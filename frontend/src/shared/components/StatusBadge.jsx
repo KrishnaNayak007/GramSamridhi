@@ -1,0 +1,1 @@
+// Reusable incident status indicators

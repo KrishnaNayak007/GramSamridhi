@@ -1,0 +1,43 @@
+# Environmental variables
+.env
+.env.*
+!.env.example
+
+# Python
+backend/.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Node / Frontend
+node_modules/
+dist/
+build/
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.nyc_output/
+
+# Media / Uploaded files
+media/
+staticfiles/
+
+# Logs
+*.log
+logs/
+
+# IDE / Editor configs
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS / Miscellaneous
+.DS_Store
+Thumbs.db

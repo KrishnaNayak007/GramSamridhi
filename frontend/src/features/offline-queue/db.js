@@ -1,0 +1,1 @@
+// IndexedDB configuration and wrapper
