@@ -47,7 +47,11 @@ swc-platform/
 │   │   ├── workflow/                # status transitions, assignment
 │   │   ├── notifications/
 │   │   ├── analytics/
-│   │   └── audit/
+│   │   ├── audit/
+│   │   ├── surplus/                # item listings, categories, transactions
+│   │   ├── activity/               # cross-domain feed read-aggregator
+│   │   ├── impact/                 # cross-domain user impact calculator
+│   │   └── messaging/              # conversation/message services
 │   ├── core/                        # shared kernel: base models, permissions, exceptions, pagination
 │   │   ├── models.py                 # BaseModel (UUID pk, timestamps, soft-delete)
 │   │   ├── permissions.py

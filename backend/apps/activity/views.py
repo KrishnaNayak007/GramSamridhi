@@ -1,0 +1,1 @@
+# REST views - ActivityFeedView, ActivityStatsView
