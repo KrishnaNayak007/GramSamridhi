@@ -73,10 +73,13 @@ swc-platform/
 │   └── requirements/             # Dependency lists (base, dev, prod)
 ├── frontend/                     # React Single Page Application
 │   ├── src/
-│   │   ├── app/                  # Providers, Routing setup, Layout
-│   │   ├── features/             # Bounded user capabilities (report-submission, offline-queue)
-│   │   ├── shared/               # Cross-feature primitive hooks and components
-│   │   └── services/             # Typed API clients mapping to backend apps
+│   │   ├── app/                  # App shell, router definitions, and provider wrappers
+│   │   ├── routes/               # Route guard components and path constants
+│   │   ├── pages/                # Page component directories (DashboardPage, SettingsPage, etc.)
+│   │   ├── shared/               # Shared presentational components, hooks, formatting libs, and types
+│   │   ├── services/             # Endpoint API clients (authApi, surplusApi, etc.)
+│   │   └── main.jsx              # Main entry point
+│   ├── index.html                # HTML mount point
 │   ├── public/                   # Static assets
 │   ├── vite.config.js            # Vite bundler options
 │   └── package.json              # NPM manifest

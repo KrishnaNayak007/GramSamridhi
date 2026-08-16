@@ -1,1 +1,0 @@
-// Map/device location selection

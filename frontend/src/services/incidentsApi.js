@@ -1,1 +1,1 @@
-// API client for incidents domain
+// workflow: fetch incident/complaint status for MyActivityPage and SwcPage.

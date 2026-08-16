@@ -63,20 +63,13 @@ swc-platform/
 │   └── pytest.ini
 ├── frontend/
 │   ├── src/
-│   │   ├── app/                      # app shell: router, providers, layout
-│   │   ├── features/
-│   │   │   ├── report-submission/
-│   │   │   ├── offline-queue/
-│   │   │   ├── incident-tracking/
-│   │   │   ├── auth/
-│   │   │   └── officer-dashboard/
-│   │   ├── shared/
-│   │   │   ├── components/
-│   │   │   ├── hooks/
-│   │   │   ├── lib/
-│   │   │   └── types/
-│   │   ├── services/                 # API clients (per domain)
-│   │   └── routes/
+│   │   ├── app/                      # App shell, router definitions, and provider wrappers
+│   │   ├── routes/                   # Route guard components and path constants
+│   │   ├── pages/                    # Page component directories (DashboardPage, SettingsPage, MyActivityPage, SurplusPage, SwcPage, auth, etc.)
+│   │   ├── shared/                   # Shared presentational components, hooks, formatting libs, and types
+│   │   ├── services/                 # Endpoint API clients (authApi, surplusApi, etc.)
+│   │   └── main.jsx                  # Main entry point
+│   ├── index.html                # HTML mount point
 │   ├── public/
 │   ├── vite.config.js
 │   └── package.json

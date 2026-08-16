@@ -1,1 +1,1 @@
-// API client for reports domain
+// workflow: SWC report submission calls (used once SwcPage is built).
