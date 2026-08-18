@@ -1,2 +1,2 @@
 -r base.txt
-# Production dependencies
+gunicorn>=20.1

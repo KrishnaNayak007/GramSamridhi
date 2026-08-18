@@ -1,1 +1,5 @@
-# Core dependencies
+Django>=5.0
+djangorestframework>=3.14
+djangorestframework-simplejwt>=5.2
+django-cors-headers>=4.0
+psycopg2-binary>=2.9
