@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiFetch } from '../shared/lib/api';
 
 const LocationContext = createContext();
 
 export function LocationProvider({ children }) {
   // Store the active resolved administrative boundary (Ward / Nigam)
   const [activeLocation, setActiveLocation] = useState(null);
-  const [coords, setCoords] = useState(null);
+  const [coords, setCoords] = useState({ latitude: 20.296, longitude: 85.824 });
   const [isResolving, setIsResolving] = useState(false);
   const [resolutionError, setResolutionError] = useState(null);
 
@@ -44,7 +45,7 @@ export function LocationProvider({ children }) {
       setIsResolving(true);
       setResolutionError(null);
       try {
-        const response = await fetch(
+        const response = await apiFetch(
           `/api/v1/geography/resolve/?lat=${coords.latitude}&lon=${coords.longitude}`
         );
         const data = await response.json();

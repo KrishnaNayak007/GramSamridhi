@@ -12,6 +12,7 @@ from apps.geography.services import resolve_administrative_area
 from apps.authorities.models import Department, Authority, OfficerProfile
 from apps.incidents.services import submit_citizen_report
 from apps.evidence.models import Evidence
+from apps.surplus.models import Category
 
 class Command(BaseCommand):
     help = "Seeds real administrative hierarchy for Odisha (Urban/Rural) and runs PostGIS resolution demo."
@@ -30,6 +31,7 @@ class Command(BaseCommand):
                 OfficerProfile.objects.all_with_deleted().hard_delete()
                 Authority.objects.all_with_deleted().hard_delete()
                 AdministrativeArea.objects.all_with_deleted().hard_delete()
+                Category.objects.all_with_deleted().hard_delete()
 
                 # 1. State: Odisha (Code: 21)
                 # Broad bounding box polygon containing Odisha coordinates
@@ -218,6 +220,22 @@ class Command(BaseCommand):
                         "checksum": "d577273ff885c3f84d76854d62ecae91d8e6ad8f106d073f3020b769c7324e49"
                     }
                 )
+
+                # 9. Seed 6 surplus.Category rows matching Browse Categories
+                categories = [
+                    ("Books & Stationery", "book"),
+                    ("Furniture", "chair"),
+                    ("Electronics", "laptop"),
+                    ("Clothes & Accessories", "shirt"),
+                    ("Home & Kitchen", "home"),
+                    ("Others", "grid")
+                ]
+                for cat_name, icon in categories:
+                    Category.objects.get_or_create(
+                        name=cat_name,
+                        defaults={"icon": icon}
+                    )
+                self.stdout.write(self.style.SUCCESS("Seeded 6 SURPLUS category rows."))
 
             # Execution demo prints
             self.stdout.write(self.style.SUCCESS("\nSeeding complete! Running PostGIS Spatial Resolution Demo..."))
