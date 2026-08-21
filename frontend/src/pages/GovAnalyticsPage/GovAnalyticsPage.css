@@ -1,0 +1,418 @@
+/* =========================================================
+   SWACHSAHYOG — GOVERNMENT ANALYTICS PAGE
+   ========================================================= */
+
+.gov-analytics-page {
+  width: 100%;
+}
+
+/* ===== STAT STRIP ===== */
+.gov-analytics-page .stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.gov-analytics-page .stat-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px 16px 14px;
+  box-shadow: var(--shadow-1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gov-analytics-page .stat-card .top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.gov-analytics-page .stat-card .icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gov-teams-page .stat-card .icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.gov-analytics-page .stat-card .trend {
+  font-size: 10.5px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.gov-analytics-page .stat-card .trend.up {
+  background: var(--leaf-100);
+  color: var(--green-600);
+}
+
+.gov-analytics-page .stat-card .trend.down {
+  background: var(--red-100);
+  color: var(--red-500);
+}
+
+.gov-analytics-page .stat-card .value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 10px;
+  line-height: 1;
+}
+
+.gov-analytics-page .stat-card .label {
+  font-size: 11.5px;
+  color: var(--ink-400);
+  margin-top: 5px;
+  letter-spacing: .2px;
+}
+
+.gov-analytics-page .stat-card.total .icon {
+  background: var(--blue-100);
+  color: var(--blue-500);
+}
+
+.gov-analytics-page .stat-card.progress .icon {
+  background: var(--amber-100);
+  color: var(--amber-500);
+}
+
+.gov-analytics-page .stat-card.resolved .icon {
+  background: #E4F3E9;
+  color: var(--green-600);
+}
+
+.gov-analytics-page .stat-card.pending .icon {
+  background: var(--cream-100);
+  color: var(--ink-600);
+}
+
+.gov-analytics-page .stat-card.urgent .icon {
+  background: var(--red-100);
+  color: var(--red-500);
+}
+
+/* Range filter chips */
+.gov-analytics-page .filters {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.gov-analytics-page .chip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  color: var(--ink-600);
+  background: var(--cream-50);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gov-analytics-page .chip.active {
+  background: var(--forest-950);
+  color: #fff;
+  border-color: var(--forest-950);
+}
+
+/* ===== ANALYTICS GRID ===== */
+.gov-analytics-page .analytics-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.gov-analytics-page .analytics-grid .panel.span-2 {
+  grid-column: 1 / -1;
+}
+
+.gov-analytics-page .panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.gov-analytics-page .panel-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.gov-analytics-page .panel-head h2 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.gov-analytics-page .panel-head .count-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--cream-100);
+  padding: 2px 8px;
+  border-radius: 20px;
+  color: var(--ink-600);
+}
+
+.gov-analytics-page .panel-body {
+  padding: 18px;
+}
+
+/* Custom SVG line chart wrapper */
+.gov-analytics-page .svg-chart-container {
+  position: relative;
+  width: 100%;
+  height: 200px;
+}
+
+.gov-analytics-page .svg-chart-container svg {
+  width: 100%;
+  height: 100%;
+}
+
+.gov-analytics-page .chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding: 0 18px 16px;
+}
+
+.gov-analytics-page .chart-legend .li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  color: var(--ink-600);
+  font-weight: 600;
+}
+
+.gov-analytics-page .chart-legend .sw {
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+
+/* Custom bar chart styles */
+.gov-analytics-page .bar-chart-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-end;
+  height: 180px;
+  padding-top: 10px;
+  position: relative;
+}
+
+.gov-analytics-page .bar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+}
+
+.gov-analytics-page .bar-fill {
+  width: 26px;
+  background: #5FAE3D;
+  border-radius: 6px 6px 0 0;
+  transition: height 0.4s ease;
+  position: relative;
+}
+
+.gov-analytics-page .bar-val {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-600);
+  font-weight: 600;
+}
+
+.gov-analytics-page .bar-label {
+  font-size: 11px;
+  color: var(--ink-400);
+  font-weight: 600;
+}
+
+/* Custom Doughnut SVG styles */
+.gov-analytics-page .doughnut-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+  position: relative;
+}
+
+.gov-analytics-page .doughnut-center-text {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.gov-analytics-page .doughnut-center-text .pct {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.gov-analytics-page .doughnut-center-text .lbl {
+  font-size: 10.5px;
+  color: var(--ink-400);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+/* ===== Team performance leaderboard ===== */
+.gov-analytics-page .leaderboard {
+  display: flex;
+  flex-direction: column;
+}
+
+.gov-analytics-page .lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.gov-analytics-page .lb-row:last-child {
+  border-bottom: none;
+}
+
+.gov-analytics-page .lb-rank {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--cream-100);
+  color: var(--ink-600);
+}
+
+.gov-analytics-page .lb-row:nth-child(1) .lb-rank { background: var(--leaf-100); color: var(--green-600); }
+.gov-analytics-page .lb-row:nth-child(2) .lb-rank { background: var(--cream-100); color: var(--ink-600); }
+.gov-analytics-page .lb-row:nth-child(3) .lb-rank { background: var(--amber-100); color: #9c7318; }
+
+.gov-analytics-page .lb-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.gov-analytics-page .lb-info .n {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-900);
+}
+
+.gov-analytics-page .lb-info .m {
+  font-size: 11px;
+  color: var(--ink-400);
+  margin-top: 1px;
+}
+
+.gov-analytics-page .lb-stat {
+  text-align: right;
+  flex: 0 0 auto;
+  min-width: 60px;
+}
+
+.gov-analytics-page .lb-stat .v {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.gov-analytics-page .lb-stat .l {
+  font-size: 10px;
+  color: var(--ink-400);
+  margin-top: 1px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+
+/* ===== Horizontal bar rows ===== */
+.gov-analytics-page .hbar-list {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.gov-analytics-page .hbar-row .hb-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.gov-analytics-page .hbar-row .hb-top .lab {
+  font-weight: 600;
+  color: var(--ink-900);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gov-analytics-page .hbar-row .hb-top .lab .sev-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.gov-analytics-page .hbar-row .hb-top .val {
+  font-family: var(--font-mono);
+  color: var(--ink-600);
+}
+
+.gov-analytics-page .hb-track {
+  height: 8px;
+  border-radius: 20px;
+  background: var(--cream-100);
+  overflow: hidden;
+}
+
+.gov-analytics-page .hb-fill {
+  height: 100%;
+  border-radius: 20px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 900px) {
+  .gov-analytics-page .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .gov-analytics-page .analytics-grid {
+    grid-template-columns: 1fr;
+  }
+  .gov-analytics-page .analytics-grid .panel.span-2 {
+    grid-column: auto;
+  }
+}

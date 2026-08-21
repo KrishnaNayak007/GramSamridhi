@@ -1,0 +1,558 @@
+/* =========================================================
+   SWACHSAHYOG — GOVERNMENT SLA TRACKER PAGE
+   ========================================================= */
+
+.gov-sla-page {
+  width: 100%;
+}
+
+/* ===== STAT STRIP ===== */
+.gov-sla-page .stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.gov-sla-page .stat-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px 16px 14px;
+  box-shadow: var(--shadow-1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gov-sla-page .stat-card .top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.gov-sla-page .stat-card .icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gov-sla-page .stat-card .icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.gov-sla-page .stat-card .value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 10px;
+  line-height: 1;
+}
+
+.gov-sla-page .stat-card .label {
+  font-size: 11.5px;
+  color: var(--ink-400);
+  margin-top: 5px;
+  letter-spacing: .2px;
+}
+
+.gov-sla-page .stat-card.resolved .icon {
+  background: #E4F3E9;
+  color: var(--green-600);
+}
+
+.gov-sla-page .stat-card.progress .icon {
+  background: var(--leaf-100);
+  color: var(--green-600);
+}
+
+.gov-sla-page .stat-card.pending .icon {
+  background: var(--amber-100);
+  color: var(--amber-500);
+}
+
+.gov-sla-page .stat-card.urgent .icon {
+  background: var(--red-100);
+  color: var(--red-500);
+}
+
+/* ===== WORKSPACE SPLIT ===== */
+.gov-sla-page .sla-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(380px, 0.85fr);
+  gap: 20px;
+  align-items: start;
+  width: 100%;
+}
+
+.gov-sla-page .panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.gov-sla-page .panel-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.gov-sla-page .panel-head h2 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.gov-sla-page .panel-head .count-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--cream-100);
+  padding: 2px 8px;
+  border-radius: 20px;
+  color: var(--ink-600);
+}
+
+.gov-sla-page .filters {
+  display: flex;
+  gap: 8px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+}
+
+.gov-sla-page .chip {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  color: var(--ink-600);
+  background: var(--cream-50);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gov-sla-page .chip.active {
+  background: var(--forest-950);
+  color: #fff;
+  border-color: var(--forest-950);
+}
+
+.gov-sla-page .chip .sev-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.gov-sla-page .queue {
+  max-height: 640px;
+  overflow-y: auto;
+}
+
+/* SLA state pill — shown on list rows, separate from .status-pill */
+.gov-sla-page .sla-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+
+.gov-sla-page .sla-pill.ontrack { background: var(--leaf-100); color: var(--green-600); }
+.gov-sla-page .sla-pill.atrisk { background: var(--amber-100); color: #9c7318; }
+.gov-sla-page .sla-pill.breached { background: var(--red-100); color: var(--red-500); }
+
+/* Slim SLA progress bar under each list row */
+.gov-sla-page .sla-track {
+  height: 5px;
+  border-radius: 20px;
+  background: var(--cream-100);
+  overflow: hidden;
+  margin-top: 4px;
+}
+
+.gov-sla-page .sla-track .fill {
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+.gov-sla-page .sla-track .fill.ontrack { background: var(--green-600); }
+.gov-sla-page .sla-track .fill.atrisk { background: var(--amber-500); }
+.gov-sla-page .sla-track .fill.breached { background: var(--red-500); }
+
+/* Complaint list overrides */
+.gov-sla-page .complaint {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: background .12s ease;
+}
+
+.gov-sla-page .complaint:hover {
+  background: var(--cream-50);
+}
+
+.gov-sla-page .complaint.selected {
+  background: var(--leaf-100);
+  box-shadow: inset 3px 0 0 var(--green-600);
+}
+
+.gov-sla-page .complaint .row-top {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.gov-sla-page .complaint .thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 9px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+
+.gov-sla-page .c-main {
+  min-width: 0;
+}
+
+.gov-sla-page .c-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.gov-sla-page .c-id {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-400);
+}
+
+.gov-sla-page .sev-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px 2px 6px;
+  border-radius: 20px;
+  letter-spacing: .2px;
+  text-transform: uppercase;
+}
+
+.gov-sla-page .sev-badge svg {
+  width: 9px;
+  height: 9px;
+}
+
+.gov-sla-page .sev-badge.high { background: var(--red-100); color: var(--red-500); }
+.gov-sla-page .sev-badge.medium { background: var(--amber-100); color: #9c7318; }
+.gov-sla-page .sev-badge.low { background: var(--leaf-100); color: var(--green-600); }
+
+.gov-sla-page .c-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gov-sla-page .c-meta {
+  font-size: 11.5px;
+  color: var(--ink-400);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gov-sla-page .c-meta svg {
+  width: 11px;
+  height: 11px;
+  flex: 0 0 auto;
+}
+
+.gov-sla-page .c-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.gov-sla-page .c-time {
+  font-size: 10.5px;
+  color: var(--ink-400);
+  font-family: var(--font-mono);
+}
+
+/* Detail panel */
+.gov-sla-page .right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gov-sla-page .detail-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.gov-sla-page .detail-empty {
+  padding: 50px 24px;
+  text-align: center;
+  color: var(--ink-400);
+}
+
+.gov-sla-page .detail-empty svg {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.gov-sla-page .detail-empty p {
+  font-size: 12.5px;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.gov-sla-page .d-photo {
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-radius: 12px 12px 0 0;
+}
+
+.gov-sla-page .d-photo .sev-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.gov-sla-page .d-photo .d-id {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: rgba(11,42,27,0.7);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.gov-sla-page .d-body {
+  padding: 16px 18px 18px;
+}
+
+.gov-sla-page .d-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15.5px;
+  margin-bottom: 3px;
+}
+
+.gov-sla-page .d-desc {
+  font-size: 12.5px;
+  color: var(--ink-600);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.gov-sla-page .d-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.gov-sla-page .d-row svg {
+  width: 14px;
+  height: 14px;
+  color: var(--ink-400);
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+
+.gov-sla-page .d-row .l {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--ink-400);
+  margin-bottom: 1px;
+}
+
+.gov-sla-page .d-row .v {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-900);
+}
+
+/* SLA countdown box in the detail panel */
+.gov-sla-page .sla-box {
+  background: linear-gradient(160deg, var(--forest-900), var(--forest-950));
+  border-radius: var(--radius-md);
+  padding: 13px 14px;
+  margin: 14px 0;
+  color: #fff;
+}
+
+.gov-sla-page .sla-box .sla-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.gov-sla-page .sla-box .sla-top .lab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  color: var(--leaf-300);
+}
+
+.gov-sla-page .sla-box .sla-top .lab svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gov-sla-page .sla-box .sla-state {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  text-transform: uppercase;
+}
+
+.gov-sla-page .sla-box .sla-state.ontrack { background: rgba(95,174,61,0.25); color: #B7E39A; }
+.gov-sla-page .sla-box .sla-state.atrisk { background: rgba(226,167,59,0.25); color: #F0CE8C; }
+.gov-sla-page .sla-box .sla-state.breached { background: rgba(209,73,63,0.28); color: #F3AEA9; }
+
+.gov-sla-page .sla-box .sla-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.gov-sla-page .sla-box .sla-grid .k {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  color: #8FA697;
+}
+
+.gov-sla-page .sla-box .sla-grid .v {
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+.gov-sla-page .sla-box .sla-bar {
+  height: 7px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.12);
+  overflow: hidden;
+}
+
+.gov-sla-page .sla-box .sla-bar .fill {
+  height: 100%;
+  border-radius: 20px;
+  transition: width 0.3s ease;
+}
+
+.gov-sla-page .sla-box .sla-bar .fill.ontrack { background: var(--leaf-500); }
+.gov-sla-page .sla-box .sla-bar .fill.atrisk { background: var(--amber-500); }
+.gov-sla-page .sla-box .sla-bar .fill.breached { background: var(--red-500); }
+
+.gov-sla-page .assign-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.gov-sla-page .btn {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform .1s ease, box-shadow .15s ease;
+  cursor: pointer;
+}
+
+.gov-sla-page .btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gov-sla-page .btn:active {
+  transform: scale(0.97);
+}
+
+.gov-sla-page .btn-primary {
+  background: var(--green-600);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(31,122,77,0.28);
+}
+
+.gov-sla-page .btn-primary:hover {
+  background: #1b6b43;
+}
+
+.gov-sla-page .btn-ghost {
+  background: var(--cream-100);
+  color: var(--ink-600);
+  border: 1px solid var(--line);
+}
+
+.gov-sla-page .btn-ghost:hover {
+  background: #e2e7db;
+}
+
+/* Responsive */
+@media (max-width: 1050px) {
+  .gov-sla-page .sla-workspace {
+    grid-template-columns: 1fr;
+  }
+}

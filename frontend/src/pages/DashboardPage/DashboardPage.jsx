@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useLocationContext } from '../../app/LocationContext';
 import { apiFetch } from '../../shared/lib/api';
 import GoogleMap from '../../shared/components/layout/GoogleMap';
+import { surplusApi } from '../../services/surplusApi';
+import { incidentsApi } from '../../services/incidentsApi';
+import './DashboardPage.css';
 
 // Import slide images
 import heroBins from '../../assets/hero_bins.jpg';
@@ -54,15 +57,11 @@ export default function DashboardPage({ onNavigate }) {
     const fetchActivities = async () => {
       setLoading(true);
       try {
-        const listingsRes = await apiFetch('/api/v1/surplus/listings/');
-        if (listingsRes.ok) {
-          setListings(await listingsRes.json());
-        }
+        const listingsData = await surplusApi.getAll();
+        setListings(listingsData);
 
-        const reportsRes = await apiFetch('/api/v1/incidents/incidents/');
-        if (reportsRes.ok) {
-          setReports(await reportsRes.json());
-        }
+        const reportsData = await incidentsApi.getAll();
+        setReports(reportsData);
       } catch (err) {
         console.error('Error fetching activities:', err);
       } finally {
@@ -111,31 +110,63 @@ export default function DashboardPage({ onNavigate }) {
               </div>
             </div>
 
-            <div className="hero-overlay"></div>
+            <div 
+              className="hero-overlay" 
+              style={{ 
+                position: 'absolute', 
+                inset: 0, 
+                zIndex: 10, 
+                pointerEvents: 'none', 
+                background: 'linear-gradient(100deg, rgba(9,38,30,.92) 0%, rgba(9,38,30,.78) 30%, rgba(9,38,30,.38) 56%, rgba(9,38,30,.06) 78%), linear-gradient(0deg, rgba(9,38,30,.55) 0%, rgba(9,38,30,0) 26%)'
+              }}
+            ></div>
 
-            <div className="hero-copy">
-              <div className="hero-kicker">CIVIC WASTE + CIRCULARITY</div>
-              <h1>A cleaner city starts with <span>you.</span></h1>
-              <p>Report waste. Reuse useful items. Track the impact you create.</p>
-              <div className="hero-status">
-                <span>📍 {activeLocation?.name || 'Ward 24 active'}</span>
+            <div 
+              className="hero-copy" 
+              style={{ 
+                position: 'absolute', 
+                zIndex: 20, 
+                left: '36px', 
+                top: '50%', 
+                transform: 'translateY(-50%)', 
+                maxWidth: '440px', 
+                display: 'flex', 
+                flexDirection: 'column' 
+              }}
+            >
+              <div className="hero-kicker" style={{ fontSize: '9.5px', letterSpacing: '.16em', fontWeight: 800, color: '#A9D8BE', marginBottom: '14px' }}>
+                CIVIC WASTE + CIRCULARITY
+              </div>
+              <h1 style={{ fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: '34px', lineHeight: 1.16, letterSpacing: '-.035em', color: '#FFFDF8', marginBottom: '10px' }}>
+                A cleaner city starts with <span style={{ color: '#A9D8BE' }}>you.</span>
+              </h1>
+              <p style={{ fontSize: '13.5px', lineHeight: 1.5, color: 'rgba(255,253,248,.82)', marginBottom: '24px' }}>
+                Report waste. Reuse useful items. Track the impact you create.
+              </p>
+              <div className="hero-status" style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11px', color: '#A9D8BE', fontWeight: 600, marginBottom: '24px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '13px', height: '13px' }}><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  {activeLocation?.name || 'Ward 24 active'}
+                </span>
                 <span>•</span>
                 <span>AI-assisted reporting</span>
                 <span>•</span>
                 <span>Live updates</span>
               </div>
-              <div className="hero-actions">
+              <div className="hero-actions" style={{ display: 'flex', gap: '12px' }}>
                 <button className="btn btn-primary" onClick={() => onNavigate('swc')}>
-                  🗑️ Report Waste
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '15px', height: '15px', marginRight: '6px' }}><path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2M10 11v6M14 11v6"/></svg>
+                  Report Waste
                 </button>
                 <button className="btn btn-secondary" onClick={() => onNavigate('surplus')}>
-                  🎁 Give / Sell an Item
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '15px', height: '15px', marginRight: '6px' }}><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/><path d="M12 8c-1.5-3-6-3-6-.5S9 8 12 8Zm0 0c1.5-3 6-3 6-.5S15 8 12 8Z"/></svg>
+                  Give / Sell an Item
                 </button>
               </div>
             </div>
 
             {/* Dots navigator */}
-            <div className="hero-dots" aria-hidden="true">
+            <div className="hero-dots" aria-hidden="true" style={{ zIndex: 20 }}>
               <button className={`hero-dot ${activeDot === 0 ? 'active' : ''}`} onClick={() => handleDotClick(0)}></button>
               <button className={`hero-dot ${activeDot === 1 ? 'active' : ''}`} onClick={() => handleDotClick(1)}></button>
               <button className={`hero-dot ${activeDot === 2 ? 'active' : ''}`} onClick={() => handleDotClick(2)}></button>

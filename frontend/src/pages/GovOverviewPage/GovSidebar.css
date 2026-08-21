@@ -1,0 +1,272 @@
+/* =========================================================
+   SWACHSAHYOG — GOVERNMENT AUTHORITY SIDEBAR
+   ========================================================= */
+
+.gov-shell {
+  --forest-950: #0c2519;
+  --forest-900: #0F3520;
+  --forest-800: #123D26;
+  --forest-700: #175232;
+  --green-600: #1F7A4D;
+  --green-500: #2C9660;
+  --leaf-500: #5FAE3D;
+  --leaf-300: #8FCB63;
+  --leaf-100: #DCEFCC;
+  --cream-50: #F5F7F1;
+  --cream-100: #EDF0E6;
+  --card: #FFFFFF;
+  --ink-900: #12201A;
+  --ink-600: #42544A;
+  --ink-400: #7C8B81;
+  --line: #E1E6DC;
+  --red-500: #D1493F;
+  --red-100: #FBE6E3;
+  --amber-500: #E2A73B;
+  --amber-100: #FBF0DA;
+  --blue-500: #3D7FBF;
+  --blue-100: #E1EBF6;
+  --radius-lg: 18px;
+  --radius-md: 12px;
+  --radius-sm: 8px;
+
+  --shadow-1: 0 1px 2px rgba(11,42,27,0.06), 0 1px 1px rgba(11,42,27,0.04);
+  --shadow-2: 0 8px 24px rgba(11,42,27,0.10);
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  display: grid;
+  grid-template-columns: 248px 1fr;
+  min-height: 100vh;
+  width: 100%;
+  background: var(--cream-50);
+  color: var(--ink-900);
+}
+
+/* Sidebar structure */
+.gov-shell .sidebar {
+  background:
+    radial-gradient(1200px 400px at -10% -10%, rgba(95,174,61,0.20), transparent 55%),
+    linear-gradient(180deg, var(--forest-950), var(--forest-900) 60%, var(--forest-950));
+  color: #EAF2EA;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 16px 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  z-index: 100;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.gov-shell .sidebar .brand {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  padding: 20px 10px 16px !important;
+  min-height: auto !important;
+  margin-bottom: 4px !important;
+  border-bottom: none !important;
+  gap: 0 !important;
+}
+
+.gov-shell .sidebar .brand-mark {
+  width: 100% !important;
+  height: auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-bottom: 8px !important;
+  background: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.gov-shell .sidebar .brand-mark img {
+  width: 190px !important;
+  height: auto !important;
+  max-height: 130px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+.gov-shell .sidebar .brand-text {
+  width: 100%;
+  margin-top: 4px;
+}
+
+.gov-shell .sidebar .brand-text .tag {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: #DCEBDF;
+  opacity: 0.85;
+}
+
+.gov-shell .nav-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #7E9686;
+  padding: 10px 10px 4px !important;
+  font-weight: 700;
+}
+
+.gov-shell .nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gov-shell .nav-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 11px !important;
+  padding: 8px 10px !important;
+  border-radius: 9px !important;
+  font-size: 13.5px !important;
+  font-weight: 600 !important;
+  color: #C9D8CD !important;
+  position: relative !important;
+  transition: background .15s ease, color .15s ease !important;
+  width: 100% !important;
+  text-align: left !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.gov-shell .nav-item svg {
+  width: 17px;
+  height: 17px;
+  opacity: 0.85;
+  flex: 0 0 auto;
+}
+
+.gov-shell .nav-item:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: #fff !important;
+}
+
+.gov-shell .nav-item.active {
+  background: linear-gradient(90deg, rgba(95,174,61,0.28), rgba(95,174,61,0.06)) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.gov-shell .nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: -16px !important;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: var(--leaf-500);
+  border-radius: 0 4px 4px 0;
+}
+
+.gov-shell .nav-item .count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  background: rgba(255, 255, 255, 0.10);
+  padding: 1px 6px;
+  border-radius: 20px;
+  color: #DCEBDF;
+}
+
+.gov-shell .nav-item.urgent .count {
+  background: var(--red-500);
+  color: #fff;
+}
+
+.gov-shell .sidebar-foot {
+  margin-top: auto !important;
+  margin-bottom: 0 !important;
+  padding: 14px 0 0 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  background: none !important;
+  box-shadow: none !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.09) !important;
+  position: static !important;
+  overflow: visible !important;
+}
+
+.gov-shell .sidebar-foot::before {
+  display: none !important;
+}
+
+.gov-shell .jurisdiction-chip {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 10px !important;
+  padding: 8px 10px !important;
+  margin-bottom: 8px !important;
+}
+
+.gov-shell .jurisdiction-chip .lbl {
+  font-size: 9.5px;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: #84A08D;
+  font-weight: 700;
+}
+
+.gov-shell .jurisdiction-chip .val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  margin-top: 3px;
+  color: #EAF2EA;
+  line-height: 1.4;
+}
+
+.gov-shell .official {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 6px;
+}
+
+.gov-shell .official .avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: linear-gradient(135deg, var(--leaf-500), var(--green-600));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+}
+
+.gov-shell .official .who {
+  line-height: 1.25;
+}
+
+.gov-shell .official .who .n {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.gov-shell .official .who .r {
+  font-size: 10.5px;
+  color: #8FA697;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .gov-shell .sidebar {
+    display: none;
+  }
+}

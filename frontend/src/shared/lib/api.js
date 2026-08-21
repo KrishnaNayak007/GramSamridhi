@@ -73,10 +73,16 @@ if (!localStorage.getItem('mock_preferences')) {
  * when backend network calls return errors or the server is unreachable.
  */
 export async function apiFetch(url, options = {}) {
+  const token = localStorage.getItem('access_token');
+
+  // Bypass network calls when in offline dummy authentication mode to avoid console error spam
+  if (token === 'dummy_access_token' || (token && token.startsWith('dummy_'))) {
+    return handleMockRequest(url, options);
+  }
+
   const headers = options.headers || {};
   const newOptions = { ...options };
 
-  const token = localStorage.getItem('access_token');
   if (token && !headers['Authorization']) {
     headers['Authorization'] = `Bearer ${token}`;
   }
@@ -88,7 +94,7 @@ export async function apiFetch(url, options = {}) {
   newOptions.headers = headers;
 
   try {
-    const response = await fetch(url, newOptions);
+    let response = await fetch(url, newOptions);
 
     if (response.status === 401 && localStorage.getItem('refresh_token')) {
       try {
@@ -97,14 +103,19 @@ export async function apiFetch(url, options = {}) {
         localStorage.setItem('access_token', data.access);
         headers['Authorization'] = `Bearer ${data.access}`;
         newOptions.headers = headers;
-        return await fetch(url, newOptions);
+        response = await fetch(url, newOptions);
       } catch (err) {
-        console.warn('Auto-token-refresh failed, using local offline fallback mode.');
+        console.warn('Auto-token-refresh failed, logging out...');
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user');
+        window.location.reload();
+        return new Response(JSON.stringify({ detail: "Session expired. Redirecting..." }), { status: 401 });
       }
     }
 
-    if (response.status === 404 || response.status === 500) {
-      // Intercept 404 or 500 (Vite proxy errors) and use mock fallback
+    if (!response.ok) {
+      // Intercept any non-ok responses (401, 403, 404, 500) and use mock fallback
       return handleMockRequest(url, options);
     }
 
@@ -177,7 +188,7 @@ function handleMockRequest(url, options) {
   }
 
   // 4. INCIDENTS REPORTS
-  if (url.includes('/api/v1/incidents/reports/')) {
+  if (url.includes('/api/v1/incidents/reports/') || url.includes('/api/v1/reports/')) {
     const mockReports = JSON.parse(localStorage.getItem('mock_reports') || '[]');
 
     if (method === 'POST') {
@@ -198,7 +209,7 @@ function handleMockRequest(url, options) {
   }
 
   // 5. INCIDENTS LIST
-  if (url.includes('/api/v1/incidents/incidents/')) {
+  if (url.includes('/api/v1/incidents/incidents/') || url.includes('/api/v1/incidents/')) {
     const mockReports = JSON.parse(localStorage.getItem('mock_reports') || '[]');
     // Convert reports to incidents for listing
     const incidents = mockReports.map(rep => ({
@@ -280,6 +291,51 @@ function handleMockRequest(url, options) {
         role_title: 'BMC Ward Sanitation Officer'
       }
     });
+  }
+
+  // 10. EVIDENCE UPLOAD MOCK
+  if (url.includes('/api/v1/evidence/upload/') && method === 'POST') {
+    return createResponse({
+      id: 'mock-evidence-' + Math.floor(10000 + Math.random() * 89999),
+      storage_key: 'mock-storage-key-jpeg',
+      media_type: 'image/jpeg',
+      captured_at: new Date().toISOString(),
+      uploaded_at: new Date().toISOString(),
+      status: 'pending',
+      checksum: 'mock-md5-checksum'
+    }, 201);
+  }
+
+  // 11. SUBMIT CITIZEN REPORT MOCK
+  if ((url.includes('/api/v1/incidents/reports/') || url.includes('/api/v1/reports/')) && method === 'POST') {
+    const mockReports = JSON.parse(localStorage.getItem('mock_reports') || '[]');
+    const newReport = {
+      id: 'mock-report-' + Math.floor(10000 + Math.random() * 89999),
+      citizen: {
+        username: 'odisha_citizen',
+        first_name: 'Goutam',
+        last_name: 'Soni'
+      },
+      evidence: {
+        id: body?.evidence_id || 'mock-evidence-uuid-12345'
+      },
+      location: {
+        latitude: body?.latitude || 20.296,
+        longitude: body?.longitude || 85.824,
+        name: 'Park Road, Sector 5, Ward 24'
+      },
+      incident: {
+        id: 'mock-incident-' + Math.floor(10000 + Math.random() * 89999),
+        status: 'open',
+        priority_score: 5.0
+      },
+      description: body?.description || '',
+      submitted_at: new Date().toISOString()
+    };
+
+    mockReports.unshift(newReport);
+    localStorage.setItem('mock_reports', JSON.stringify(mockReports));
+    return createResponse(newReport, 201);
   }
 
   // Fallback default

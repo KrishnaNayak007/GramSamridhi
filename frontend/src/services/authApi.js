@@ -4,7 +4,7 @@
 export const authApi = {
   async login(username, password) {
     try {
-      const res = await fetch('/api/v1/accounts/auth/token/', {
+      const res = await fetch('/api/v1/auth/token/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
@@ -30,7 +30,7 @@ export const authApi = {
 
   async register(userData) {
     try {
-      const res = await fetch('/api/v1/accounts/auth/register/', {
+      const res = await fetch('/api/v1/auth/register/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData)
@@ -51,7 +51,7 @@ export const authApi = {
 
   async logout(refreshToken) {
     try {
-      const res = await fetch('/api/v1/accounts/auth/logout/', {
+      const res = await fetch('/api/v1/auth/logout/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refresh: refreshToken })
@@ -66,7 +66,7 @@ export const authApi = {
 
   async refreshToken(refresh) {
     try {
-      const res = await fetch('/api/v1/accounts/auth/token/refresh/', {
+      const res = await fetch('/api/v1/auth/token/refresh/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ refresh })
