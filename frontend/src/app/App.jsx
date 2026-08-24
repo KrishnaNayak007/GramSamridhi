@@ -2,27 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { useLocationContext } from './LocationContext';
 import LoginPage from '../pages/auth/LoginPage';
 import SignupPage from '../pages/auth/SignupPage';
-import IntroPage from '../pages/IntroPage/IntroPage';
+import IntroPage from '../pages/citizenside/IntroPage/IntroPage';
 import logo from '../assets/logo.png';
 
 // Import pages
 import DashboardPage from '../pages/DashboardPage/DashboardPage';
-import SwcPage from '../pages/SwcPage/SwcPage';
-import SurplusPage from '../pages/SurplusPage/SurplusPage';
-import ImpactPage from '../pages/ImpactPage/ImpactPage';
-import MyActivityPage from '../pages/MyActivityPage/MyActivityPage';
-import SettingsPage from '../pages/SettingsPage/SettingsPage';
-import GovOverviewPage from '../pages/GovOverviewPage/GovOverviewPage';
-import GovQueuePage from '../pages/GovQueuePage/GovQueuePage';
-import GovMapPage from '../pages/GovMapPage/GovMapPage';
-import GovTeamsPage from '../pages/GovTeamsPage/GovTeamsPage';
-import GovAnalyticsPage from '../pages/GovAnalyticsPage/GovAnalyticsPage';
-import GovSlaPage from '../pages/GovSlaPage/GovSlaPage';
-import GovResolvedPage from '../pages/GovResolvedPage/GovResolvedPage';
-import GovSidebar from '../pages/GovOverviewPage/GovSidebar';
-import GovNavbar from '../pages/GovOverviewPage/GovNavbar';
-import '../pages/GovOverviewPage/GovSidebar.css';
-import '../pages/GovOverviewPage/GovNavbar.css';
+import SwcPage from '../pages/citizenside/SwcPage/SwcPage';
+import SurplusPage from '../pages/citizenside/SurplusPage/SurplusPage';
+import ImpactPage from '../pages/citizenside/ImpactPage/ImpactPage';
+import MyActivityPage from '../pages/citizenside/MyActivityPage/MyActivityPage';
+import SettingsPage from '../pages/citizenside/SettingsPage/SettingsPage';
+import GovOverviewPage from '../pages/govtSide/GovOverviewPage/GovOverviewPage';
+import GovQueuePage from '../pages/govtSide/GovQueuePage/GovQueuePage';
+import GovMapPage from '../pages/govtSide/GovMapPage/GovMapPage';
+import GovTeamsPage from '../pages/govtSide/GovTeamsPage/GovTeamsPage';
+import GovAnalyticsPage from '../pages/govtSide/GovAnalyticsPage/GovAnalyticsPage';
+import GovSlaPage from '../pages/govtSide/GovSlaPage/GovSlaPage';
+import GovResolvedPage from '../pages/govtSide/GovResolvedPage/GovResolvedPage';
+import GovSidebar from '../pages/govtSide/GovOverviewPage/GovSidebar';
+import GovNavbar from '../pages/govtSide/GovOverviewPage/GovNavbar';
+import GovBuybackPage from '../pages/govtSide/GovBuybackPage/GovBuybackPage';
+import FarmerSidebar from '../pages/AgricultureSide/FarmerSidebar';
+import FarmerNavbar from '../pages/AgricultureSide/FarmerNavbar';
+import '../pages/govtSide/GovOverviewPage/GovSidebar.css';
+import '../pages/govtSide/GovOverviewPage/GovNavbar.css';
+import '../pages/AgricultureSide/FarmerDashboardPage.css';
 
 export default function App() {
   const { activeLocation } = useLocationContext();
@@ -90,7 +94,7 @@ export default function App() {
       switch (currentTab) {
         case 'overview':
         case 'dashboard':
-          return <GovOverviewPage />;
+          return <GovOverviewPage onNavigate={setCurrentTab} />;
         case 'queue':
           return <GovQueuePage />;
         case 'map':
@@ -99,6 +103,8 @@ export default function App() {
           return <GovTeamsPage />;
         case 'analytics':
           return <GovAnalyticsPage />;
+        case 'buyback':
+          return <GovBuybackPage />;
         case 'resolved':
           return <GovResolvedPage />;
         case 'sla':
@@ -112,7 +118,7 @@ export default function App() {
 
     switch (currentTab) {
       case 'dashboard':
-        return <DashboardPage onNavigate={setCurrentTab} />;
+        return <DashboardPage onNavigate={setCurrentTab} user={user} />;
       case 'swc':
         return <SwcPage onNavigate={setCurrentTab} />;
       case 'surplus':
@@ -143,7 +149,7 @@ export default function App() {
           </div>
         );
       default:
-        return <DashboardPage onNavigate={setCurrentTab} />;
+        return <DashboardPage onNavigate={setCurrentTab} user={user} />;
     }
   };
 
@@ -175,6 +181,30 @@ export default function App() {
     );
   }
 
+  const isFarmer = user?.role === 'farmer' || user?.username?.includes('farmer') || user?.username === 'devinder_singh';
+
+  if (isFarmer) {
+    return (
+      <div className="farmer-shell">
+        <FarmerSidebar 
+          currentTab={currentTab} 
+          setCurrentTab={setCurrentTab} 
+          user={user}
+        />
+
+        <main className="farmer-main-content">
+          <FarmerNavbar 
+            handleLogout={handleLogout} 
+          />
+
+          <div className="farmer-page-content">
+            {renderActivePage()}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
       {/* SIDEBAR */}
@@ -183,27 +213,55 @@ export default function App() {
           <img className="brand-logo" src={logo} alt="Swachh Sahyog" />
         </div>
 
+        {/* Profile Info based on role */}
+        <div style={{
+          border: '1px solid #e7ece8',
+          borderRadius: '14px',
+          padding: '12px 11px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          marginBottom: '22px',
+          background: '#fff',
+          boxShadow: '0 3px 12px rgba(24,55,42,.035)'
+        }}>
+          <div style={{
+            width: '38px',
+            height: '38px',
+            borderRadius: '50%',
+            display: 'grid',
+            placeItems: 'center',
+            flexShrink: 0,
+            background: 'var(--emerald, #10b981)',
+            color: '#fff',
+            fontSize: '11px',
+            fontWeight: 700
+          }}>
+            {(user?.username || 'UC').substring(0, 2).toUpperCase()}
+          </div>
+          <div>
+            <strong style={{ display: 'block', fontSize: '12.5px', color: 'var(--ink-950)' }}>{user?.username || 'Urban Citizen'}</strong>
+            <small style={{ display: 'block', fontSize: '9.5px', color: 'var(--ink-400)', marginTop: '3px' }}>Citizen (Urban Area)</small>
+          </div>
+        </div>
+
         <nav className="nav-group">
+          <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px' }}>CIVIC LIFE</div>
           <button
             onClick={() => setCurrentTab('dashboard')}
             className={`nav-item nav-item-btn ${currentTab === 'dashboard' ? 'active' : ''}`}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/></svg>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span>Home</span>
-            </div>
+            <span>Home</span>
           </button>
 
+          <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px', marginTop: '10px' }}>PARTICIPATE</div>
           <button
             onClick={() => setCurrentTab('swc')}
             className={`nav-item nav-item-btn ${currentTab === 'swc' ? 'active' : ''}`}
-            style={{ marginTop: '5px' }}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span>SWC</span>
-              <span className="nav-sub">Smart Waste Complaint</span>
-            </div>
+            <span>Report Waste</span>
           </button>
 
           <button
@@ -212,10 +270,7 @@ export default function App() {
             style={{ marginTop: '5px' }}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/><path d="M12 8c-1.5-3-6-3-6-.5S9 8 12 8Zm0 0c1.5-3 6-3 6-.5S15 8 12 8Z"/></svg>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span>SURPLUS</span>
-              <span className="nav-sub">Give It a Second Life</span>
-            </div>
+            <span>SURPLUS</span>
           </button>
 
           <button
@@ -224,50 +279,31 @@ export default function App() {
             style={{ marginTop: '5px' }}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m4 6 1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span>My Activity</span>
-              <span className="nav-sub">Reports & Listings</span>
-            </div>
+            <span>My Activity</span>
           </button>
 
+          <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px', marginTop: '10px' }}>COMMUNITY</div>
           <button
             onClick={() => setCurrentTab('impact')}
             className={`nav-item nav-item-btn ${currentTab === 'impact' ? 'active' : ''}`}
             style={{ marginTop: '5px' }}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 3 7v6c0 5 4 8 9 9 5-1 9-4 9-9V7l-9-5Z"/></svg>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span>Impact</span>
-              <span className="nav-sub">My Impact Stats</span>
-            </div>
-          </button>
-
-          <button
-            onClick={() => setCurrentTab('settings')}
-            className={`nav-item nav-item-btn ${currentTab === 'settings' ? 'active' : ''}`}
-            style={{ marginTop: '5px' }}
-          >
-            <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51z"/></svg>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span>Settings</span>
-              <span className="nav-sub">Account Settings</span>
-            </div>
-          </button>
-
-          <button
-            onClick={() => setCurrentTab('help')}
-            className={`nav-item nav-item-btn ${currentTab === 'help' ? 'active' : ''}`}
-            style={{ marginTop: '5px' }}
-          >
-            <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span>Help & Support</span>
-              <span className="nav-sub">FAQs & Support</span>
-            </div>
+            <span>Impact</span>
           </button>
         </nav>
 
-        <div className="sidebar-foot">
+        <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px', marginTop: '10px' }}>SUPPORT</div>
+        <button
+          onClick={() => setCurrentTab('help')}
+          className={`nav-item nav-item-btn ${currentTab === 'help' ? 'active' : ''}`}
+          style={{ marginTop: '5px' }}
+        >
+          <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
+          <span>Help & Support</span>
+        </button>
+
+        <div className="sidebar-foot" style={{ marginTop: 'auto', borderTop: '1px solid var(--line)', paddingTop: '12px' }}>
           <strong>Swachh Sahyog</strong>
           <span>Every action counts.</span>
           <span>Together, we build a cleaner, greener city for everyone.</span>
@@ -285,13 +321,13 @@ export default function App() {
           <div className="header-left">
             <div className="loc-pill" onClick={() => alert('Location options')}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-              <span>{activeLocation ? activeLocation.name : 'Ward 24, XYZ Nagar Nigam'}</span>
+              <span>{activeLocation ? activeLocation.name : 'Bhadana Village, Karnal, Haryana'}</span>
               <svg className="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>
             
             <div className="header-tagline">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 2 2 4a7 7 0 0 1-10 14Z" /><path d="M9 22a1 1 0 0 1-1-1v-3" /></svg>
-              <span>Clean City. Green Future.</span>
+              <span>TOGETHER FOR A CLEANER TOMORROW</span>
             </div>
           </div>
 
@@ -300,9 +336,9 @@ export default function App() {
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
             </button>
 
-            <button className="bell-wrap" onClick={() => alert('3 new notifications pending')}>
+            <button className="bell-wrap" onClick={() => alert('2 new notifications pending')}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9m10.3 13a3 3 0 0 1-5.6 0"/></svg>
-              <span className="badge-dot">3</span>
+              <span className="badge-dot">2</span>
             </button>
 
             <div className="user-chip" onClick={() => {
@@ -310,10 +346,10 @@ export default function App() {
                 handleLogout();
               }
             }}>
-              <div className="avatar">GS</div>
+              <div className="avatar">{(user?.username || 'UC').substring(0, 2).toUpperCase()}</div>
               <div className="user-chip-text">
-                <span className="user-name">{user ? user.username : 'Goutam Soni'}</span>
-                <span className="user-role">Ward 24 Resident</span>
+                <span className="user-name">{user ? user.username : 'odisha_citizen'}</span>
+                <span className="user-role">Urban Citizen</span>
               </div>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
             </div>

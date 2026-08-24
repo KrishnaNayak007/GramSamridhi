@@ -1,0 +1,403 @@
+/* =====================================================
+   RESIDUE BUY-BACK — GOVERNMENT DASHBOARD
+   Page-specific styles only.
+   ===================================================== */
+
+:root{
+  --organic:#5FAE3D;
+  --organic-100:#DCEFCC;
+  --inorganic:#3D7FBF;
+  --inorganic-100:#DCE9F5;
+}
+
+.gov-buyback-page {
+  font-family: var(--font-body);
+  background: var(--cream-50);
+  color: var(--ink-900);
+  padding: 0 0 40px;
+}
+
+.residue-workspace{
+  display:grid;
+  grid-template-columns:minmax(0, 1.5fr) minmax(320px, 0.9fr);
+  gap:20px;
+  align-items:start;
+  width:100%;
+}
+.residue-left{ display:flex; flex-direction:column; gap:20px; min-width:0; }
+.residue-right{ display:flex; flex-direction:column; gap:20px; }
+
+/* ===== Recovery flow diagram ===== */
+.recovery-panel .panel-body{ padding:26px 24px 22px; }
+.recovery-flow{ display:flex; flex-direction:column; align-items:center; gap:0; }
+.rf-sources{ display:flex; gap:40px; justify-content:center; width:100%; }
+.rf-source{
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  background:var(--cream-50); border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:16px 30px; min-width:150px;
+}
+.rf-source .icon{
+  width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  color:#fff;
+}
+.rf-source.organic .icon{ background:var(--organic); }
+.rf-source.inorganic .icon{ background:var(--inorganic); }
+.rf-source .icon svg{ width:19px; height:19px; }
+.rf-source .lab{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--ink-400); }
+.rf-source .val{ font-family:var(--font-display); font-size:22px; font-weight:700; color:var(--ink-900); }
+
+.rf-connector{ width:100%; max-width:340px; height:38px; position:relative; }
+.rf-connector svg{ width:100%; height:100%; }
+
+.rf-total{
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  background:linear-gradient(160deg, var(--forest-900), var(--forest-950));
+  color:#fff; border-radius:var(--radius-md); padding:16px 40px; min-width:220px;
+}
+.rf-total .lab{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--leaf-300); }
+.rf-total .val{ font-family:var(--font-display); font-size:26px; font-weight:700; }
+
+/* ===== Funnel (Requested -> Approved -> Collected -> Paid) ===== */
+.funnel{ display:flex; align-items:stretch; padding:18px; gap:0; }
+.funnel-step{ flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; position:relative; padding:0 8px; }
+.funnel-step .n{ font-family:var(--font-mono); font-size:19px; font-weight:700; color:var(--ink-900); }
+.funnel-step .l{ font-size:11px; color:var(--ink-400); text-transform:uppercase; letter-spacing:.3px; }
+.funnel-step .dot{ width:10px; height:10px; border-radius:50%; background:var(--leaf-500); margin-bottom:2px; }
+.funnel-arrow{ display:flex; align-items:center; color:var(--line); flex:0 0 auto; }
+.funnel-arrow svg{ width:16px; height:16px; }
+
+/* ===== Records table ===== */
+.records-panel .filters{ flex-wrap:wrap; }
+.records-table{ width:100%; border-collapse:collapse; }
+.records-table thead th{
+  text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.4px;
+  color:var(--ink-400); padding:10px 18px; border-bottom:1px solid var(--line);
+  background:var(--cream-50); position:sticky; top:0;
+}
+.records-table tbody td{ padding:12px 18px; border-bottom:1px solid var(--line); font-size:13px; color:var(--ink-900); }
+.records-table tbody tr{ cursor:pointer; transition:background .12s ease; }
+.records-table tbody tr:hover{ background:var(--cream-50); }
+.records-table tbody tr.selected{ background:var(--leaf-100); box-shadow:inset 3px 0 0 var(--green-600); }
+.records-table .amount{ font-family:var(--font-mono); font-weight:600; }
+.records-table .residue-type{ display:flex; align-items:center; gap:6px; }
+.records-table .residue-type .sw{ width:7px; height:7px; border-radius:50%; flex:0 0 auto; }
+.records-body-wrap{ max-height:420px; overflow-y:auto; }
+
+.wf-pill{
+  font-size:10px; font-weight:700; padding:4px 9px; border-radius:20px;
+  text-transform:uppercase; letter-spacing:.3px; white-space:nowrap;
+  display: inline-block;
+}
+.wf-pill.requested{ background:var(--cream-100); color:var(--ink-600); }
+.wf-pill.approved{ background:var(--amber-100); color:#9c7318; }
+.wf-pill.collected{ background:var(--inorganic-100); color:var(--inorganic); }
+.wf-pill.paid{ background:var(--leaf-100); color:var(--green-600); }
+
+/* ===== Demo rate card ===== */
+.rate-card .panel-body{ padding:16px 18px; }
+.rate-disclaimer{
+  display:flex; gap:8px; align-items:flex-start;
+  background:var(--amber-100); border:1px solid #f0dfb0; border-radius:var(--radius-md);
+  padding:10px 12px; font-size:11px; color:#7a5c14; line-height:1.4; margin-bottom:14px;
+}
+.rate-disclaimer svg{ width:15px; height:15px; flex:0 0 auto; margin-top:1px; }
+.rate-row{ display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); }
+.rate-row:last-child{ border-bottom:none; }
+.rate-row .rt-name{ display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--ink-900); }
+.rate-row .rt-name .sw{ width:8px; height:8px; border-radius:50%; flex:0 0 auto; }
+.rate-row .rt-val{ font-family:var(--font-mono); font-size:12.5px; color:var(--ink-600); }
+
+/* ===== Detail panel additions ===== */
+.crop-banner{
+  height:120px; border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  display:flex; align-items:flex-end; justify-content:space-between; padding:14px;
+  position:relative; color:#fff;
+}
+.crop-banner .crop-icon{
+  position:absolute; top:14px; left:14px; width:38px; height:38px; border-radius:50%;
+  background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;
+}
+.crop-banner .crop-icon svg{ width:19px; height:19px; }
+
+.calc-box{
+  background:var(--cream-50); border:1px solid var(--line); border-radius:var(--radius-md);
+  padding:12px 14px; margin:14px 0; font-size:12.5px;
+}
+.calc-box .row{ display:flex; justify-content:space-between; padding:4px 0; color:var(--ink-600); }
+.calc-box .row.total{ border-top:1px solid var(--line); margin-top:6px; padding-top:8px; font-weight:700; color:var(--ink-900); }
+.calc-box .row .v{ font-family:var(--font-mono); }
+
+@media (max-width:1050px){
+  .residue-workspace{ grid-template-columns:1fr; }
+  .rf-sources{ gap:16px; }
+}
+
+/* ===== Panels ===== */
+.gov-buyback-page .panel {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.gov-buyback-page .panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.gov-buyback-page .panel-head h2 {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--ink-900);
+}
+
+.gov-buyback-page .count-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--ink-400);
+  background: var(--cream-100);
+  padding: 4px 10px;
+  border-radius: 100px;
+  border: none;
+}
+
+/* ===== Range filter chips ===== */
+.gov-buyback-page .filters {
+  display: flex;
+  gap: 8px;
+  margin: 4px 0 18px;
+  padding: 0 18px;
+  background: transparent;
+  border-bottom: none;
+}
+
+.gov-buyback-page .chip {
+  padding: 7px 16px;
+  border-radius: 100px;
+  background: #fff;
+  border: 1px solid var(--line);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-600);
+  cursor: pointer;
+  transition: all .15s ease;
+  white-space: nowrap;
+}
+
+.gov-buyback-page .chip:hover {
+  border-color: var(--leaf-300);
+}
+
+.gov-buyback-page .chip.active {
+  background: var(--ink-900);
+  border-color: var(--ink-900);
+  color: #fff;
+}
+
+/* ===== Detail empty state ===== */
+.gov-buyback-page .detail-empty {
+  padding: 50px 24px;
+  text-align: center;
+  color: var(--ink-400);
+}
+
+.gov-buyback-page .detail-empty svg {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+  color: var(--ink-400);
+}
+
+.gov-buyback-page .detail-empty p {
+  font-size: 12.5px;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.gov-buyback-page .d-body {
+  padding: 16px 18px 18px;
+}
+
+.gov-buyback-page .d-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15.5px;
+  margin-bottom: 3px;
+  color: var(--forest-950);
+}
+
+.gov-buyback-page .d-desc {
+  font-size: 12.5px;
+  color: #42544A;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.gov-buyback-page .d-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.gov-buyback-page .d-row svg {
+  width: 14px;
+  height: 14px;
+  color: #7C8B81;
+  margin-top: 2px;
+  flex: 0 0 auto;
+  stroke: currentColor;
+}
+
+.gov-buyback-page .d-row .l {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: #7C8B81;
+  margin-bottom: 1px;
+  font-weight: 700;
+}
+
+.gov-buyback-page .d-row .v {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-900);
+}
+
+.gov-buyback-page .d-row .v.mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 500;
+  font-size: 11.5px;
+}
+
+.gov-buyback-page .assign-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.gov-buyback-page .btn {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform .1s ease, box-shadow .15s ease;
+  cursor: pointer;
+}
+
+.gov-buyback-page .btn svg {
+  width: 14px;
+  height: 14px;
+  stroke: currentColor;
+}
+
+.gov-buyback-page .btn:active {
+  transform: scale(0.97);
+}
+
+.gov-buyback-page .btn-primary {
+  background: var(--green-600);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(31,122,77,0.28);
+}
+
+.gov-buyback-page .btn-primary:hover {
+  background: #1b6b43;
+}
+
+.gov-buyback-page .btn-ghost {
+  background: var(--cream-100);
+  color: #42544A;
+  border: 1px solid var(--line);
+}
+
+.gov-buyback-page .btn-ghost:hover {
+  background: #e2e7db;
+}
+
+/* ===== Stat cards ===== */
+.gov-buyback-page .stats {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.gov-buyback-page .stat-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px 16px 14px;
+  box-shadow: var(--shadow-1);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.gov-buyback-page .stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-2);
+}
+
+.gov-buyback-page .stat-card .top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.gov-buyback-page .stat-card .icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gov-buyback-page .stat-card .icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: currentColor;
+}
+
+.gov-buyback-page .stat-card .trend {
+  font-size: 10.5px;
+  font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+.gov-buyback-page .stat-card .value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 10px;
+  line-height: 1;
+}
+
+.gov-buyback-page .stat-card .label {
+  font-size: 11.5px;
+  color: #7C8B81;
+  margin-top: 5px;
+  letter-spacing: .2px;
+  font-weight: 500;
+}
+
+.gov-buyback-page .stat-card.total .icon { background: var(--blue-100); color: var(--blue-500); }
+.gov-buyback-page .stat-card.pending .icon { background: var(--amber-100); color: var(--amber-500); }
+.gov-buyback-page .stat-card.progress .icon { background: var(--leaf-100); color: var(--green-600); }
+.gov-buyback-page .stat-card.resolved .icon { background: #E4F3E9; color: var(--green-600); }
+.gov-buyback-page .stat-card.urgent .icon { background: var(--red-100); color: var(--red-500); }

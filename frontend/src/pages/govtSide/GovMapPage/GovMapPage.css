@@ -1,0 +1,759 @@
+/* =========================================================
+   SWACHSAHYOG — GOVERNMENT AUTHORITY LIVE MAP PAGE
+   ========================================================= */
+
+.gov-map-page {
+  width: 100%;
+}
+
+/* ===== STAT STRIP ===== */
+.gov-map-page .stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.gov-map-page .stat-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 16px 16px 14px;
+  box-shadow: var(--shadow-1);
+  position: relative;
+  overflow: hidden;
+}
+
+.gov-map-page .stat-card .top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.gov-map-page .stat-card .icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gov-map-page .stat-card .icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.gov-map-page .stat-card .value {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 10px;
+  line-height: 1;
+}
+
+.gov-map-page .stat-card .label {
+  font-size: 11.5px;
+  color: var(--ink-400);
+  margin-top: 5px;
+  letter-spacing: .2px;
+}
+
+.gov-map-page .stat-card.total .icon {
+  background: var(--blue-100);
+  color: var(--blue-500);
+}
+
+.gov-map-page .stat-card.urgent .icon {
+  background: var(--red-100);
+  color: var(--red-500);
+}
+
+.gov-map-page .stat-card.urgent {
+  border-color: #f0c7c2;
+}
+
+.gov-map-page .stat-card.pending .icon {
+  background: var(--amber-100);
+  color: var(--amber-500);
+}
+
+.gov-map-page .stat-card.progress .icon {
+  background: var(--leaf-100);
+  color: var(--green-600);
+}
+
+/* ===== WORKSPACE SPLIT ===== */
+.gov-map-page .live-map-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(380px, 0.8fr);
+  gap: 20px;
+  align-items: start;
+  width: 100%;
+}
+
+.gov-map-page .panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+}
+
+.gov-map-page .panel-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.gov-map-page .panel-head h2 {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.gov-map-page .panel-head .count-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  background: var(--cream-100);
+  padding: 2px 8px;
+  border-radius: 20px;
+  color: var(--ink-600);
+}
+
+/* Filters */
+.gov-map-page .filters {
+  display: flex;
+  gap: 8px;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+  overflow-x: auto;
+  background: rgba(247, 250, 245, 0.85);
+}
+
+.gov-map-page .chip {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 7px 13px;
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  color: var(--ink-600);
+  background: var(--cream-50);
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.gov-map-page .chip.active {
+  background: var(--forest-950);
+  color: #fff;
+  border-color: var(--forest-950);
+}
+
+.gov-map-page .chip .sev-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+/* Taller map canvas just for this page */
+.gov-map-page .map-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.gov-map-page .map-panel.map-panel-tall {
+  height: 560px;
+}
+
+.gov-map-page .map-canvas {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(15,53,32,0.035) 1px, transparent 1px) 0 0/28px 28px,
+    linear-gradient(90deg, rgba(15,53,32,0.035) 1px, transparent 1px) 0 0/28px 28px,
+    linear-gradient(160deg, #EAF1E5, #DCE8D6 55%, #CFE0CD);
+}
+
+.gov-map-page .map-canvas .river {
+  position: absolute;
+  left: -10%;
+  top: 30%;
+  width: 120%;
+  height: 70px;
+  background: rgba(61,127,191,0.16);
+  transform: rotate(-6deg);
+  border-radius: 50%;
+  filter: blur(2px);
+}
+
+/* Map pins */
+.gov-map-page .map-pin {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg) translate(-50%,-100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  cursor: pointer;
+  border: 2px solid #fff;
+  transition: transform 0.15s ease;
+}
+
+.gov-map-page .map-pin.high { background: var(--red-500); }
+.gov-map-page .map-pin.medium { background: var(--amber-500); }
+.gov-map-page .map-pin.low { background: var(--green-600); }
+
+.gov-map-page .map-pin::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+  transform: rotate(45deg);
+}
+
+.gov-map-page .map-pin.active {
+  transform: rotate(-45deg) translate(-50%,-100%) scale(1.35);
+  z-index: 5;
+}
+
+/* Pin tooltip */
+.gov-map-page .map-pin .pin-tip {
+  position: absolute;
+  bottom: 26px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  background: var(--forest-950);
+  color: #fff;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  padding: 3px 7px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s ease;
+  box-shadow: var(--shadow-2);
+}
+
+.gov-map-page .map-pin:hover .pin-tip {
+  opacity: 1;
+}
+
+.gov-map-page .map-legend {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background: rgba(255,255,255,0.92);
+  border-radius: 9px;
+  padding: 8px 11px;
+  font-size: 10.5px;
+  display: flex;
+  gap: 12px;
+  box-shadow: var(--shadow-1);
+}
+
+.gov-map-page .map-legend .li {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--ink-600);
+  font-weight: 600;
+}
+
+.gov-map-page .map-legend .sw {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.gov-map-page .map-panel .panel-head {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+/* ===== RIGHT COLUMN: MAP + DETAIL ===== */
+.gov-map-page .right-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gov-map-page .right-col .queue {
+  max-height: 220px;
+  overflow-y: auto;
+  background: #f7faf5;
+  border-radius: 14px;
+  padding: 6px;
+}
+
+/* Complaint cards */
+.gov-map-page .complaint {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: #ffffff;
+  border: 1px solid #dce8d9;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.gov-map-page .complaint:hover {
+  background: #f4faf2;
+  border-color: #c4ddc0;
+  transform: translateY(-1px);
+}
+
+.gov-map-page .complaint.selected {
+  background: #e8f4e7;
+  border-color: #98c996;
+  box-shadow: 0 3px 12px rgba(54,110,67,0.08);
+}
+
+.gov-map-page .complaint .thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 9px;
+  background-size: cover;
+  background-position: center;
+  border: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+
+.gov-map-page .c-main {
+  min-width: 0;
+}
+
+.gov-map-page .c-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 3px;
+}
+
+.gov-map-page .c-id {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--ink-400);
+}
+
+.gov-map-page .sev-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px 2px 6px;
+  border-radius: 20px;
+  letter-spacing: .2px;
+  text-transform: uppercase;
+}
+
+.gov-map-page .sev-badge svg {
+  width: 9px;
+  height: 9px;
+}
+
+.gov-map-page .sev-badge.high { background: var(--red-100); color: var(--red-500); }
+.gov-map-page .sev-badge.medium { background: var(--amber-100); color: #9c7318; }
+.gov-map-page .sev-badge.low { background: var(--leaf-100); color: var(--green-600); }
+
+.gov-map-page .c-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-900);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gov-map-page .c-meta {
+  font-size: 11.5px;
+  color: var(--ink-400);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gov-map-page .c-meta svg {
+  width: 11px;
+  height: 11px;
+  flex: 0 0 auto;
+}
+
+.gov-map-page .c-right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.gov-map-page .status-pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  white-space: nowrap;
+}
+
+.gov-map-page .status-pill.submitted { background: #e1ebf6; color: #3d7fbf; }
+.gov-map-page .status-pill.assigned { background: #fbf0da; color: #9c7318; }
+.gov-map-page .status-pill.progress { background: #e6eefb; color: #3d5fbf; }
+.gov-map-page .status-pill.resolved { background: #dcefcc; color: #1f7a4d; }
+
+.gov-map-page .c-time {
+  font-size: 10.5px;
+  color: var(--ink-400);
+  font-family: var(--font-mono);
+}
+
+/* Detail panel */
+.gov-map-page .detail-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.gov-map-page .detail-empty {
+  padding: 50px 24px;
+  text-align: center;
+  color: var(--ink-400);
+}
+
+.gov-map-page .detail-empty svg {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 10px;
+  opacity: 0.5;
+}
+
+.gov-map-page .detail-empty p {
+  font-size: 12.5px;
+  max-width: 220px;
+  margin: 0 auto;
+}
+
+.gov-map-page .d-photo {
+  height: 150px;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  border-radius: 12px 12px 0 0;
+}
+
+.gov-map-page .d-photo .sev-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.gov-map-page .d-photo .d-id {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  background: rgba(11,42,27,0.7);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.gov-map-page .d-body {
+  padding: 16px 18px 18px;
+}
+
+.gov-map-page .d-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15.5px;
+  margin-bottom: 3px;
+}
+
+.gov-map-page .d-desc {
+  font-size: 12.5px;
+  color: var(--ink-600);
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.gov-map-page .d-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-bottom: 10px;
+}
+
+.gov-map-page .d-row svg {
+  width: 14px;
+  height: 14px;
+  color: var(--ink-400);
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+
+.gov-map-page .d-row .l {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  color: var(--ink-400);
+  margin-bottom: 1px;
+}
+
+.gov-map-page .d-row .v {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-900);
+}
+
+.gov-map-page .d-row .v.mono {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11.5px;
+}
+
+.gov-map-page .ai-box {
+  background: linear-gradient(135deg, var(--forest-950), var(--forest-800));
+  border-radius: 11px;
+  padding: 12px 13px;
+  margin: 12px 0 14px;
+  color: #fff;
+}
+
+.gov-map-page .ai-box .ai-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 7px;
+}
+
+.gov-map-page .ai-box .ai-top svg {
+  width: 14px;
+  height: 14px;
+  color: var(--leaf-300);
+}
+
+.gov-map-page .ai-box .ai-top span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .3px;
+  color: var(--leaf-300);
+  text-transform: uppercase;
+}
+
+.gov-map-page .ai-box .ai-line {
+  font-size: 12px;
+  color: #DCE8DC;
+  line-height: 1.5;
+}
+
+.gov-map-page .confidence-bar {
+  height: 5px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.14);
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.gov-map-page .confidence-bar i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--leaf-500), var(--leaf-300));
+  border-radius: 4px;
+}
+
+/* Status stepper */
+.gov-map-page .stepper-wrap {
+  padding: 8px 0 4px;
+}
+
+.gov-map-page .stepper-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--ink-400);
+  margin-bottom: 10px;
+}
+
+.gov-map-page .stepper {
+  position: relative;
+  padding: 6px 2px 0;
+  width: 100%;
+}
+
+.gov-map-page .stepper svg {
+  width: 100%;
+  height: 52px;
+  display: block;
+  overflow: visible;
+}
+
+.gov-map-page .step-items {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  text-align: center;
+  gap: 8px;
+}
+
+.gov-map-page .step-item {
+  font-size: 9.5px;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+/* Active/completed colors */
+.gov-map-page .step-item:nth-child(1) { color: #4b9b65; }
+.gov-map-page .step-item:nth-child(2) { color: #2f8a56; }
+.gov-map-page .step-item:nth-child(3) { color: #c58a22; }
+.gov-map-page .step-item:nth-child(4) { color: #3b9b61; }
+
+.gov-map-page .step-item.done {
+  font-weight: 700;
+}
+
+.gov-map-page .step-item.now {
+  font-weight: 700;
+  transform: translateY(-1px);
+}
+
+.gov-map-page .assign-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.gov-map-page .btn {
+  flex: 1;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform .1s ease, box-shadow .15s ease;
+  cursor: pointer;
+}
+
+.gov-map-page .btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.gov-map-page .btn:active {
+  transform: scale(0.97);
+}
+
+.gov-map-page .btn-primary {
+  background: var(--green-600);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(31,122,77,0.28);
+}
+
+.gov-map-page .btn-primary:hover {
+  background: #1b6b43;
+}
+
+.gov-map-page .btn-ghost {
+  background: var(--cream-100);
+  color: var(--ink-600);
+  border: 1px solid var(--line);
+}
+
+.gov-map-page .btn-ghost:hover {
+  background: #e2e7db;
+}
+
+.gov-map-page .select-team {
+  width: 100%;
+  margin-top: 9px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  border: 1px solid var(--line);
+  background: var(--cream-50);
+  font-size: 12px;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 1180px) {
+  .gov-map-page .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .gov-map-page .live-map-workspace {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .gov-map-page .map-panel.map-panel-tall {
+    height: 380px;
+  }
+}
+
+/* ===== Farm Score badge — AI-detected % of organic waste ===== */
+.gov-map-page .farm-score-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  white-space: nowrap;
+  letter-spacing: .2px;
+}
+.gov-map-page .farm-score-badge svg {
+  width: 10px;
+  height: 10px;
+}
+.gov-map-page .farm-score-badge.high {
+  background: var(--leaf-100);
+  color: var(--green-600);
+}
+.gov-map-page .farm-score-badge.mid {
+  background: var(--amber-100);
+  color: #9c7318;
+}
+.gov-map-page .farm-score-badge.low {
+  background: var(--cream-100);
+  color: var(--ink-600);
+}
+.gov-map-page .d-photo .farm-score-badge {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.gov-map-page .d-photo .farm-score-badge.high { background: rgba(220,239,204,0.95); }
+.gov-map-page .d-photo .farm-score-badge.mid { background: rgba(250,235,200,0.95); }
+.gov-map-page .d-photo .farm-score-badge.low { background: rgba(255,255,255,0.85); }

@@ -15,6 +15,7 @@ export const authApi = {
     } catch (err) {
       console.warn('Backend server down, falling back to dummy sign-in user:', err);
       // Dummy user success payload
+      const isFarmer = username?.toLowerCase() === 'devinder_singh' || username?.toLowerCase().includes('farmer');
       return {
         access: 'dummy_access_token',
         refresh: 'dummy_refresh_token',
@@ -22,7 +23,7 @@ export const authApi = {
           username: username || 'odisha_citizen',
           email: `${username || 'citizen'}@swachsahyog.in`,
           phone: '+919999900024',
-          role: 'citizen'
+          role: isFarmer ? 'farmer' : 'citizen'
         }
       };
     }

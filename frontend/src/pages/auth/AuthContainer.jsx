@@ -308,19 +308,37 @@ export default function AuthContainer({ initialPanel = 'role', initialMode = 'lo
               <h2>Choose how you'll sign in</h2>
               <p className="sub">Select the access that matches your account.</p>
               <div className="role-grid">
-                <button type="button" className="role-card" onClick={() => setActivePanel('civilian')}>
+                <button type="button" className="role-card" onClick={() => {
+                  setActivePanel('civilian');
+                  setCivilianEmail('odisha_citizen');
+                  setCivilianPassword('citizen123');
+                  setCivilianMode('login');
+                }}>
                   <span className="role-card__icon" aria-hidden="true">🧍</span>
                   <span>
-                    <span class="role-card__title" style={{ display: 'block' }}>Citizen access</span>
-                    <span class="role-card__desc" style={{ display: 'block' }}>Report issues, track cleanups, follow your area</span>
+                    <span className="role-card__title" style={{ display: 'block' }}>Citizen access</span>
+                    <span className="role-card__desc" style={{ display: 'block' }}>Report issues, track cleanups, follow your area</span>
+                  </span>
+                  <span className="role-card__arrow" aria-hidden="true">→</span>
+                </button>
+                <button type="button" className="role-card" onClick={() => {
+                  setActivePanel('civilian');
+                  setCivilianEmail('devinder_singh');
+                  setCivilianPassword('citizen123');
+                  setCivilianMode('login');
+                }}>
+                  <span className="role-card__icon" style={{ backgroundColor: '#eaf6ed', color: '#18855a' }} aria-hidden="true">🌾</span>
+                  <span>
+                    <span className="role-card__title" style={{ display: 'block' }}>Agriculture access</span>
+                    <span className="role-card__desc" style={{ display: 'block' }}>Request residue pickup, manage compost credits, organic advice</span>
                   </span>
                   <span className="role-card__arrow" aria-hidden="true">→</span>
                 </button>
                 <button type="button" className="role-card" onClick={() => setActivePanel('government')}>
                   <span className="role-card__icon" style={{ backgroundColor: '#eef5df', color: '#638e25' }} aria-hidden="true">🏛️</span>
                   <span>
-                    <span class="role-card__title" style={{ display: 'block' }}>Government access</span>
-                    <span class="role-card__desc" style={{ display: 'block' }}>Manage jurisdiction, respond to citizen reports</span>
+                    <span className="role-card__title" style={{ display: 'block' }}>Government access</span>
+                    <span className="role-card__desc" style={{ display: 'block' }}>Manage jurisdiction, respond to citizen reports</span>
                   </span>
                   <span className="role-card__arrow" aria-hidden="true">→</span>
                 </button>
@@ -355,6 +373,25 @@ export default function AuthContainer({ initialPanel = 'role', initialMode = 'lo
               </div>
 
               <form onSubmit={handleCivilianSubmit} className={civilianMode === 'register' ? 'create-mode' : ''} noValidate>
+                {civilianMode === 'login' && (
+                  <div style={{
+                    background: '#fcf8ec',
+                    border: '1px solid #f2e1b8',
+                    borderRadius: '8px',
+                    padding: '10px 12px',
+                    fontSize: '11.5px',
+                    lineHeight: '1.45',
+                    marginBottom: '15px',
+                    color: '#856404'
+                  }}>
+                    💡 <b>Demo Access Guide:</b>
+                    <ul style={{ paddingLeft: '18px', marginTop: '4px', marginFloat: 'none', listStyleType: 'disc' }}>
+                      <li>To test <b>Citizen (Urban Area)</b>: Use <code>odisha_citizen</code></li>
+                      <li>To test <b>Farmer (Rural Area)</b>: Use <code>devinder_singh</code></li>
+                    </ul>
+                    <small style={{ display: 'block', marginTop: '4px', color: '#997305' }}>Use password <code>citizen123</code> for both.</small>
+                  </div>
+                )}
                 <div className="field field--name">
                   <label htmlFor="civilianName">Full name</label>
                   <input 
