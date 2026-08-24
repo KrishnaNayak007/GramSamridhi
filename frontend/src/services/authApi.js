@@ -21,7 +21,7 @@ export const authApi = {
         refresh: 'dummy_refresh_token',
         user: {
           username: username || 'odisha_citizen',
-          email: `${username || 'citizen'}@swachsahyog.in`,
+          email: `${username || 'citizen'}@gramsamridh.in`,
           phone: '+919999900024',
           role: isFarmer ? 'farmer' : 'citizen'
         }

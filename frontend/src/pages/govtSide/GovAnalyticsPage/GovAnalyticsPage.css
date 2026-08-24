@@ -82,7 +82,7 @@
   color: var(--blue-500);
 }
 
-.gov-analytics-page .stat-card.progress .icon {
+.gov-analytics-page .stat-card.in-progress .icon {
   background: var(--amber-100);
   color: var(--amber-500);
 }

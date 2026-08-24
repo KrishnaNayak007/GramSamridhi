@@ -166,7 +166,7 @@ export default function GovResolvedPage() {
           <div className="value">{resolvedThisMonth}</div>
           <div className="label">Resolved This Month</div>
         </div>
-        <div className="stat-card progress">
+        <div className="stat-card in-progress">
           <div className="top-row">
             <div className="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

@@ -21,6 +21,18 @@
   gap: 9px;
 }
 
+.brand.brand-vertical {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 8px 7px 12px;
+  min-height: auto;
+  border-bottom: 1px solid var(--border-soft);
+  margin-bottom: 6px;
+  gap: 4px;
+  width: 100%;
+}
+
 .brand-logo {
   display: block;
   width: 184px;
@@ -29,6 +41,32 @@
   object-fit: contain;
   object-position: left center;
   filter: saturate(.92) contrast(1.04);
+}
+
+.brand.brand-vertical .brand-logo {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  margin-bottom: 4px;
+}
+
+.brand.brand-vertical .brand-name {
+  font-size: 19px;
+  font-weight: 800;
+  color: #163C35;
+  display: block;
+  font-family: var(--font-display);
+}
+
+.brand.brand-vertical .brand-tagline {
+  font-size: 11px;
+  color: #7a837e;
+  display: block;
+  font-weight: 700;
+  letter-spacing: 0.1px;
+  text-align: center;
+  margin-top: 4px;
+  width: 100%;
 }
 
 .brand-mark {
@@ -72,8 +110,8 @@
 }
 
 .nav-item:hover {
-  background: #F1EEE5;
-  color: var(--green-900);
+  background: #F3F8F3;
+  color: #183630;
   transform: translateX(2px);
 }
 

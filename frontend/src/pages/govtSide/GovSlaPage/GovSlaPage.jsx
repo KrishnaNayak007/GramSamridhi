@@ -138,7 +138,7 @@ export default function GovSlaPage() {
           <div className="value">91%</div>
           <div className="label">Overall SLA Compliance</div>
         </div>
-        <div className="stat-card progress">
+        <div className="stat-card in-progress">
           <div className="top-row">
             <div className="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

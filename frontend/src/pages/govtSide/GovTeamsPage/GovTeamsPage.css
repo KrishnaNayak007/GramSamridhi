@@ -64,7 +64,7 @@
   color: var(--blue-500);
 }
 
-.gov-teams-page .stat-card.progress .icon {
+.gov-teams-page .stat-card.in-progress .icon {
   background: var(--leaf-100);
   color: var(--green-600);
 }

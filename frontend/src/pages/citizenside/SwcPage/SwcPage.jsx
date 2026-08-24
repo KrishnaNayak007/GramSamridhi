@@ -235,7 +235,7 @@ export default function SwcPage({ onNavigate }) {
             <circle cx="52" cy="52" r="40" fill="none" stroke="rgba(233,218,169,.5)" strokeWidth="1" strokeDasharray="1.5 4.5" />
             <path id="sealPath" fill="none" d="M 52,52 m -40,0 a 40,40 0 1,1 80,0 a 40,40 0 1,1 -80,0" />
             <text fontSize="7" fontWeight="700" letterSpacing="2.2" fill="rgba(245,238,221,.85)">
-              <textPath href="#sealPath" startOffset="1%">SWACHH SAHYOG · CIVIC WASTE NETWORK ·</textPath>
+              <textPath href="#sealPath" startOffset="1%">GRAMSAMRIDH · CIVIC WASTE NETWORK ·</textPath>
             </text>
           </g>
           <g transform="translate(52,52)">

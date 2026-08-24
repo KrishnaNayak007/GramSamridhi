@@ -1,8 +1,119 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "SWC API",
-    "version": "1.0.0"
+    "title": "GramSamridhi API",
+    "version": "1.0.0",
+    "description": "API endpoints for GramSamridhi: Smart Waste Complaint (SWC) and Agriculture/Crop Residue Buy-back management."
   },
-  "paths": {}
+  "paths": {
+    "/api/v1/agriculture/pickups/": {
+      "get": {
+        "summary": "List crop residue pickup requests",
+        "description": "Returns all residue pickup requests filed by the authenticated farmer, or all requests if logged in as an authority officer.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a crop residue pickup request",
+        "description": "Registers a new residue pickup request. Automatically calculates payment amount based on rate per kg.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["residue_type", "weight_kg", "location_address", "scheduled_slot"],
+                "properties": {
+                  "residue_type": { "type": "string", "example": "Paddy Straw" },
+                  "weight_kg": { "type": "number", "example": 650.0 },
+                  "location_address": { "type": "string", "example": "Bhadana Village, Karnal, Haryana" },
+                  "scheduled_slot": { "type": "string", "example": "Tomorrow, 09:00 - 11:00 AM" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/agriculture/schemes/": {
+      "get": {
+        "summary": "List active agricultural government schemes",
+        "description": "Returns a list of government schemes relevant to organic farming, residue management machinery (SMAM), and sustainable farming.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    },
+    "/api/v1/agriculture/complaints/": {
+      "get": {
+        "summary": "List farmer complaints",
+        "description": "Returns complaints submitted by the authenticated farmer.",
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      },
+      "post": {
+        "summary": "Submit a farmer complaint",
+        "description": "Registers a new farmer complaint directly to government authorities.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title", "category", "description"],
+                "properties": {
+                  "title": { "type": "string", "example": "Delay in pickup payment" },
+                  "category": { "type": "string", "enum": ["collection", "payment", "schemes", "other"], "example": "payment" },
+                  "description": { "type": "string", "example": "Request RC-4892 collection is completed but status is not showing paid." }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          }
+        }
+      }
+    },
+    "/api/v1/agriculture/ai-assistant/": {
+      "post": {
+        "summary": " KrishiSahyog AI Farming Assistant Chat",
+        "description": "Responds to farming, crop residue, composting, and pesticide queries. Detects regional languages (Hindi, Odia, etc.) and answers in the matching language.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["prompt"],
+                "properties": {
+                  "prompt": { "type": "string", "example": "जैविक खाद कैसे बनाएं?" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        }
+      }
+    }
+  }
 }

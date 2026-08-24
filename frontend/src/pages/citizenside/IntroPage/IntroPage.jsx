@@ -82,8 +82,8 @@ export default function IntroPage({ onLoginClick, onGetStartedClick }) {
       <nav className={`navbar ${scrolled ? 'scrolled' : ''}`} id="navbar">
         <div className="container navbar-inner" id="navbarInner">
           <a href="#home" className="brand">
-            <img src={logo} alt="SwachSahyog logo" />
-            <span className="brand-word">Swach<span>Sahyog</span></span>
+            <img src={logo} alt="GramSamridh logo" />
+            <span className="brand-word">Gram<span>Samridh</span></span>
           </a>
           <div className="nav-links">
             <a href="#home">Home</a>
@@ -105,8 +105,8 @@ export default function IntroPage({ onLoginClick, onGetStartedClick }) {
       <div className={`mobile-panel ${mobileOpen ? 'open' : ''}`} id="mobilePanel">
         <div className="mobile-panel-top">
           <a href="#home" className="brand">
-            <img src={logo} alt="SwachSahyog" style={{ height: '48px', width: '48px' }} />
-            <span className="brand-word" style={{ color: 'var(--white)' }}>SwachSahyog</span>
+            <img src={logo} alt="GramSamridh" style={{ height: '48px', width: '48px' }} />
+            <span className="brand-word" style={{ color: 'var(--white)' }}>GramSamridh</span>
           </a>
           <button className="mobile-close" onClick={() => setMobileOpen(false)} aria-label="Close menu">
             <svg className="icon"><use href="#i-close"/></svg>
@@ -305,10 +305,10 @@ export default function IntroPage({ onLoginClick, onGetStartedClick }) {
           <div className="footer-top">
             <div>
               <div className="footer-brand">
-                <img src={logo} alt="SwachSahyog logo" />
-                <span>SwachSahyog</span>
+                <img src={logo} alt="GramSamridh logo" />
+                <span>GramSamridh</span>
               </div>
-              <p className="footer-tag">Together for a cleaner tomorrow — smart waste reporting that connects citizens with the right local authority.</p>
+              <p className="footer-tag">Swach Gram · Samridh Kisan · Satat Vikas — connecting communities, empowering farmers, and building a sustainable future.</p>
               <div className="footer-social">
                 <a href="#" aria-label="LinkedIn"><svg className="icon" style={{ stroke: 'var(--white)' }}><use href="#i-linkedin"/></svg></a>
                 <a href="#" aria-label="Twitter"><svg className="icon" style={{ stroke: 'var(--white)' }}><use href="#i-twitter"/></svg></a>
@@ -343,7 +343,7 @@ export default function IntroPage({ onLoginClick, onGetStartedClick }) {
             </div>
           </div>
           <div className="footer-bottom">
-            <span>© 2026 SwachSahyog. All rights reserved.</span>
+            <span>© 2026 GramSamridh. All rights reserved.</span>
             <div className="fb-links">
               <a href="#">Privacy Policy</a>
               <a href="#">Terms of Service</a>

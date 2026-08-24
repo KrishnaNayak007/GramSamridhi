@@ -51,7 +51,8 @@ swc-platform/
 │   │   ├── surplus/                # item listings, categories, transactions
 │   │   ├── activity/               # cross-domain feed read-aggregator
 │   │   ├── impact/                 # cross-domain user impact calculator
-│   │   └── messaging/              # conversation/message services
+│   │   ├── messaging/              # conversation/message services
+│   │   └── agriculture/            # residue requests, schemes, complaints, AI helper
 │   ├── core/                        # shared kernel: base models, permissions, exceptions, pagination
 │   │   ├── models.py                 # BaseModel (UUID pk, timestamps, soft-delete)
 │   │   ├── permissions.py
@@ -138,6 +139,10 @@ swc-platform/
 **`audit`**
 - Owns: `AuditLog` model + a simple `record(actor, action, target, metadata)` helper other services call.
 
+**`agriculture`**
+- Owns: `ResiduePickupRequest` (residue type, weight, price payments, scheduled slots, status), `GovernmentScheme` (PKVY, SMAM, NMSA specifications, eligibility, apply links), and `FarmerComplaint` (title, category, status description, resolutions) models.
+- Depends on: `accounts` (foreign key to custom User model).
+
 ---
 
 ## 4. React Feature Architecture
@@ -163,6 +168,9 @@ Feature-based, not type-based, because SWC's complexity is in *workflows* (submi
 - `StatusHistory (workflow)`
 - `Notification (notifications)`
 - `AuditLog (audit)`
+- `ResiduePickupRequest (agriculture)`
+- `GovernmentScheme (agriculture)`
+- `FarmerComplaint (agriculture)`
 
 ---
 

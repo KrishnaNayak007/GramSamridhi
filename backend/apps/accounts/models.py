@@ -10,6 +10,7 @@ class User(AbstractUser):
     ROLE_CHOICES = (
         ('citizen', 'Citizen'),
         ('officer', 'Authority Officer'),
+        ('farmer', 'Farmer'),
     )
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

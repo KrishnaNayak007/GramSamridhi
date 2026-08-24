@@ -18,7 +18,7 @@ export default function GovSidebar({ currentTab, setCurrentTab, activeLocation, 
     <aside className="sidebar">
       <div className="brand">
         <div className="brand-mark">
-          <img src={logo} alt="SwachSahyog Logo" />
+          <img src={logo} alt="GramSamridh Logo" />
         </div>
         <div className="brand-text">
           <div className="tag">AUTHORITY CONSOLE</div>

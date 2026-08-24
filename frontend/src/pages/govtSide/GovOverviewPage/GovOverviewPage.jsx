@@ -458,7 +458,7 @@ export default function GovOverviewPage({ onNavigate }) {
           <div className="label">Awaiting assignment</div>
         </div>
 
-        <div className="stat-card progress">
+        <div className="stat-card in-progress">
           <div className="top-row">
             <div className="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -757,7 +757,7 @@ export default function GovOverviewPage({ onNavigate }) {
               <div className="value">86</div>
               <div className="label">Requests Pending</div>
             </div>
-            <div className="stat-card progress" style={{ marginTop: 0 }}>
+            <div className="stat-card in-progress" style={{ marginTop: 0 }}>
               <div className="top-row"><div className="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="7" width="15" height="13" rx="2"/><path d="M16 11h3l4 4v5h-7"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg></div></div>
               <div className="value">37</div>
               <div className="label">Pickups Scheduled</div>

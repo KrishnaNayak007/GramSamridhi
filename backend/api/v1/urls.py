@@ -28,4 +28,7 @@ urlpatterns = [
     
     # Dashboard (officer analytics & map pins)
     path('dashboard/', include('apps.analytics.urls', namespace='dashboard')),
+
+    # Agriculture / Crop residue support
+    path('agriculture/', include('apps.agriculture.urls', namespace='agriculture')),
 ]

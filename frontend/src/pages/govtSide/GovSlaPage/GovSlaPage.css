@@ -64,7 +64,7 @@
   color: var(--green-600);
 }
 
-.gov-sla-page .stat-card.progress .icon {
+.gov-sla-page .stat-card.in-progress .icon {
   background: var(--leaf-100);
   color: var(--green-600);
 }

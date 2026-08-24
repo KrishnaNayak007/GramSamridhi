@@ -78,7 +78,7 @@
   color: var(--amber-500);
 }
 
-.gov-map-page .stat-card.progress .icon {
+.gov-map-page .stat-card.in-progress .icon {
   background: var(--leaf-100);
   color: var(--green-600);
 }

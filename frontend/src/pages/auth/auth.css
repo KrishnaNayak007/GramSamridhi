@@ -169,62 +169,65 @@
 }
 
 .auth-page .slogan .type-line {
-  display: inline-block;
+  display: block;
   overflow: hidden;
   white-space: nowrap;
-  vertical-align: top;
   width: fit-content;
   max-width: 0;
   padding: 0.04em 0 0.22em;
   margin: 0 0 -0.22em;
   border-right: .09em solid transparent;
-  animation-fill-mode: forwards, forwards;
+  animation-fill-mode: forwards, forwards, forwards;
 }
 
-/* "Your city." — 10 characters */
+/* "Swach Gram." — 11 characters */
 .auth-page .slogan .type-line--1 {
-  animation-name: type1, caret;
-  animation-duration: .9s, 1.7s;
-  animation-delay: .35s, .35s;
-  animation-timing-function: steps(10), step-end;
+  animation-name: type1, caret, hideCaret;
+  animation-duration: 1s, 1s, .01s;
+  animation-delay: .35s, .35s, 1.35s;
+  animation-timing-function: steps(11), step-end, linear;
   border-right-color: var(--gold-400);
 }
 
-/* "Your voice." — 11 characters */
+/* "Samridh Kisan." — 14 characters */
 .auth-page .slogan .type-line--2 {
-  animation-name: type2, caret;
-  animation-duration: 1s, 1.7s;
-  animation-delay: 1.35s, 1.35s;
-  animation-timing-function: steps(11), step-end;
+  animation-name: type2, caret, hideCaret;
+  animation-duration: 1.25s, 1.25s, .01s;
+  animation-delay: 1.35s, 1.35s, 2.6s;
+  animation-timing-function: steps(14), step-end, linear;
   border-right-color: var(--gold-400);
 }
 
-/* "Your impact." — 12 characters */
+/* "Satat Vikas." — 12 characters */
 .auth-page .slogan .type-line--3 {
-  animation-name: type3, caret;
-  animation-duration: 1.05s, 2.6s;
-  animation-delay: 2.45s, 2.45s;
-  animation-timing-function: steps(12), step-end;
+  animation-name: type3, caret, hideCaret;
+  animation-duration: 1.05s, 1.9s, .01s;
+  animation-delay: 2.6s, 2.6s, 4.5s;
+  animation-timing-function: steps(12), step-end, linear;
   border-right-color: var(--gold-400);
 }
 
 @keyframes type1 {
   from { max-width: 0; }
-  to { max-width: 13ch; }
+  to { max-width: 14ch; }
 }
 
 @keyframes type2 {
   from { max-width: 0; }
-  to { max-width: 14ch; }
+  to { max-width: 17ch; }
 }
 
 @keyframes type3 {
   from { max-width: 0; }
-  to { max-width: 16ch; }
+  to { max-width: 15ch; }
 }
 
 @keyframes caret {
   50% { border-color: transparent; }
+}
+
+@keyframes hideCaret {
+  to { border-right-color: transparent; }
 }
 
 .auth-page .hero__tagline {
@@ -236,7 +239,7 @@
   max-width: 34ch;
   opacity: 0;
   animation: fadeUp .8s ease forwards;
-  animation-delay: 4s;
+  animation-delay: 4.6s;
 }
 
 @keyframes fadeUp {

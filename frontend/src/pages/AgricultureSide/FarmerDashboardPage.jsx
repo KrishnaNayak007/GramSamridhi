@@ -245,7 +245,7 @@ export default function FarmerDashboardPage({ onNavigate }) {
               </div>
             </div>
           )}
-          <small className="integration-note">Demo mode • Powered by Swachh Sahyog Agri AI Knowledge Base.</small>
+          <small className="integration-note">Demo mode • Powered by GramSamridh Agri AI Knowledge Base.</small>
         </article>
 
         {/* ACTIVE REQUESTS TIMELINE */}

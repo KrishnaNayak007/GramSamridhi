@@ -340,7 +340,7 @@ export default function SettingsPage() {
 
             <div className="preference">
               <div className="preference-title">Theme</div>
-              <div className="preference-desc">Choose how Swachh Sahyog looks</div>
+              <div className="preference-desc">Choose how GramSamridh looks</div>
               <div className="choice-row">
                 <button 
                   type="button" 

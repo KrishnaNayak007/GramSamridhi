@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'apps.activity',
     'apps.impact',
     'apps.messaging',
+    'apps.agriculture',
 ]
 
 MIDDLEWARE = [

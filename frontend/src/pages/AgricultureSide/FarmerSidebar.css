@@ -3,50 +3,13 @@
   z-index: 20;
   inset: 0 auto 0 0;
   width: 242px;
-  background: rgba(242, 237, 227, 0.97) !important;
+  background: #fbfaf6 !important;
   border-right: 1px solid rgba(23, 54, 48, 0.12) !important;
   padding: 27px 13px 16px;
   display: flex;
   flex-direction: column;
 }
 
-.farmer-sidebar .brand {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #173630;
-  padding: 0 9px;
-}
-
-.farmer-sidebar .brand-mark {
-  width: 35px;
-  height: 35px;
-  border: 2px solid #0f6849;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  color: #0f6849;
-  background: #f4fbf6;
-}
-
-.farmer-sidebar .brand-name {
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -.65px;
-  color: #173630;
-}
-
-.farmer-sidebar .brand-name b {
-  color: #14865a;
-}
-
-.farmer-sidebar .brand-tagline {
-  font-size: 6.5px;
-  letter-spacing: .65px;
-  color: #67736d;
-  margin: 6px 0 30px 58px;
-  white-space: nowrap;
-}
 
 .farmer-sidebar .profile-mini {
   border: 1px solid #e7ece8;

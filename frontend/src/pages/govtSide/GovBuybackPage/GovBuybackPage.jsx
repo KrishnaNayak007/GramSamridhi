@@ -137,7 +137,7 @@ export default function GovBuybackPage() {
             <div className="value">86</div>
             <div className="label">Requests Pending</div>
           </div>
-          <div className="stat-card progress">
+          <div className="stat-card in-progress">
             <div className="top-row">
               <div className="icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

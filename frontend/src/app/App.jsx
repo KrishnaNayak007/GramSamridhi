@@ -195,6 +195,7 @@ export default function App() {
         <main className="farmer-main-content">
           <FarmerNavbar 
             handleLogout={handleLogout} 
+            user={user}
           />
 
           <div className="farmer-page-content">
@@ -209,59 +210,34 @@ export default function App() {
     <div className="app">
       {/* SIDEBAR */}
       <aside className="sidebar">
-        <div className="brand" style={{ padding: '0 0 15px 0' }}>
-          <img className="brand-logo" src={logo} alt="Swachh Sahyog" />
-        </div>
-
-        {/* Profile Info based on role */}
-        <div style={{
-          border: '1px solid #e7ece8',
-          borderRadius: '14px',
-          padding: '12px 11px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '10px',
-          marginBottom: '22px',
-          background: '#fff',
-          boxShadow: '0 3px 12px rgba(24,55,42,.035)'
-        }}>
-          <div style={{
-            width: '38px',
-            height: '38px',
-            borderRadius: '50%',
-            display: 'grid',
-            placeItems: 'center',
-            flexShrink: 0,
-            background: 'var(--emerald, #10b981)',
-            color: '#fff',
-            fontSize: '11px',
-            fontWeight: 700
-          }}>
-            {(user?.username || 'UC').substring(0, 2).toUpperCase()}
-          </div>
-          <div>
-            <strong style={{ display: 'block', fontSize: '12.5px', color: 'var(--ink-950)' }}>{user?.username || 'Urban Citizen'}</strong>
-            <small style={{ display: 'block', fontSize: '9.5px', color: 'var(--ink-400)', marginTop: '3px' }}>Citizen (Urban Area)</small>
-          </div>
+        <div className="brand brand-vertical">
+          <img className="brand-logo" src={logo} alt="GramSamridhi logo" />
+          <span className="brand-tagline">Swach Gram • Samridh Kisan</span>
         </div>
 
         <nav className="nav-group">
-          <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px' }}>CIVIC LIFE</div>
+          <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px' }}>PLATFORM</div>
+          
           <button
             onClick={() => setCurrentTab('dashboard')}
             className={`nav-item nav-item-btn ${currentTab === 'dashboard' ? 'active' : ''}`}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="m3 10 9-7 9 7"/><path d="M5 9v11h14V9"/></svg>
-            <span>Home</span>
+            <span>
+              <strong style={{ display: 'block', fontSize: '13px', fontWeight: 600 }}>Home</strong>
+            </span>
           </button>
 
-          <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px', marginTop: '10px' }}>PARTICIPATE</div>
           <button
             onClick={() => setCurrentTab('swc')}
             className={`nav-item nav-item-btn ${currentTab === 'swc' ? 'active' : ''}`}
+            style={{ marginTop: '5px' }}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-            <span>Report Waste</span>
+            <span>
+              <strong style={{ display: 'block', fontSize: '13px', fontWeight: 600 }}>SWC</strong>
+              <small style={{ display: 'block', fontSize: '9.5px', color: '#88988e', fontWeight: 500, marginTop: '2px' }}>Smart Waste Complaint</small>
+            </span>
           </button>
 
           <button
@@ -270,7 +246,10 @@ export default function App() {
             style={{ marginTop: '5px' }}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13M5 12v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/><path d="M12 8c-1.5-3-6-3-6-.5S9 8 12 8Zm0 0c1.5-3 6-3 6-.5S15 8 12 8Z"/></svg>
-            <span>SURPLUS</span>
+            <span>
+              <strong style={{ display: 'block', fontSize: '13px', fontWeight: 600 }}>SURPLUS</strong>
+              <small style={{ display: 'block', fontSize: '9.5px', color: '#88988e', fontWeight: 500, marginTop: '2px' }}>Resource Exchange</small>
+            </span>
           </button>
 
           <button
@@ -279,34 +258,50 @@ export default function App() {
             style={{ marginTop: '5px' }}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="m4 6 1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/></svg>
-            <span>My Activity</span>
+            <span>
+              <strong style={{ display: 'block', fontSize: '13px', fontWeight: 600 }}>My Activity</strong>
+            </span>
           </button>
 
-          <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px', marginTop: '10px' }}>COMMUNITY</div>
           <button
             onClick={() => setCurrentTab('impact')}
             className={`nav-item nav-item-btn ${currentTab === 'impact' ? 'active' : ''}`}
             style={{ marginTop: '5px' }}
           >
             <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2 3 7v6c0 5 4 8 9 9 5-1 9-4 9-9V7l-9-5Z"/></svg>
-            <span>Impact</span>
+            <span>
+              <strong style={{ display: 'block', fontSize: '13px', fontWeight: 600 }}>Impact</strong>
+              <small style={{ display: 'block', fontSize: '9.5px', color: '#88988e', fontWeight: 500, marginTop: '2px' }}>System Outcomes</small>
+            </span>
+          </button>
+
+          <button
+            onClick={() => setCurrentTab('settings')}
+            className={`nav-item nav-item-btn ${currentTab === 'settings' ? 'active' : ''}`}
+            style={{ marginTop: '5px' }}
+          >
+            <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+            <span>
+              <strong style={{ display: 'block', fontSize: '13px', fontWeight: 600 }}>Settings</strong>
+            </span>
+          </button>
+
+          <button
+            onClick={() => setCurrentTab('help')}
+            className={`nav-item nav-item-btn ${currentTab === 'help' ? 'active' : ''}`}
+            style={{ marginTop: '5px' }}
+          >
+            <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
+            <span>
+              <strong style={{ display: 'block', fontSize: '13px', fontWeight: 600 }}>Help & Support</strong>
+            </span>
           </button>
         </nav>
 
-        <div className="nav-section" style={{ fontSize: '8.5px', fontWeight: 700, letterSpacing: '1.45px', color: '#77847d', padding: '7px 11px 6px', marginTop: '10px' }}>SUPPORT</div>
-        <button
-          onClick={() => setCurrentTab('help')}
-          className={`nav-item nav-item-btn ${currentTab === 'help' ? 'active' : ''}`}
-          style={{ marginTop: '5px' }}
-        >
-          <svg className="nav-ic" viewBox="0 0 24 24" fill="none" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.82 1c0 2-3 2-3 4"/><path d="M12 17h.01"/></svg>
-          <span>Help & Support</span>
-        </button>
-
-        <div className="sidebar-foot" style={{ marginTop: 'auto', borderTop: '1px solid var(--line)', paddingTop: '12px' }}>
-          <strong>Swachh Sahyog</strong>
-          <span>Every action counts.</span>
-          <span>Together, we build a cleaner, greener city for everyone.</span>
+        <div className="sidebar-foot" style={{ marginTop: 'auto' }}>
+          <strong>GRAMSAMRIDH</strong>
+          <span>One platform. Three outcomes.</span>
+          <span>Cleaner communities, supported farmer participation and sustainable resource recovery.</span>
         </div>
       </aside>
 

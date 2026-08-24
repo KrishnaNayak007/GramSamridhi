@@ -128,7 +128,7 @@ Residue Certified: ${team.residueCertified ? "Yes" : "No"}
           <div className="value">{totalTeams}</div>
           <div className="label">Total Teams</div>
         </div>
-        <div className="stat-card progress">
+        <div className="stat-card in-progress">
           <div className="top-row">
             <div className="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

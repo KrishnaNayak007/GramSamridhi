@@ -1,40 +1,13 @@
 import React from 'react';
 import './FarmerSidebar.css';
+import logo from '../../assets/logo.png';
 
 export default function FarmerSidebar({ currentTab, setCurrentTab, user }) {
-  const getHash = (str) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return Math.abs(hash);
-  };
-
-  const username = user?.username || 'devinder_singh';
-  const isDemoDevinder = username.toLowerCase() === 'devinder_singh';
-
-  const name = isDemoDevinder ? 'Devinder Singh' : username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  const initials = isDemoDevinder ? 'DS' : name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-  const farmerId = isDemoDevinder ? 'SS-10492' : `SS-${(getHash(username) % 90000) + 10000}`;
-
   return (
     <aside className="farmer-sidebar">
-      <div className="brand" style={{ padding: '0' }}>
-        <span className="brand-mark">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ width: '21px', height: '21px' }}>
-            <path d="M12 3c3.6 2 6 5.6 6 9.4 0 4-2.7 6.6-6 6.6s-6-2.6-6-6.6C6 8.6 8.4 5 12 3Z" fill="currentColor"/>
-          </svg>
-        </span>
-        <span className="brand-name">Swachh <b>Sahyog</b></span>
-      </div>
-      <div className="brand-tagline">TOGETHER FOR A CLEANER TOMORROW</div>
-
-      <div className="profile-mini">
-        <div className="avatar">{initials}</div>
-        <div>
-          <strong>{name}</strong>
-          <small>Farmer ID: {farmerId}</small>
-        </div>
+      <div className="brand brand-vertical">
+        <img className="brand-logo" src={logo} alt="GramSamridhi logo" />
+        <span className="brand-tagline">Swach Gram • Samridh Kisan</span>
       </div>
 
       <nav aria-label="Main navigation">

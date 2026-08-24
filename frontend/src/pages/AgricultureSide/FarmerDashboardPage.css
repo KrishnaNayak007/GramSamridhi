@@ -162,7 +162,10 @@
   width: 224px;
   padding: 17px;
   border-radius: 15px;
-  background: linear-gradient(160deg, #0d4e38, #075536);
+  background: rgba(18, 55, 39, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #fff;
   box-shadow: 0 14px 30px rgba(4, 45, 31, .26);
 }
@@ -796,6 +799,34 @@
   gap: 12px;
   margin-top: 12px;
   align-items: stretch;
+}
+
+.lower-grid .card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.lower-grid .card .progress-row {
+  margin-top: auto;
+}
+
+.lower-grid .card .full-report {
+  margin-top: auto;
+}
+
+.lower-grid .card .next-list {
+  margin-top: auto;
+}
+
+.lower-grid .scheme-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.lower-grid .scheme-card .scheme-footer {
+  margin-top: auto;
 }
 
 .standard-card {
@@ -1624,182 +1655,7 @@
   font-family: "Manrope", sans-serif;
 }
 
-.farmer-sidebar {
-  position: fixed;
-  z-index: 20;
-  inset: 0 auto 0 0;
-  width: 242px;
-  background: rgba(242, 237, 227, 0.97) !important;
-  border-right: 1px solid rgba(23, 54, 48, 0.12) !important;
-  padding: 27px 13px 16px;
-  display: flex;
-  flex-direction: column;
-}
 
-.farmer-sidebar .brand {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  color: #173630;
-  padding: 0 9px;
-}
-
-.farmer-sidebar .brand-logo {
-  height: 35px;
-}
-
-.farmer-sidebar .brand-mark {
-  width: 35px;
-  height: 35px;
-  border: 2px solid #0f6849;
-  border-radius: 10px;
-  display: grid;
-  place-items: center;
-  color: #0f6849;
-  background: #f4fbf6;
-}
-
-.farmer-sidebar .brand-name {
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: -.65px;
-  color: #173630;
-}
-
-.farmer-sidebar .brand-name b {
-  color: #14865a;
-}
-
-.farmer-sidebar .brand-tagline {
-  font-size: 6.5px;
-  letter-spacing: .65px;
-  color: #67736d;
-  margin: 6px 0 30px 48px;
-  white-space: nowrap;
-}
-
-.farmer-sidebar .profile-mini {
-  border: 1px solid rgba(23, 54, 48, 0.1);
-  border-radius: 14px;
-  padding: 12px 11px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 22px;
-  background: #fff;
-  box-shadow: 0 3px 12px rgba(24, 55, 42, .035);
-}
-
-.farmer-sidebar .avatar {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  flex: none;
-  background: #ffc62e;
-  color: #26300d;
-  font-size: 11px;
-  font-weight: 700;
-}
-
-.farmer-sidebar .profile-mini strong {
-  display: block;
-  font-size: 12.5px;
-  color: #173630;
-}
-
-.farmer-sidebar .profile-mini small {
-  display: block;
-  font-size: 9.5px;
-  color: #687870;
-  margin-top: 3px;
-}
-
-.farmer-sidebar nav {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-}
-
-.farmer-sidebar .nav-section {
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 1.45px;
-  color: #77847d;
-  padding: 7px 11px 6px;
-  margin-top: 10px;
-}
-
-.farmer-sidebar .nav-link {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  color: #172e27;
-  font-size: 12.5px;
-  font-weight: 500;
-  padding: 10px 11px;
-  border-radius: 10px;
-  transition: background .18s, color .18s, transform .18s;
-  background: transparent;
-  border: none;
-  width: 100%;
-  text-align: left;
-}
-
-.farmer-sidebar .nav-link:hover {
-  background: rgba(229, 198, 144, 0.18) !important;
-  transform: translateX(1px);
-  cursor: pointer;
-}
-
-.farmer-sidebar .nav-link.active {
-  background: #d9e2d6 !important;
-  color: #173630 !important;
-  font-weight: 700;
-}
-
-.farmer-sidebar .nav-link.active:before {
-  content: "";
-  position: absolute;
-  left: -13px;
-  top: 7px;
-  bottom: 7px;
-  width: 3px;
-  border-radius: 0 4px 4px 0;
-  background: #1c9962;
-}
-
-.farmer-sidebar .sidebar-bottom {
-  margin-top: auto;
-  border-top: 1px solid rgba(23, 54, 48, 0.1);
-  padding-top: 12px;
-}
-
-.farmer-sidebar .language-button {
-  width: 100%;
-  border: 0;
-  background: transparent;
-  color: #253b33;
-  border-radius: 10px;
-  padding: 10px 11px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 12px;
-  cursor: pointer;
-}
-
-.farmer-sidebar .language-button:hover {
-  background: rgba(23, 54, 48, 0.05);
-}
-
-.farmer-sidebar .language-button svg {
-  width: 15px;
-  height: 15px;
-  color: #687870;
-}
 
 .farmer-main-content {
   width: calc(100% - 242px);
