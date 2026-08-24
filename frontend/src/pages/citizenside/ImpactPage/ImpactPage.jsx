@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import './ImpactPage.css';
+import React, { useEffect, useState } from "react";
+import "./ImpactPage.css";
 
 export default function ImpactPage() {
   // Reveal animations mount flag
@@ -13,23 +13,46 @@ export default function ImpactPage() {
   const [villagesCount, setVillagesCount] = useState(0);
 
   // Chart interactivity states
-  const [activeSeries, setActiveSeries] = useState('waste');
+  const [activeSeries, setActiveSeries] = useState("waste");
 
   // Toast feedback states
-  const [toastMessage, setToastMessage] = useState('');
+  const [toastMessage, setToastMessage] = useState("");
   const [toastVisible, setToastVisible] = useState(false);
   const [toastTimer, setToastTimer] = useState(null);
 
   // Data mapping for Monthly Trend Chart
-  const chartLabels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const chartLabels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const chartData = {
     waste: [120, 180, 240, 310, 420, 380, 510, 620, 540, 680, 720, 760],
     residue: [45, 60, 90, 120, 150, 130, 210, 260, 230, 300, 330, 360],
     complaints: [8, 11, 14, 18, 21, 17, 25, 28, 24, 31, 34, 39],
-    farmers: [12, 18, 25, 31, 42, 39, 51, 63, 59, 74, 86, 96]
+    farmers: [12, 18, 25, 31, 42, 39, 51, 63, 59, 74, 86, 96],
   };
-  const chartUnits = { waste: "kg", residue: "kg", complaints: "resolved", farmers: "participants" };
-  const chartNames = { waste: "Waste collected", residue: "Crop residue collected", complaints: "Complaints resolved", farmers: "Farmers participating" };
+  const chartUnits = {
+    waste: "kg",
+    residue: "kg",
+    complaints: "resolved",
+    farmers: "participants",
+  };
+  const chartNames = {
+    waste: "Waste collected",
+    residue: "Crop residue collected",
+    complaints: "Complaints resolved",
+    farmers: "Farmers participating",
+  };
 
   const values = chartData[activeSeries];
   const maxVal = Math.max(...values) || 1;
@@ -90,7 +113,7 @@ export default function ImpactPage() {
   // Export report logic
   const handleExport = () => {
     const reportText = [
-      "GRAMSAMRIDH — SYSTEM IMPACT REPORT",
+      "GramSamridhi — SYSTEM IMPACT REPORT",
       "Swach Gram • Samridh Kisan • Satat Vikas",
       "",
       "Ward 24 · Rourkela Municipal Corp.",
@@ -102,14 +125,14 @@ export default function ImpactPage() {
       "Farmer payments processed: ₹1.84 L",
       "Villages reached: 18",
       "",
-      "This prototype uses demonstration data. Connect these fields to live jurisdiction-level records for deployment."
+      "This prototype uses demonstration data. Connect these fields to live jurisdiction-level records for deployment.",
     ].join("\n");
 
     const blob = new Blob([reportText], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "gramsamridh-impact-report.txt";
+    a.download = "GramSamridhi-impact-report.txt";
     document.body.appendChild(a);
     a.click();
     a.remove();
@@ -126,11 +149,15 @@ export default function ImpactPage() {
         <strong>Impact</strong>
       </div>
 
-      <section className={`page-head reveal ${revealVisible ? 'visible' : ''}`}>
+      <section className={`page-head reveal ${revealVisible ? "visible" : ""}`}>
         <div>
-          <p className="eyebrow">GRAMSAMRIDH · SYSTEM IMPACT</p>
+          <p className="eyebrow">GramSamridhi · SYSTEM IMPACT</p>
           <h1>Measuring change across every community.</h1>
-          <p>See how citizens, farmers and government teams are working through one platform to create cleaner communities, stronger farmer participation and sustainable rural development.</p>
+          <p>
+            See how citizens, farmers and government teams are working through
+            one platform to create cleaner communities, stronger farmer
+            participation and sustainable rural development.
+          </p>
           <div className="tagline">
             <span>Swach Gram</span>
             <i>•</i>
@@ -144,29 +171,56 @@ export default function ImpactPage() {
         </button>
       </section>
 
-      <section className={`impact-hero reveal ${revealVisible ? 'visible' : ''}`}>
+      <section
+        className={`impact-hero reveal ${revealVisible ? "visible" : ""}`}
+      >
         <div className="hero-copy">
-          <p className="eyebrow light">FROM LOCAL ACTION TO MEASURABLE OUTCOMES</p>
-          <h2>Three pillars.<br /><span>One connected system.</span></h2>
-          <p>GramSamridh links a citizen's report or a farmer's residue request to the people and processes that can act on it — and records the result.</p>
+          <p className="eyebrow light">
+            FROM LOCAL ACTION TO MEASURABLE OUTCOMES
+          </p>
+          <h2>
+            Three pillars.
+            <br />
+            <span>One connected system.</span>
+          </h2>
+          <p>
+            GramSamridhi links a citizen's report or a farmer's residue request
+            to the people and processes that can act on it — and records the
+            result.
+          </p>
           <div className="hero-pills">
             <span>Citizen reports</span>
             <span>Farmer participation</span>
             <span>Government response</span>
           </div>
         </div>
-        <div className="hero-orbit" aria-label="GramSamridh three-pillar model">
+        <div
+          className="hero-orbit"
+          aria-label="GramSamridhi three-pillar model"
+        >
           <div className="orbit-line"></div>
           <div className="orbit-node node-one">
-            <b>SWACH<br />GRAM</b>
+            <b>
+              SWACH
+              <br />
+              GRAM
+            </b>
             <small>Cleaner villages</small>
           </div>
           <div className="orbit-node node-two">
-            <b>SAMRIDH<br />KISAN</b>
+            <b>
+              SAMRIDH
+              <br />
+              KISAN
+            </b>
             <small>Farmer support</small>
           </div>
           <div className="orbit-node node-three">
-            <b>SATAT<br />VIKAS</b>
+            <b>
+              SATAT
+              <br />
+              VIKAS
+            </b>
             <small>Resource recovery</small>
           </div>
           <div className="orbit-center">
@@ -176,7 +230,10 @@ export default function ImpactPage() {
         </div>
       </section>
 
-      <section className={`metric-grid reveal ${revealVisible ? 'visible' : ''}`} aria-label="Key system metrics">
+      <section
+        className={`metric-grid reveal ${revealVisible ? "visible" : ""}`}
+        aria-label="Key system metrics"
+      >
         <article className="metric">
           <div className="metric-icon green">♻</div>
           <strong>{formatMetric(wasteCount, "ton")}</strong>
@@ -209,13 +266,17 @@ export default function ImpactPage() {
         </article>
       </section>
 
-      <section className={`pillar-section reveal ${revealVisible ? 'visible' : ''}`}>
+      <section
+        className={`pillar-section reveal ${revealVisible ? "visible" : ""}`}
+      >
         <div className="section-head">
           <div>
-            <p className="eyebrow">THE CORE OF GRAMSAMRIDH</p>
+            <p className="eyebrow">THE CORE OF GramSamridhi</p>
             <h2>Three pillars. One mission.</h2>
           </div>
-          <span className="section-note">Measured through platform activity</span>
+          <span className="section-note">
+            Measured through platform activity
+          </span>
         </div>
         <div className="pillar-grid">
           <article className="pillar pillar-green">
@@ -225,7 +286,10 @@ export default function ImpactPage() {
             </div>
             <p className="pillar-label">SWACH GRAM</p>
             <h3>Cleaner communities</h3>
-            <p>AI-assisted waste reporting helps authorities identify, prioritize and resolve local waste issues.</p>
+            <p>
+              AI-assisted waste reporting helps authorities identify, prioritize
+              and resolve local waste issues.
+            </p>
             <div className="mini-stats">
               <div>
                 <strong>156</strong>
@@ -258,7 +322,10 @@ export default function ImpactPage() {
             </div>
             <p className="pillar-label">SAMRIDH KISAN</p>
             <h3>Better support for farmers</h3>
-            <p>Farmers can register crop residue for authorized collection, receive payment and access digital support.</p>
+            <p>
+              Farmers can register crop residue for authorized collection,
+              receive payment and access digital support.
+            </p>
             <div className="mini-stats">
               <div>
                 <strong>124</strong>
@@ -289,7 +356,10 @@ export default function ImpactPage() {
             </div>
             <p className="pillar-label">SATAT VIKAS</p>
             <h3>Sustainable rural development</h3>
-            <p>Waste and agricultural residue are redirected toward reuse, recycling and composting instead of unmanaged disposal.</p>
+            <p>
+              Waste and agricultural residue are redirected toward reuse,
+              recycling and composting instead of unmanaged disposal.
+            </p>
             <div className="mini-stats">
               <div>
                 <strong>680 kg</strong>
@@ -315,7 +385,9 @@ export default function ImpactPage() {
         </div>
       </section>
 
-      <section className={`two-column reveal ${revealVisible ? 'visible' : ''}`}>
+      <section
+        className={`two-column reveal ${revealVisible ? "visible" : ""}`}
+      >
         <article className="panel governance">
           <div className="section-head compact">
             <div>
@@ -324,7 +396,10 @@ export default function ImpactPage() {
             </div>
             <span className="status-chip">Operational view</span>
           </div>
-          <p className="section-copy">Jurisdiction-based dashboards help officials see what needs attention, assign work and monitor resolution.</p>
+          <p className="section-copy">
+            Jurisdiction-based dashboards help officials see what needs
+            attention, assign work and monitor resolution.
+          </p>
           <div className="gov-grid">
             <div>
               <strong>204</strong>
@@ -393,7 +468,9 @@ export default function ImpactPage() {
         </article>
       </section>
 
-      <section className={`two-column reveal ${revealVisible ? 'visible' : ''}`}>
+      <section
+        className={`two-column reveal ${revealVisible ? "visible" : ""}`}
+      >
         <article className="panel farmer-impact">
           <div className="section-head compact">
             <div>
@@ -470,7 +547,9 @@ export default function ImpactPage() {
         </article>
       </section>
 
-      <section className={`panel journey reveal ${revealVisible ? 'visible' : ''}`}>
+      <section
+        className={`panel journey reveal ${revealVisible ? "visible" : ""}`}
+      >
         <div className="section-head compact">
           <div>
             <p className="eyebrow">HOW THE SYSTEM CREATES IMPACT</p>
@@ -512,7 +591,9 @@ export default function ImpactPage() {
         </div>
       </section>
 
-      <section className={`panel activity-chart-grid reveal ${revealVisible ? 'visible' : ''}`}>
+      <section
+        className={`panel activity-chart-grid reveal ${revealVisible ? "visible" : ""}`}
+      >
         <div className="activity">
           <div className="section-head compact">
             <div>
@@ -563,11 +644,15 @@ export default function ImpactPage() {
               <h2>Monthly platform activity.</h2>
             </div>
           </div>
-          <div className="chart-controls" role="group" aria-label="Impact trend">
-            {['waste', 'residue', 'complaints', 'farmers'].map((key) => (
+          <div
+            className="chart-controls"
+            role="group"
+            aria-label="Impact trend"
+          >
+            {["waste", "residue", "complaints", "farmers"].map((key) => (
               <button
                 key={key}
-                className={`chart-btn ${activeSeries === key ? 'active' : ''}`}
+                className={`chart-btn ${activeSeries === key ? "active" : ""}`}
                 onClick={() => {
                   setActiveSeries(key);
                   triggerToast(`Viewing monthly ${key} trends`);
@@ -584,7 +669,7 @@ export default function ImpactPage() {
               return (
                 <div key={label} className="bar">
                   <div
-                    className={`bar-fill ${isPeak ? 'peak' : ''}`}
+                    className={`bar-fill ${isPeak ? "peak" : ""}`}
                     data-tip={`${label} · ${values[idx]} ${chartUnits[activeSeries]}`}
                     style={{ height: `${heightPercent}%` }}
                   ></div>
@@ -594,13 +679,20 @@ export default function ImpactPage() {
             })}
           </div>
           <div className="chart-foot">
-            <span>{chartNames[activeSeries]} · {chartUnits[activeSeries]}</span>
-            <span>Peak: {chartLabels[peakIndex]} ({values[peakIndex]} {chartUnits[activeSeries]})</span>
+            <span>
+              {chartNames[activeSeries]} · {chartUnits[activeSeries]}
+            </span>
+            <span>
+              Peak: {chartLabels[peakIndex]} ({values[peakIndex]}{" "}
+              {chartUnits[activeSeries]})
+            </span>
           </div>
         </div>
       </section>
 
-      <section className={`outcome-strip reveal ${revealVisible ? 'visible' : ''}`}>
+      <section
+        className={`outcome-strip reveal ${revealVisible ? "visible" : ""}`}
+      >
         <div>
           <span>01</span>
           <strong>Cleaner villages</strong>
@@ -626,10 +718,13 @@ export default function ImpactPage() {
       <footer className="footer-note">
         <div className="footer-mark">GS</div>
         <div>
-          <strong>GramSamridh</strong>
+          <strong>GramSamridhi</strong>
           <span>Swach Gram • Samridh Kisan • Satat Vikas</span>
         </div>
-        <p>Impact data shown here is prototype data and can be connected to live jurisdiction-level records.</p>
+        <p>
+          Impact data shown here is prototype data and can be connected to live
+          jurisdiction-level records.
+        </p>
       </footer>
 
       {toastVisible && (

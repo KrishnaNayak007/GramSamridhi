@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "GramSamridhi API",
+    "title": "GramSamridhii API",
     "version": "1.0.0",
-    "description": "API endpoints for GramSamridhi: Smart Waste Complaint (SWC) and Agriculture/Crop Residue Buy-back management."
+    "description": "API endpoints for GramSamridhii: Smart Waste Complaint (SWC) and Agriculture/Crop Residue Buy-back management."
   },
   "paths": {
     "/api/v1/agriculture/pickups/": {
@@ -25,12 +25,26 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["residue_type", "weight_kg", "location_address", "scheduled_slot"],
+                "required": [
+                  "residue_type",
+                  "weight_kg",
+                  "location_address",
+                  "scheduled_slot"
+                ],
                 "properties": {
-                  "residue_type": { "type": "string", "example": "Paddy Straw" },
+                  "residue_type": {
+                    "type": "string",
+                    "example": "Paddy Straw"
+                  },
                   "weight_kg": { "type": "number", "example": 650.0 },
-                  "location_address": { "type": "string", "example": "Bhadana Village, Karnal, Haryana" },
-                  "scheduled_slot": { "type": "string", "example": "Tomorrow, 09:00 - 11:00 AM" }
+                  "location_address": {
+                    "type": "string",
+                    "example": "Bhadana Village, Karnal, Haryana"
+                  },
+                  "scheduled_slot": {
+                    "type": "string",
+                    "example": "Tomorrow, 09:00 - 11:00 AM"
+                  }
                 }
               }
             }
@@ -75,9 +89,19 @@
                 "type": "object",
                 "required": ["title", "category", "description"],
                 "properties": {
-                  "title": { "type": "string", "example": "Delay in pickup payment" },
-                  "category": { "type": "string", "enum": ["collection", "payment", "schemes", "other"], "example": "payment" },
-                  "description": { "type": "string", "example": "Request RC-4892 collection is completed but status is not showing paid." }
+                  "title": {
+                    "type": "string",
+                    "example": "Delay in pickup payment"
+                  },
+                  "category": {
+                    "type": "string",
+                    "enum": ["collection", "payment", "schemes", "other"],
+                    "example": "payment"
+                  },
+                  "description": {
+                    "type": "string",
+                    "example": "Request RC-4892 collection is completed but status is not showing paid."
+                  }
                 }
               }
             }
@@ -102,7 +126,10 @@
                 "type": "object",
                 "required": ["prompt"],
                 "properties": {
-                  "prompt": { "type": "string", "example": "जैविक खाद कैसे बनाएं?" }
+                  "prompt": {
+                    "type": "string",
+                    "example": "जैविक खाद कैसे बनाएं?"
+                  }
                 }
               }
             }
