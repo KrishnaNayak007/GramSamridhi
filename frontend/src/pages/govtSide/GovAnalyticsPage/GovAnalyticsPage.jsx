@@ -1,13 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './GovAnalyticsPage.css';
-
-const LEADERBOARD = [
-  { name: 'Team Bravo', meta: 'Sector 7 · Ward 14', resolved: 78, avg: '10.5h' },
-  { name: 'Team Alpha', meta: 'Sector 4 · Ward 14', resolved: 64, avg: '12.1h' },
-  { name: 'Team Echo', meta: 'Market Road Belt', resolved: 51, avg: '13.8h' },
-  { name: 'Team Delta', meta: 'Riverside Colony', resolved: 39, avg: '19.4h' },
-  { name: 'Team Foxtrot', meta: 'Sector 9 · Ward 14', resolved: 22, avg: '21.0h' },
-];
+import { incidentsApi } from '../../../services/incidentsApi';
+import { agricultureApi } from '../../../services/agricultureApi';
 
 const SEVERITY = [
   { label: 'High', hours: 6.2, max: 24, color: '#D1493F' },
@@ -15,27 +9,182 @@ const SEVERITY = [
   { label: 'Low', hours: 21.5, max: 24, color: '#1F7A4D' },
 ];
 
-const RANGES = {
-  7:  { labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-        reported: [14, 18, 11, 20, 16, 9, 7],
-        resolved: [10, 15, 12, 17, 14, 11, 8] },
-  30: { labels: ['W1', 'W2', 'W3', 'W4'],
-        reported: [92, 101, 88, 110],
-        resolved: [80, 95, 90, 103] },
-  90: { labels: ['Jan', 'Feb', 'Mar'],
-        reported: [310, 289, 342],
-        resolved: [275, 301, 318] },
-  365:{ labels: ['Q1', 'Q2', 'Q3', 'Q4'],
-        reported: [941, 1023, 987, 1105],
-        resolved: [880, 960, 940, 1040] },
-};
-
 const RANGE_LABELS = { 7: 'Last 7 days', 30: 'Last 30 days', 90: 'Last 90 days', 365: 'Last 1 year' };
 
+const RESIDUE_STREAM = {
+  "Rice Straw": "organic",
+  "Wheat Straw": "organic",
+  "Sugarcane Trash": "organic",
+  "Agri Plastic Sheet": "inorganic",
+  "Irrigation Pipe": "inorganic"
+};
+
 export default function GovAnalyticsPage() {
+  const [complaints, setComplaints] = useState([]);
+  const [pickups, setPickups] = useState([]);
   const [selectedRange, setSelectedRange] = useState(7);
 
-  const activeRange = RANGES[selectedRange];
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const compData = await incidentsApi.getAll();
+        if (compData) {
+          const mapped = compData.map(inc => {
+            const severity = inc.priority_score > 7.0 ? 'high' : inc.priority_score > 4.0 ? 'medium' : 'low';
+            const status = inc.status === 'open' ? 'submitted' : inc.status === 'assigned' ? 'assigned' : inc.status === 'in_progress' ? 'progress' : 'resolved';
+            const created = new Date(inc.created_at || Date.now());
+            const elapsed = Math.max(0.1, ((Date.now() - created.getTime()) / 3600000));
+            return {
+              id: inc.id,
+              status: status,
+              severity: severity,
+              created_at: inc.created_at,
+              resolutionHours: 12.5,
+              locality: inc.representative_location?.name || 'BMC Ward 24',
+              assignedTeam: inc.assigned_officer?.name || null,
+              rating: inc.rating || 5,
+              reopened: false,
+              escalated: elapsed > (severity === 'high' ? 8 : severity === 'medium' ? 24 : 72)
+            };
+          });
+          setComplaints(mapped);
+        }
+
+        const pickData = await agricultureApi.getPickups();
+        if (pickData) {
+          setPickups(pickData);
+        }
+      } catch (err) {
+        console.error("Error loading analytics data:", err);
+      }
+    }
+    loadData();
+  }, []);
+
+  // Compute dynamic stats strip metrics
+  const resolvedThisMonth = complaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
+  
+  const resolvedComplaints = complaints.filter(c => c.status === 'resolved' || c.status === 'closed');
+  const avgResolutionTime = resolvedComplaints.length > 0
+    ? (resolvedComplaints.reduce((sum, c) => sum + (c.resolutionHours || 12.5), 0) / resolvedComplaints.length).toFixed(1) + 'h'
+    : '0.0h';
+
+  const slaCompliantCount = complaints.filter(c => !c.escalated).length;
+  const slaCompliance = complaints.length > 0
+    ? Math.round((slaCompliantCount / complaints.length) * 100) + '%'
+    : '100%';
+
+  const ratedComplaints = complaints.filter(c => c.rating > 0);
+  const citizenSatisfaction = ratedComplaints.length > 0
+    ? (ratedComplaints.reduce((sum, c) => sum + c.rating, 0) / ratedComplaints.length).toFixed(1) + '/5'
+    : '5.0/5';
+
+  const repeatCount = complaints.filter(c => c.reopened).length;
+  const repeatComplaints = complaints.length > 0
+    ? Math.round((repeatCount / complaints.length) * 100) + '%'
+    : '0%';
+
+  // Dynamic Leaderboard
+  const teamResolutions = {};
+  complaints.forEach(c => {
+    if (c.status === 'resolved' || c.status === 'closed') {
+      const team = c.assignedTeam || 'Sanitation Team Alpha';
+      if (!teamResolutions[team]) {
+        teamResolutions[team] = { name: team, meta: c.locality || 'Zone 1', resolved: 0, totalHours: 0 };
+      }
+      teamResolutions[team].resolved++;
+      teamResolutions[team].totalHours += (c.resolutionHours || 12.5);
+    }
+  });
+
+  const LEADERBOARD = Object.values(teamResolutions)
+    .map(t => ({
+      name: t.name,
+      meta: t.meta,
+      resolved: t.resolved,
+      avg: (t.totalHours / t.resolved).toFixed(1) + 'h'
+    }))
+    .sort((a, b) => b.resolved - a.resolved)
+    .slice(0, 5);
+
+  // Dynamic ranges reported/resolved line chart helper
+  const getRangeData = (range) => {
+    if (range === 7) {
+      const labels = [];
+      const reported = [0, 0, 0, 0, 0, 0, 0];
+      const resolved = [0, 0, 0, 0, 0, 0, 0];
+      for (let i = 6; i >= 0; i--) {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        labels.push(d.toLocaleString('en-US', { weekday: 'short' }));
+      }
+      complaints.forEach(c => {
+        const d = new Date(c.created_at || Date.now());
+        const diffDays = Math.floor((Date.now() - d.getTime()) / (3600000 * 24));
+        if (diffDays >= 0 && diffDays < 7) {
+          reported[6 - diffDays]++;
+          if (c.status === 'resolved' || c.status === 'closed') {
+            resolved[6 - diffDays]++;
+          }
+        }
+      });
+      return { labels, reported, resolved };
+    }
+    if (range === 30) {
+      const labels = ['W1', 'W2', 'W3', 'W4'];
+      const reported = [0, 0, 0, 0];
+      const resolved = [0, 0, 0, 0];
+      complaints.forEach(c => {
+        const d = new Date(c.created_at || Date.now());
+        const diffDays = Math.floor((Date.now() - d.getTime()) / (3600000 * 24));
+        if (diffDays >= 0 && diffDays < 30) {
+          const wIdx = Math.floor(diffDays / 7.5);
+          if (wIdx >= 0 && wIdx < 4) {
+            reported[3 - wIdx]++;
+            if (c.status === 'resolved' || c.status === 'closed') {
+              resolved[3 - wIdx]++;
+            }
+          }
+        }
+      });
+      return { labels, reported, resolved };
+    }
+    const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const reported = Array(12).fill(0);
+    const resolved = Array(12).fill(0);
+    complaints.forEach(c => {
+      const d = new Date(c.created_at || Date.now());
+      const mIdx = d.getMonth();
+      reported[mIdx]++;
+      if (c.status === 'resolved' || c.status === 'closed') {
+        resolved[mIdx]++;
+      }
+    });
+    if (range === 90) {
+      const currentMonth = new Date().getMonth();
+      const mLabels = [];
+      const mReported = [];
+      const mResolved = [];
+      for (let i = 2; i >= 0; i--) {
+        const mIdx = (currentMonth - i + 12) % 12;
+        mLabels.push(labels[mIdx]);
+        mReported.push(reported[mIdx]);
+        mResolved.push(resolved[mIdx]);
+      }
+      return { labels: mLabels, reported: mReported, resolved: mResolved };
+    }
+    const qLabels = ['Q1', 'Q2', 'Q3', 'Q4'];
+    const qReported = [0, 0, 0, 0];
+    const qResolved = [0, 0, 0, 0];
+    for (let i = 0; i < 12; i++) {
+      const qIdx = Math.floor(i / 3);
+      qReported[qIdx] += reported[i];
+      qResolved[qIdx] += resolved[i];
+    }
+    return { labels: qLabels, reported: qReported, resolved: qResolved };
+  };
+
+  const activeRange = getRangeData(selectedRange);
 
   // Custom Line Chart SVG Plotter
   const renderLineChart = () => {
@@ -145,9 +294,25 @@ export default function GovAnalyticsPage() {
 
   const renderResidueImpactChart = () => {
     const labels = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'];
-    const organic = [620, 780, 910, 1050, 1150, 1240];
-    const inorganic = [310, 380, 460, 540, 610, 680];
-    const avoided = [8, 14, 22, 31, 41, 53];
+    const organic = [0, 0, 0, 0, 0, 0];
+    const inorganic = [0, 0, 0, 0, 0, 0];
+    const avoided = [0, 0, 0, 0, 0, 0];
+
+    pickups.forEach(p => {
+      const d = new Date(p.created_at || Date.now());
+      const m = d.toLocaleString('en-US', { month: 'short' });
+      const idx = labels.indexOf(m);
+      if (idx !== -1) {
+        const isOrganic = p.residue_type?.toLowerCase().includes('straw') || p.residue_type?.toLowerCase().includes('trash');
+        const qtyT = (p.weight_kg || 0) / 1000;
+        if (isOrganic) {
+          organic[idx] += qtyT;
+        } else {
+          inorganic[idx] += qtyT;
+        }
+        avoided[idx] += qtyT * 0.0007;
+      }
+    });
 
     const width = 800;
     const height = 200;
@@ -160,14 +325,20 @@ export default function GovAnalyticsPage() {
     const chartH = height - paddingTop - paddingBottom;
 
     const getX = (index) => paddingLeft + index * (chartW / (labels.length - 1));
-    const getLeftY = (val) => paddingTop + chartH - (val / 2000) * chartH;
-    const getRightY = (val) => paddingTop + chartH - (val / 60) * chartH;
+    
+    const maxVal = Math.max(...organic, ...inorganic, 10);
+    const scaleMax = Math.ceil(maxVal * 1.15);
+    const getLeftY = (val) => paddingTop + chartH - (val / scaleMax) * chartH;
+
+    const maxAvoided = Math.max(...avoided, 1);
+    const scaleAvoidedMax = Math.ceil(maxAvoided * 1.15);
+    const getRightY = (val) => paddingTop + chartH - (val / scaleAvoidedMax) * chartH;
 
     const linePoints = avoided.map((val, i) => `${getX(i)},${getRightY(val)}`);
     const linePath = `M ${linePoints.join(' L ')}`;
 
-    const leftTicks = [0, 500, 1000, 1500, 2000];
-    const rightTicks = [0, 15, 30, 45, 60];
+    const leftTicks = [0, Math.round(scaleMax * 0.25), Math.round(scaleMax * 0.5), Math.round(scaleMax * 0.75), scaleMax];
+    const rightTicks = [0, Math.round(scaleAvoidedMax * 0.25), Math.round(scaleAvoidedMax * 0.5), Math.round(scaleAvoidedMax * 0.75), scaleAvoidedMax];
 
     return (
       <div className="svg-chart-container" style={{ height: '220px' }}>
@@ -235,8 +406,8 @@ export default function GovAnalyticsPage() {
 
           {labels.map((_, i) => {
             const x = getX(i);
-            const orgH = (organic[i] / 2000) * chartH;
-            const inorgH = (inorganic[i] / 2000) * chartH;
+            const orgH = (organic[i] / scaleMax) * chartH;
+            const inorgH = (inorganic[i] / scaleMax) * chartH;
             const orgY = paddingTop + chartH - orgH;
             const inorgY = orgY - inorgH;
 
@@ -304,7 +475,7 @@ export default function GovAnalyticsPage() {
             </div>
             <span className="trend up">+12%</span>
           </div>
-          <div className="value">341</div>
+          <div className="value">{resolvedThisMonth}</div>
           <div className="label">Resolved This Month</div>
         </div>
         <div className="stat-card in-progress">
@@ -316,7 +487,7 @@ export default function GovAnalyticsPage() {
             </div>
             <span className="trend up">-8%</span>
           </div>
-          <div className="value">14.2h</div>
+          <div className="value">{avgResolutionTime}</div>
           <div className="label">Avg. Resolution Time</div>
         </div>
         <div className="stat-card resolved">
@@ -328,7 +499,7 @@ export default function GovAnalyticsPage() {
             </div>
             <span className="trend up">+3%</span>
           </div>
-          <div className="value">91%</div>
+          <div className="value">{slaCompliance}</div>
           <div className="label">SLA Compliance</div>
         </div>
         <div className="stat-card pending">
@@ -340,7 +511,7 @@ export default function GovAnalyticsPage() {
             </div>
             <span className="trend up">+0.2</span>
           </div>
-          <div className="value">4.4/5</div>
+          <div className="value">{citizenSatisfaction}</div>
           <div className="label">Citizen Satisfaction</div>
         </div>
         <div className="stat-card urgent">
@@ -352,7 +523,7 @@ export default function GovAnalyticsPage() {
             </div>
             <span className="trend down">-2%</span>
           </div>
-          <div className="value">6%</div>
+          <div className="value">{repeatComplaints}</div>
           <div className="label">Repeat Complaints</div>
         </div>
       </section>

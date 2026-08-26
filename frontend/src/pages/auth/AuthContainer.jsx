@@ -34,6 +34,7 @@ export default function AuthContainer({
   const [farmerPassword, setFarmerPassword] = useState("citizen123");
   const [showFarmerPassword, setShowFarmerPassword] = useState(false);
   const [farmerError, setFarmerError] = useState("");
+  const [farmerProfession, setFarmerProfession] = useState("farmer");
 
   // Government Form State
   const [govId, setGovId] = useState("bmc_ward24_officer");
@@ -222,15 +223,16 @@ export default function AuthContainer({
           email: farmerEmail,
           phone: farmerPhone,
           address: farmerAddress,
+          profession: farmerProfession,
         };
         const data = await authApi.register(payload);
-        triggerToast("Farmer account created successfully!");
+        triggerToast("Agriculture account created successfully!");
         if (data.access) {
           localStorage.setItem("access_token", data.access);
           localStorage.setItem("refresh_token", data.refresh);
           localStorage.setItem(
             "user",
-            JSON.stringify(data.user || { username: payload.username }),
+            JSON.stringify(data.user || { username: payload.username, role: "farmer", profession: farmerProfession }),
           );
           setTimeout(() => {
             onLoginSuccess();
@@ -296,7 +298,7 @@ export default function AuthContainer({
   const getStepLabel = () => {
     if (activePanel === "role") return "Welcome to GramSamridhii";
     if (activePanel === "civilian") return "Citizen access";
-    if (activePanel === "farmer") return "Farmer access";
+    if (activePanel === "farmer") return "Agriculture Portal";
     return "Government access";
   };
 
@@ -392,37 +394,6 @@ export default function AuthContainer({
                   type="button"
                   className="role-card"
                   onClick={() => {
-                    setActivePanel("civilian");
-                    setCivilianEmail("odisha_citizen");
-                    setCivilianPassword("citizen123");
-                    setCivilianMode("login");
-                  }}
-                >
-                  <span className="role-card__icon" aria-hidden="true">
-                    🧍
-                  </span>
-                  <span>
-                    <span
-                      className="role-card__title"
-                      style={{ display: "block" }}
-                    >
-                      Citizen access
-                    </span>
-                    <span
-                      className="role-card__desc"
-                      style={{ display: "block" }}
-                    >
-                      Report issues, track cleanups, follow your area
-                    </span>
-                  </span>
-                  <span className="role-card__arrow" aria-hidden="true">
-                    →
-                  </span>
-                </button>
-                <button
-                  type="button"
-                  className="role-card"
-                  onClick={() => {
                     setActivePanel("farmer");
                     setFarmerEmail("devinder_singh");
                     setFarmerPassword("citizen123");
@@ -441,13 +412,13 @@ export default function AuthContainer({
                       className="role-card__title"
                       style={{ display: "block" }}
                     >
-                      Farmer access
+                      Agriculture Portal
                     </span>
                     <span
                       className="role-card__desc"
                       style={{ display: "block" }}
                     >
-                      Register land, access advisories and local support
+                      Access collection schedules, residue buyback, marketplace and local support
                     </span>
                   </span>
                   <span className="role-card__arrow" aria-hidden="true">
@@ -680,7 +651,7 @@ export default function AuthContainer({
               >
                 ← Back
               </button>
-              <h2>Farmer access</h2>
+              <h2>Agriculture Portal</h2>
               <p className="sub">Log in or create your GramSamridhi account.</p>
 
               <div
@@ -802,6 +773,29 @@ export default function AuthContainer({
                         onChange={(e) => setFarmerAddress(e.target.value)}
                         placeholder="Village / town, block, district, state"
                       />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="farmerProfession">Profession</label>
+                      <select
+                        id="farmerProfession"
+                        value={farmerProfession}
+                        onChange={(e) => setFarmerProfession(e.target.value)}
+                        required
+                        style={{
+                          width: "100%",
+                          padding: "12px 14px",
+                          borderRadius: "8px",
+                          border: "1px solid #dcdfd8",
+                          backgroundColor: "#fff",
+                          fontSize: "13px",
+                          fontWeight: "500",
+                          color: "#1c2620"
+                        }}
+                      >
+                        <option value="farmer">Farmer</option>
+                        <option value="dairy">Dairy</option>
+                        <option value="other">Other</option>
+                      </select>
                     </div>
                   </>
                 )}

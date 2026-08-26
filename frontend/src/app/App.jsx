@@ -2,16 +2,16 @@ import React, { useState, useEffect } from "react";
 import { useLocationContext } from "./LocationContext";
 import LoginPage from "../pages/auth/LoginPage";
 import SignupPage from "../pages/auth/SignupPage";
-import IntroPage from "../pages/citizenside/IntroPage/IntroPage";
+import IntroPage from "../pages/AgricultureSide/IntroPage/IntroPage";
 import logo from "../assets/logo.png";
 
 // Import pages
 import DashboardPage from "../pages/DashboardPage/DashboardPage";
-import SwcPage from "../pages/citizenside/SwcPage/SwcPage";
-import SurplusPage from "../pages/citizenside/SurplusPage/SurplusPage";
-import ImpactPage from "../pages/citizenside/ImpactPage/ImpactPage";
-import MyActivityPage from "../pages/citizenside/MyActivityPage/MyActivityPage";
-import SettingsPage from "../pages/citizenside/SettingsPage/SettingsPage";
+import SwcPage from "../pages/AgricultureSide/SwcPage/SwcPage";
+import SurplusPage from "../pages/AgricultureSide/SurplusPage/SurplusPage";
+import ImpactPage from "../pages/AgricultureSide/ImpactPage/ImpactPage";
+import MyActivityPage from "../pages/AgricultureSide/MyActivityPage/MyActivityPage";
+import SettingsPage from "../pages/AgricultureSide/SettingsPage/SettingsPage";
 import GovOverviewPage from "../pages/govtSide/GovOverviewPage/GovOverviewPage";
 import GovQueuePage from "../pages/govtSide/GovQueuePage/GovQueuePage";
 import GovMapPage from "../pages/govtSide/GovMapPage/GovMapPage";
@@ -22,11 +22,19 @@ import GovResolvedPage from "../pages/govtSide/GovResolvedPage/GovResolvedPage";
 import GovSidebar from "../pages/govtSide/GovOverviewPage/GovSidebar";
 import GovNavbar from "../pages/govtSide/GovOverviewPage/GovNavbar";
 import GovBuybackPage from "../pages/govtSide/GovBuybackPage/GovBuybackPage";
-import FarmerSidebar from "../pages/AgricultureSide/FarmerSidebar";
-import FarmerNavbar from "../pages/AgricultureSide/FarmerNavbar";
+import GovSchedulePage from "../pages/govtSide/GovSchedulePage/GovSchedulePage";
+import Sidebar from "../pages/AgricultureSide/Sidebar/Sidebar";
+import OverviewPage from "../pages/AgricultureSide/OverviewPage/OverviewPage";
+import InventoryPage from "../pages/AgricultureSide/InventoryPage/InventoryPage";
+import SchedulePage from "../pages/AgricultureSide/SchedulePage/SchedulePage";
+import ContractsPage from "../pages/AgricultureSide/ContractsPage/ContractsPage";
+import PaymentHistoryPage from "../pages/AgricultureSide/PaymentHistoryPage/PaymentHistoryPage";
+import LeaderboardPage from "../pages/AgricultureSide/LeaderboardPage/LeaderboardPage";
+import ResiduePage from "../pages/AgricultureSide/ResiduePage/ResiduePage";
+import Navbar from "../pages/AgricultureSide/Navbar/Navbar";
+import "../pages/AgricultureSide/AgriculturePortal.css";
 import "../pages/govtSide/GovOverviewPage/GovSidebar.css";
 import "../pages/govtSide/GovOverviewPage/GovNavbar.css";
-import "../pages/AgricultureSide/FarmerDashboardPage.css";
 
 export default function App() {
   const { activeLocation } = useLocationContext();
@@ -36,6 +44,7 @@ export default function App() {
   );
   const [authView, setAuthView] = useState("intro"); // 'intro' | 'login' | 'signup'
   const [currentTab, setCurrentTab] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState(null);
 
   // Sync auth state and load user details
@@ -90,6 +99,7 @@ export default function App() {
 
   // Active page router mapping
   const renderActivePage = () => {
+    const isAgriculture = user?.role === "farmer" || user?.username?.includes("farmer") || user?.username === "devinder_singh";
     const isOfficer =
       user?.role === "officer" ||
       user?.role === "government" ||
@@ -110,6 +120,8 @@ export default function App() {
           return <GovAnalyticsPage />;
         case "buyback":
           return <GovBuybackPage />;
+        case "schedule":
+          return <GovSchedulePage />;
         case "resolved":
           return <GovResolvedPage />;
         case "sla":
@@ -123,13 +135,27 @@ export default function App() {
 
     switch (currentTab) {
       case "dashboard":
-        return <DashboardPage onNavigate={setCurrentTab} user={user} />;
+        return isAgriculture ? <OverviewPage onNavigate={setCurrentTab} /> : <DashboardPage onNavigate={setCurrentTab} user={user} />;
       case "swc":
         return <SwcPage onNavigate={setCurrentTab} />;
       case "surplus":
         return <SurplusPage />;
+      case "residue":
+        return <ResiduePage />;
+      case "paymentHistory":
+        return <PaymentHistoryPage />;
+      case "inventory":
+        return <InventoryPage />;
+      case "schedule":
+        return <SchedulePage />;
+      case "contracts":
+        return <ContractsPage />;
       case "impact":
         return <ImpactPage />;
+      case "leaderboard":
+        return <LeaderboardPage />;
+      case "analytics":
+        return <GovAnalyticsPage />;
       case "activity":
         return <MyActivityPage />;
       case "settings":
@@ -197,31 +223,57 @@ export default function App() {
             setCurrentTab={setCurrentTab}
           />
 
-          <div className="content">{renderActivePage()}</div>
+          <div className="content"><div className={currentTab === 'dashboard' ? '' : `agriculture-other-pages-wrap current-tab-${currentTab}`}>
+            {renderActivePage()}
+          </div></div>
         </main>
       </div>
     );
   }
 
-  const isFarmer =
+  const isAgriculture =
     user?.role === "farmer" ||
     user?.username?.includes("farmer") ||
     user?.username === "devinder_singh";
 
-  if (isFarmer) {
+  if (isAgriculture) {
     return (
-      <div className="farmer-shell">
-        <FarmerSidebar
+      <div className="app">
+        <Sidebar
           currentTab={currentTab}
           setCurrentTab={setCurrentTab}
           user={user}
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
         />
 
-        <main className="farmer-main-content">
-          <FarmerNavbar handleLogout={handleLogout} user={user} />
+        <main className="main">
+          <Navbar 
+            handleLogout={handleLogout} 
+            user={user} 
+            currentTab={currentTab} 
+            setCurrentTab={setCurrentTab}
+            setSidebarOpen={setSidebarOpen}
+          />
 
-          <div className="farmer-page-content">{renderActivePage()}</div>
+          {renderActivePage()}
         </main>
+
+        {/* FLOATING AI AGRICULTURE ASSISTANT */}
+        <div
+          className="civic-assistant"
+          onClick={() =>
+            alert(
+              "Ask GramSamridhi: Speak in regional languages or voice commands to report issues!",
+            )
+          }
+        >
+          <div className="ca-icon">🎙️</div>
+          <div>
+            <span className="ca-title">Ask GramSamridhi</span>
+            <span className="ca-sub">Voice & regional language</span>
+          </div>
+        </div>
       </div>
     );
   }

@@ -1,80 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './GovSlaPage.css';
 import GovDetailMap from '../../../shared/components/layout/GovDetailMap';
+import { incidentsApi } from '../../../services/incidentsApi';
 
 const SLA_TARGET_HOURS = { high: 8, medium: 24, low: 72 };
 
-const INITIAL_CASES = [
-  { id:"SS-24816", title:"Overflowing bin near Sarat Colony market", severity:"high",
-    status:"submitted", locality:"Sarat Colony, Ward 14", distance:"0.4 km",
-    coords:"23.6739° N, 86.9524° E", elapsedHours:0.3, assignedTeam:"Unassigned",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo:"linear-gradient(135deg,#6b7d63,#3a4a35)",
-    desc:"Citizen reports a municipal bin overflowing onto the footpath for 3+ days, blocking pedestrian access.", escalated: false },
-  { id:"SS-24815", title:"Illegal dumping behind Girls' High School", severity:"high",
-    status:"submitted", locality:"Ushagram, Ward 14", distance:"1.1 km",
-    coords:"23.6812° N, 86.9601° E", elapsedHours:0.7, assignedTeam:"Unassigned",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo:"linear-gradient(135deg,#5c4a3a,#2e2419)",
-    desc:"Construction debris and household waste dumped on vacant plot adjacent to school boundary wall.", escalated: false },
-  { id:"SS-24811", title:"Garbage pile near auto stand", severity:"high",
-    status:"assigned", locality:"G.T. Road Crossing, Ward 14", distance:"0.9 km",
-    coords:"23.6771° N, 86.9578° E", elapsedHours:6.4, assignedTeam:"Team Bravo · Sector 7",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 1",
-    photo:"linear-gradient(135deg,#7a4a3d,#471f1f)",
-    desc:"Loose garbage accumulating around the auto-rickshaw stand, spilling onto the main carriageway.", escalated: false },
-  { id:"SS-24798-B", title:"Debris blocking storm drain, Zone 1", severity:"high",
-    status:"assigned", locality:"Court Road, Ward 14", distance:"0.8 km",
-    coords:"23.6765° N, 86.9552° E", elapsedHours:9.1, assignedTeam:"Drainage Cell",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Drainage Cell",
-    photo:"linear-gradient(135deg,#3d5f7a,#1f3547)",
-    desc:"Storm drain blocked by construction debris, flagged as high priority ahead of forecast rainfall.", escalated: false },
-  { id:"SS-24802", title:"Blocked drain causing waterlogging", severity:"medium",
-    status:"assigned", locality:"Court Road, Ward 14", distance:"0.8 km",
-    coords:"23.6765° N, 86.9552° E", elapsedHours:14.5, assignedTeam:"Drainage Cell",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Drainage Cell",
-    photo:"linear-gradient(135deg,#3d5f7a,#1f3547)",
-    desc:"Plastic and silt buildup blocking roadside drain, causing water to pool near shop entrances.", escalated: false },
-  { id:"SS-24798", title:"Uncollected garbage — residential lane", severity:"medium",
-    status:"progress", locality:"Rambandhu Talab, Ward 14", distance:"1.6 km",
-    coords:"23.6721° N, 86.9487° E", elapsedHours:19.8, assignedTeam:"Team Alpha · Sector 4",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 2",
-    photo:"linear-gradient(135deg,#7a6a3d,#473c1f)",
-    desc:"Household waste accumulating for over a week after missed collection rounds.", escalated: false },
-  { id:"SS-24795", title:"Overflowing community bin, Zone 2", severity:"medium",
-    status:"assigned", locality:"Ushagram Crossing, Ward 14", distance:"1.4 km",
-    coords:"23.6829° N, 86.9612° E", elapsedHours:27.3, assignedTeam:"Team Bravo · Sector 7",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 2",
-    photo:"linear-gradient(135deg,#5f6b7a,#2e3547)",
-    desc:"Shared community bin overflowing near residential crossing; waste scattered overnight.", escalated: false },
-  { id:"SS-24790", title:"Litter along riverside walking path", severity:"low",
-    status:"progress", locality:"Damodar Ghat, Ward 14", distance:"2.3 km",
-    coords:"23.6698° N, 86.9445° E", elapsedHours:38.0, assignedTeam:"Team Echo · Market Road",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Parks & Riverside",
-    photo:"linear-gradient(135deg,#3d7a5f,#1f472e)",
-    desc:"Scattered plastic wrappers and bottles along the public walking path.", escalated: false },
-  { id:"SS-24784", title:"Minor litter near bus shelter", severity:"low",
-    status:"submitted", locality:"Bus Stand Area, Ward 14", distance:"0.6 km",
-    coords:"23.6754° N, 86.9538° E", elapsedHours:58.2, assignedTeam:"Unassigned",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo:"linear-gradient(135deg,#5f7a5a,#2e4728)",
-    desc:"Light scattering of wrappers and cups around the bus shelter bench area.", escalated: false },
-  { id:"SS-24762", title:"Overflowing bin, Zone 2 residential block", severity:"medium",
-    status:"assigned", locality:"Rambandhu Talab, Ward 14", distance:"1.5 km",
-    coords:"23.6733° N, 86.9491° E", elapsedHours:26.9, assignedTeam:"Team Alpha · Sector 4",
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 2",
-    photo:"linear-gradient(135deg,#4a5c7a,#252e3d)",
-    desc:"Residential block bin overflow past scheduled collection, now exceeding SLA target.", escalated: false },
-];
+const INITIAL_CASES = [];
 
 const SEV_LABEL = { high: "High", medium: "Medium", low: "Low" };
 const STATE_LABELS = { ontrack: "On Track", atrisk: "At Risk", breached: "Breached" };
 
 export default function GovSlaPage() {
-  const [cases, setCases] = useState(INITIAL_CASES);
-  const [selectedId, setSelectedId] = useState(INITIAL_CASES[3].id);
+  const [cases, setCases] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    async function fetchCases() {
+      try {
+        const data = await incidentsApi.getAll();
+        if (data && data.length > 0) {
+          const mapped = data.map(inc => {
+            const severity = inc.priority_score > 7.0 ? 'high' : inc.priority_score > 4.0 ? 'medium' : 'low';
+            const status = inc.status === 'open' ? 'submitted' : inc.status === 'assigned' ? 'assigned' : inc.status === 'in_progress' ? 'progress' : 'resolved';
+            
+            // Calculate mock elapsed hours (or calculate real elapsed hours)
+            const created = new Date(inc.created_at || Date.now());
+            const elapsed = Math.max(0.1, ((Date.now() - created.getTime()) / 3600000));
+
+            return {
+              id: inc.id || `SS-mock-${Math.floor(1000 + Math.random() * 9000)}`,
+              title: inc.description || (inc.category ? inc.category.replace('_', ' ') : 'Uncategorized Waste'),
+              severity: severity,
+              status: status,
+              locality: inc.representative_location?.name || 'BMC Ward 24',
+              distance: `${(Math.random() * 2 + 0.3).toFixed(1)} km`,
+              coords: inc.representative_location ? `${inc.representative_location.latitude}° N, ${inc.representative_location.longitude}° E` : "23.6739° N, 86.9524° E",
+              elapsedHours: parseFloat(elapsed.toFixed(1)),
+              assignedTeam: inc.assigned_officer?.name || "Unassigned",
+              jurisdiction: inc.representative_location ? `Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation` : "Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation Zone 3",
+              photo: "linear-gradient(135deg,#6b7d63,#3a4a35)",
+              desc: inc.description || 'No description provided.',
+              escalated: elapsed > (severity === 'high' ? 8 : severity === 'medium' ? 24 : 72)
+            };
+          });
+          setCases(mapped);
+          setSelectedId(mapped[0].id);
+        }
+      } catch (err) {
+        console.error("Error loading SLA cases:", err);
+      }
+    }
+    fetchCases();
+  }, []);
 
   // Helper function to calculate SLA state
   const getSlaState = (c) => {

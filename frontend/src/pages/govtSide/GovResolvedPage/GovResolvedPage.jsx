@@ -1,97 +1,57 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './GovResolvedPage.css';
 import GovDetailMap from '../../../shared/components/layout/GovDetailMap';
+import { incidentsApi } from '../../../services/incidentsApi';
 
-const INITIAL_RESOLVED = [
-  { id:"SS-24771", title:"Public toilet waste disposal issue", severity:"medium",
-    locality:"Bus Stand Area, Ward 14", distance:"0.6 km",
-    resolvedTime:"2 days ago", coords:"23.6754° N, 86.9538° E", resolutionHours:9.5,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo:"linear-gradient(135deg,#7a3d4a,#471f27)",
-    desc:"Overflow from public toilet waste bin near the bus stand, cleared and sanitized by Team Bravo.",
-    aiNote:"Cleanup verified against before/after photo pair. Waste volume reduced to baseline; no further action required.",
-    confidence:97, verified:true, rating:5, reopened:false, resolvedBy:"Team Bravo · Sector 7" },
-  { id:"SS-24759", title:"Roadside dumping near market entrance", severity:"low",
-    locality:"Hutton Road, Ward 14", distance:"1.2 km",
-    resolvedTime:"3 days ago", coords:"23.6788° N, 86.9569° E", resolutionHours:14.2,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 1",
-    photo:"linear-gradient(135deg,#5f7a3d,#324719)",
-    desc:"Vegetable market spillover waste cleared during scheduled morning collection route.",
-    aiNote:"Confirmed resolved via routine collection log cross-reference. No citizen follow-up complaint received.",
-    confidence:92, verified:true, rating:4, reopened:false, resolvedBy:"Team Alpha · Sector 4" },
-  { id:"SS-24741", title:"Overflowing bin, Ushagram crossing", severity:"high",
-    locality:"Ushagram, Ward 14", distance:"1.1 km",
-    resolvedTime:"4 days ago", coords:"23.6812° N, 86.9601° E", resolutionHours:6.8,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo:"linear-gradient(135deg,#5c4a3a,#2e2419)",
-    desc:"Bin overflow near crossing cleared same-day after priority dispatch flagged by AI triage.",
-    aiNote:"Before/after image comparison shows full clearance. Response time well within SLA for high-severity tier.",
-    confidence:95, verified:true, rating:5, reopened:false, resolvedBy:"Team Bravo · Sector 7" },
-  { id:"SS-24730", title:"Blocked drain, Court Road", severity:"medium",
-    locality:"Court Road, Ward 14", distance:"0.8 km",
-    resolvedTime:"5 days ago", coords:"23.6765° N, 86.9552° E", resolutionHours:18.4,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Drainage Cell",
-    photo:"linear-gradient(135deg,#3d5f7a,#1f3547)",
-    desc:"Drain desilted and plastic debris cleared; waterlogging no longer observed after test rainfall.",
-    aiNote:"Follow-up drone pass confirms drain flow restored. No standing water detected in latest imagery.",
-    confidence:88, verified:false, rating:0, reopened:false, resolvedBy:"Drainage Cell · Rapid Response" },
-  { id:"SS-24718", title:"Litter, Damodar Ghat walking path", severity:"low",
-    locality:"Damodar Ghat, Ward 14", distance:"2.3 km",
-    resolvedTime:"6 days ago", coords:"23.6698° N, 86.9445° E", resolutionHours:22.1,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Parks & Riverside",
-    photo:"linear-gradient(135deg,#3d7a5f,#1f472e)",
-    desc:"Routine sweep cleared scattered litter along the riverside path during scheduled maintenance.",
-    aiNote:"Low-priority item closed via routine sweep log. No dedicated dispatch was required.",
-    confidence:74, verified:true, rating:3, reopened:false, resolvedBy:"Team Echo · Market Road" },
-  { id:"SS-24705", title:"Garbage pile, G.T. Road crossing", severity:"high",
-    locality:"G.T. Road Crossing, Ward 14", distance:"0.9 km",
-    resolvedTime:"1 week ago", coords:"23.6771° N, 86.9578° E", resolutionHours:8.3,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 1",
-    photo:"linear-gradient(135deg,#7a4a3d,#471f1f)",
-    desc:"Loose garbage near auto stand cleared; area resurveyed twice to confirm no recurrence.",
-    aiNote:"Recurrence check after 48 hours shows no new accumulation — closing with high confidence.",
-    confidence:90, verified:true, rating:2, reopened:true, resolvedBy:"Team Alpha · Sector 4" },
-  { id:"SS-24689", title:"Community bin overflow, Sector 2", severity:"medium",
-    locality:"Ushagram Crossing, Ward 14", distance:"1.4 km",
-    resolvedTime:"1 week ago", coords:"23.6829° N, 86.9612° E", resolutionHours:11.6,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 2",
-    photo:"linear-gradient(135deg,#5f6b7a,#2e3547)",
-    desc:"Community bin emptied and collection frequency adjusted after third repeat report this month.",
-    aiNote:"Escalated to scheduling review; collection frequency at this stop has been increased going forward.",
-    confidence:83, verified:true, rating:4, reopened:false, resolvedBy:"Team Bravo · Sector 7" },
-  { id:"SS-24662", title:"Minor litter, bus shelter", severity:"low",
-    locality:"Bus Stand Area, Ward 14", distance:"0.6 km",
-    resolvedTime:"9 days ago", coords:"23.6754° N, 86.9538° E", resolutionHours:16.0,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo:"linear-gradient(135deg,#5f7a5a,#2e4728)",
-    desc:"Bundled with routine zone sweep; wrappers and cups cleared from shelter bench area.",
-    aiNote:"No hazard indicators present; item closed as part of scheduled maintenance route.",
-    confidence:68, verified:false, rating:0, reopened:false, resolvedBy:"Team Echo · Market Road" },
-  { id:"SS-24631", title:"Illegal dumping, vacant plot", severity:"high",
-    locality:"Sarat Colony, Ward 14", distance:"0.4 km",
-    resolvedTime:"10 days ago", coords:"23.6739° N, 86.9524° E", resolutionHours:5.4,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo:"linear-gradient(135deg,#6b7d63,#3a4a35)",
-    desc:"Construction debris and household waste removed same day due to proximity to school priority flag.",
-    aiNote:"Priority-flagged case closed within target window. Plot resurveyed — no further dumping observed.",
-    confidence:96, verified:true, rating:5, reopened:false, resolvedBy:"Team Delta · Riverside" },
-  { id:"SS-24604", title:"Waterlogging, residential lane", severity:"medium",
-    locality:"Rambandhu Talab, Ward 14", distance:"1.6 km",
-    resolvedTime:"12 days ago", coords:"23.6721° N, 86.9487° E", resolutionHours:20.7,
-    jurisdiction:"Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 2",
-    photo:"linear-gradient(135deg,#7a6a3d,#473c1f)",
-    desc:"Missed-collection backlog cleared; residents confirmed odor complaint resolved on follow-up call.",
-    aiNote:"Citizen follow-up call logged as satisfied. Scheduling adjustment applied to prevent recurrence.",
-    confidence:85, verified:true, rating:4, reopened:false, resolvedBy:"Team Alpha · Sector 4" },
-];
+const INITIAL_RESOLVED = [];
 
 const SEV_LABEL = { high: "High", medium: "Medium", low: "Low" };
 
 export default function GovResolvedPage() {
-  const [cases, setCases] = useState(INITIAL_RESOLVED);
-  const [selectedId, setSelectedId] = useState(INITIAL_RESOLVED[0].id);
+  const [cases, setCases] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    async function fetchResolved() {
+      try {
+        const data = await incidentsApi.getAll();
+        if (data && data.length > 0) {
+          const resolvedData = data.filter(inc => inc.status === 'resolved' || inc.status === 'closed');
+          const mapped = resolvedData.map(inc => {
+            const severity = inc.priority_score > 7.0 ? 'high' : inc.priority_score > 4.0 ? 'medium' : 'low';
+            return {
+              id: inc.id || `SS-mock-${Math.floor(1000 + Math.random() * 9000)}`,
+              title: inc.description || (inc.category ? inc.category.replace('_', ' ') : 'Uncategorized Waste'),
+              severity: severity,
+              locality: inc.representative_location?.name || 'BMC Ward 24',
+              distance: `${(Math.random() * 2 + 0.3).toFixed(1)} km`,
+              resolvedTime: 'Recently',
+              coords: inc.representative_location ? `${inc.representative_location.latitude}° N, ${inc.representative_location.longitude}° E` : "23.6739° N, 86.9524° E",
+              resolutionHours: 12.5,
+              jurisdiction: inc.representative_location ? `Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation` : "Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation Zone 3",
+              photo: "linear-gradient(135deg,#6b7d63,#3a4a35)",
+              desc: inc.description || 'No description provided.',
+              aiNote: `AI priority score: ${inc.priority_score}. Category: ${inc.category || 'garbage_accumulation'}.`,
+              confidence: 90,
+              verified: true,
+              rating: 5,
+              reopened: false,
+              resolvedBy: inc.assigned_officer?.name || "Sanitation Team Alpha"
+            };
+          });
+          setCases(mapped);
+          if (mapped.length > 0) {
+            setSelectedId(mapped[0].id);
+          }
+        }
+      } catch (err) {
+        console.error("Error loading resolved cases:", err);
+      }
+    }
+    fetchResolved();
+  }, []);
 
   // Filtering
   const filteredCases = cases.filter(c => {

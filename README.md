@@ -214,6 +214,6 @@ The SWC architecture has been deliberately decoupled to accommodate the **SURPLU
 - **SURPLUS apps** (e.g. `surplus_items`, `surplus_transactions`) will sit beside existing apps.
 - **Clean namespaces:** The API will expose `/api/v1/surplus/...` to avoid route overlap.
 
-## SIH / Clean & Green Technology Context
+## SIH / Agriculture, FoodTech & Rural Development Context
 
-This project was built under the Smart India Hackathon (SIH) framework under the "Clean & Green Technology" theme. It serves as a proof of concept for local governments and municipal authorities to automate clean-up coordination and foster community participation through smart geospatial deduplication and automated routing.
+This project was built under the Smart India Hackathon (SIH) framework under the "Agriculture, FoodTech & Rural Development" theme. It serves as a proof of concept for farmers, local food networks, and municipal authorities to optimize crop residue recycling, automate waste and resource logistics, and foster rural-urban circular economy participation through smart geospatial deduplication and automated routing.

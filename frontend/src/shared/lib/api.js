@@ -338,6 +338,90 @@ function handleMockRequest(url, options) {
     return createResponse(newReport, 201);
   }
 
+  // 12. AGRICULTURE PICKUPS
+  if (url.includes('/api/v1/agriculture/pickups/')) {
+    if (!localStorage.getItem('mock_pickups')) {
+      localStorage.setItem('mock_pickups', JSON.stringify([]));
+    }
+    const mockPickups = JSON.parse(localStorage.getItem('mock_pickups'));
+    if (method === 'POST') {
+      const newPickup = {
+        id: 'mock-pickup-' + Math.floor(10000 + Math.random() * 89999),
+        residue_type: body.residue_type || 'Paddy Straw',
+        weight_kg: parseFloat(body.weight_kg) || 0.0,
+        location_address: body.location_address || '',
+        scheduled_slot: body.scheduled_slot || '',
+        status: 'pending',
+        payment_amount: (parseFloat(body.weight_kg) || 0.0) * 2.15,
+        payment_status: 'unpaid',
+        created_at: new Date().toISOString()
+      };
+      mockPickups.unshift(newPickup);
+      localStorage.setItem('mock_pickups', JSON.stringify(mockPickups));
+      return createResponse(newPickup, 201);
+    }
+    return createResponse(mockPickups);
+  }
+
+  // 13. AGRICULTURE SCHEMES
+  if (url.includes('/api/v1/agriculture/schemes/')) {
+    const mockSchemes = [
+      {
+        id: "scheme-pkvy",
+        name: "Paramparagat Krishi Vikas Yojana",
+        code: "PKVY",
+        category: "Organic Farming",
+        description: "Support for cluster-based organic farming, certification, and farmer capacity building.",
+        benefits: "Financial assistance of Rs. 50,000 per hectare for 3 years, with 60% (Rs. 30,000) for organic inputs.",
+        eligibility: "Farmers forming clusters of 20 hectares or more in contiguous areas.",
+        apply_url: "https://pgsindia-ncof.gov.in/pkvy/index.html",
+        is_active: true
+      }
+    ];
+    return createResponse(mockSchemes);
+  }
+
+  // 14. AGRICULTURE COMPLAINTS
+  if (url.includes('/api/v1/agriculture/complaints/')) {
+    if (!localStorage.getItem('mock_farmer_complaints')) {
+      localStorage.setItem('mock_farmer_complaints', JSON.stringify([]));
+    }
+    const mockComplaints = JSON.parse(localStorage.getItem('mock_farmer_complaints'));
+    if (method === 'POST') {
+      const newComplaint = {
+        id: 'mock-comp-' + Math.floor(10000 + Math.random() * 89999),
+        title: body.title,
+        category: body.category || 'other',
+        description: body.description,
+        status: 'pending',
+        response_resolution: '',
+        created_at: new Date().toISOString()
+      };
+      mockComplaints.unshift(newComplaint);
+      localStorage.setItem('mock_farmer_complaints', JSON.stringify(mockComplaints));
+      return createResponse(newComplaint, 201);
+    }
+    return createResponse(mockComplaints);
+  }
+
+  // 15. AGRICULTURE AI ASSISTANT
+  if (url.includes('/api/v1/agriculture/ai-assistant/')) {
+    const prompt = body.prompt || '';
+    let response_text = "Hello! I am your KrishiSahyog assistant. You can ask me any questions about organic farming, residue management, and compost.";
+    const p = prompt.toLowerCase();
+    if (p.includes("खाद") || p.includes("कम्पोस्ट") || p.includes("गोबर") || p.includes("जैविक")) {
+      response_text = "नमस्ते! जैविक खाद (Organic Compost) बनाने के लिए धान के अवशेष (पॉली/पुआल) को छोटे टुकड़ों में काट लें। इसे गोबर, मिट्टी और हरी पत्तियों के साथ मिलकर 60-90 दिनों तक नमी में रखें। इससे उत्तम गुणवत्ता वाली खाद तैयार होगी जो मिट्टी की उत्पादकता बढ़ाएगी।";
+    } else if (p.includes("कीड़ा") || p.includes("बीमारी") || p.includes("पेस्ट") || p.includes("सुरक्षा")) {
+      response_text = "कीटनाशक सुरक्षा के लिए आप नीम के काढ़े (Neem oil spray) का उपयोग कर सकते हैं। 10 लीटर पानी में 50 मिलीलीटर नीम का तेल और थोड़ा सा साबुन का घोल मिलाकर फसलों पर छिड़काव करें। यह एक सुरक्षित और प्राकृतिक उपाय है।";
+    } else if (p.includes("compost") || p.includes("residue") || p.includes("manure") || p.includes("organic")) {
+      response_text = "Hello! To prepare high-quality organic compost, mix crop residue with green leaves and manure (1:3 ratio), keep it moist, and turn it every 15 days. Within 8-10 weeks, you will have nutrient-rich compost ready for your fields, helping you avoid residue burning.";
+    } else if (p.includes("pest") || p.includes("disease") || p.includes("insect")) {
+      response_text = "For natural pest management, we recommend neem-based solutions. Spraying a mixture of neem oil (5ml/L of water) with a few drops of liquid soap helps control aphids, whiteflies, and caterpillars without chemical side effects.";
+    }
+    return createResponse({ response: response_text });
+  }
+
   // Fallback default
   return createResponse({ detail: 'Endpoint mock not matched' }, 404);
 }
+

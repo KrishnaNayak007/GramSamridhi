@@ -3,7 +3,7 @@
    Page-specific styles only.
    ===================================================== */
 
-:root{
+:root {
   --organic:#5FAE3D;
   --organic-100:#DCEFCC;
   --inorganic:#3D7FBF;
@@ -17,119 +17,119 @@
   padding: 0 0 40px;
 }
 
-.residue-workspace{
+.gov-buyback-page .residue-workspace {
   display:grid;
   grid-template-columns:minmax(0, 1.5fr) minmax(320px, 0.9fr);
   gap:20px;
   align-items:start;
   width:100%;
 }
-.residue-left{ display:flex; flex-direction:column; gap:20px; min-width:0; }
-.residue-right{ display:flex; flex-direction:column; gap:20px; }
+.gov-buyback-page .residue-left { display:flex; flex-direction:column; gap:20px; min-width:0; }
+.gov-buyback-page .residue-right { display:flex; flex-direction:column; gap:20px; }
 
 /* ===== Recovery flow diagram ===== */
-.recovery-panel .panel-body{ padding:26px 24px 22px; }
-.recovery-flow{ display:flex; flex-direction:column; align-items:center; gap:0; }
-.rf-sources{ display:flex; gap:40px; justify-content:center; width:100%; }
-.rf-source{
+.gov-buyback-page .recovery-panel .panel-body { padding:26px 24px 22px; }
+.gov-buyback-page .recovery-flow { display:flex; flex-direction:column; align-items:center; gap:0; }
+.gov-buyback-page .rf-sources { display:flex; gap:40px; justify-content:center; width:100%; }
+.gov-buyback-page .rf-source {
   display:flex; flex-direction:column; align-items:center; gap:8px;
   background:var(--cream-50); border:1px solid var(--line); border-radius:var(--radius-md);
   padding:16px 30px; min-width:150px;
 }
-.rf-source .icon{
+.gov-buyback-page .rf-source .icon {
   width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center;
   color:#fff;
 }
-.rf-source.organic .icon{ background:var(--organic); }
-.rf-source.inorganic .icon{ background:var(--inorganic); }
-.rf-source .icon svg{ width:19px; height:19px; }
-.rf-source .lab{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--ink-400); }
-.rf-source .val{ font-family:var(--font-display); font-size:22px; font-weight:700; color:var(--ink-900); }
+.gov-buyback-page .rf-source.organic .icon { background:var(--organic); }
+.gov-buyback-page .rf-source.inorganic .icon { background:var(--inorganic); }
+.gov-buyback-page .rf-source .icon svg { width:19px; height:19px; }
+.gov-buyback-page .rf-source .lab { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--ink-400); }
+.gov-buyback-page .rf-source .val { font-family:var(--font-display); font-size:22px; font-weight:700; color:var(--ink-900); }
 
-.rf-connector{ width:100%; max-width:340px; height:38px; position:relative; }
-.rf-connector svg{ width:100%; height:100%; }
+.gov-buyback-page .rf-connector { width:100%; max-width:340px; height:38px; position:relative; }
+.gov-buyback-page .rf-connector svg { width:100%; height:100%; }
 
-.rf-total{
+.gov-buyback-page .rf-total {
   display:flex; flex-direction:column; align-items:center; gap:6px;
   background:linear-gradient(160deg, var(--forest-900), var(--forest-950));
   color:#fff; border-radius:var(--radius-md); padding:16px 40px; min-width:220px;
 }
-.rf-total .lab{ font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--leaf-300); }
-.rf-total .val{ font-family:var(--font-display); font-size:26px; font-weight:700; }
+.gov-buyback-page .rf-total .lab { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; color:var(--leaf-300); }
+.gov-buyback-page .rf-total .val { font-family:var(--font-display); font-size:26px; font-weight:700; }
 
 /* ===== Funnel (Requested -> Approved -> Collected -> Paid) ===== */
-.funnel{ display:flex; align-items:stretch; padding:18px; gap:0; }
-.funnel-step{ flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; position:relative; padding:0 8px; }
-.funnel-step .n{ font-family:var(--font-mono); font-size:19px; font-weight:700; color:var(--ink-900); }
-.funnel-step .l{ font-size:11px; color:var(--ink-400); text-transform:uppercase; letter-spacing:.3px; }
-.funnel-step .dot{ width:10px; height:10px; border-radius:50%; background:var(--leaf-500); margin-bottom:2px; }
-.funnel-arrow{ display:flex; align-items:center; color:var(--line); flex:0 0 auto; }
-.funnel-arrow svg{ width:16px; height:16px; }
+.gov-buyback-page .funnel { display:flex; align-items:stretch; padding:18px; gap:0; }
+.gov-buyback-page .funnel-step { flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; position:relative; padding:0 8px; }
+.gov-buyback-page .funnel-step .n { font-family:var(--font-mono); font-size:19px; font-weight:700; color:var(--ink-900); }
+.gov-buyback-page .funnel-step .l { font-size:11px; color:var(--ink-400); text-transform:uppercase; letter-spacing:.3px; }
+.gov-buyback-page .funnel-step .dot { width:10px; height:10px; border-radius:50%; background:var(--leaf-500); margin-bottom:2px; }
+.gov-buyback-page .funnel-arrow { display:flex; align-items:center; color:var(--line); flex:0 0 auto; }
+.gov-buyback-page .funnel-arrow svg { width:16px; height:16px; }
 
 /* ===== Records table ===== */
-.records-panel .filters{ flex-wrap:wrap; }
-.records-table{ width:100%; border-collapse:collapse; }
-.records-table thead th{
+.gov-buyback-page .records-panel .filters { flex-wrap:wrap; }
+.gov-buyback-page .records-table { width:100%; border-collapse:collapse; }
+.gov-buyback-page .records-table thead th {
   text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.4px;
   color:var(--ink-400); padding:10px 18px; border-bottom:1px solid var(--line);
   background:var(--cream-50); position:sticky; top:0;
 }
-.records-table tbody td{ padding:12px 18px; border-bottom:1px solid var(--line); font-size:13px; color:var(--ink-900); }
-.records-table tbody tr{ cursor:pointer; transition:background .12s ease; }
-.records-table tbody tr:hover{ background:var(--cream-50); }
-.records-table tbody tr.selected{ background:var(--leaf-100); box-shadow:inset 3px 0 0 var(--green-600); }
-.records-table .amount{ font-family:var(--font-mono); font-weight:600; }
-.records-table .residue-type{ display:flex; align-items:center; gap:6px; }
-.records-table .residue-type .sw{ width:7px; height:7px; border-radius:50%; flex:0 0 auto; }
-.records-body-wrap{ max-height:420px; overflow-y:auto; }
+.gov-buyback-page .records-table tbody td { padding:12px 18px; border-bottom:1px solid var(--line); font-size:13px; color:var(--ink-900); }
+.gov-buyback-page .records-table tbody tr { cursor:pointer; transition:background .12s ease; }
+.gov-buyback-page .records-table tbody tr:hover { background:var(--cream-50); }
+.gov-buyback-page .records-table tbody tr.selected { background:var(--leaf-100); box-shadow:inset 3px 0 0 var(--green-600); }
+.gov-buyback-page .records-table .amount { font-family:var(--font-mono); font-weight:600; }
+.gov-buyback-page .records-table .residue-type { display:flex; align-items:center; gap:6px; }
+.gov-buyback-page .records-table .residue-type .sw { width:7px; height:7px; border-radius:50%; flex:0 0 auto; }
+.gov-buyback-page .records-body-wrap { max-height:420px; overflow-y:auto; }
 
-.wf-pill{
+.gov-buyback-page .wf-pill {
   font-size:10px; font-weight:700; padding:4px 9px; border-radius:20px;
   text-transform:uppercase; letter-spacing:.3px; white-space:nowrap;
   display: inline-block;
 }
-.wf-pill.requested{ background:var(--cream-100); color:var(--ink-600); }
-.wf-pill.approved{ background:var(--amber-100); color:#9c7318; }
-.wf-pill.collected{ background:var(--inorganic-100); color:var(--inorganic); }
-.wf-pill.paid{ background:var(--leaf-100); color:var(--green-600); }
+.gov-buyback-page .wf-pill.requested { background:var(--cream-100); color:var(--ink-600); }
+.gov-buyback-page .wf-pill.approved { background:var(--amber-100); color:#9c7318; }
+.gov-buyback-page .wf-pill.collected { background:var(--inorganic-100); color:var(--inorganic); }
+.gov-buyback-page .wf-pill.paid { background:var(--leaf-100); color:var(--green-600); }
 
 /* ===== Demo rate card ===== */
-.rate-card .panel-body{ padding:16px 18px; }
-.rate-disclaimer{
+.gov-buyback-page .rate-card .panel-body { padding:16px 18px; }
+.gov-buyback-page .rate-disclaimer {
   display:flex; gap:8px; align-items:flex-start;
   background:var(--amber-100); border:1px solid #f0dfb0; border-radius:var(--radius-md);
   padding:10px 12px; font-size:11px; color:#7a5c14; line-height:1.4; margin-bottom:14px;
 }
-.rate-disclaimer svg{ width:15px; height:15px; flex:0 0 auto; margin-top:1px; }
-.rate-row{ display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); }
-.rate-row:last-child{ border-bottom:none; }
-.rate-row .rt-name{ display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--ink-900); }
-.rate-row .rt-name .sw{ width:8px; height:8px; border-radius:50%; flex:0 0 auto; }
-.rate-row .rt-val{ font-family:var(--font-mono); font-size:12.5px; color:var(--ink-600); }
+.gov-buyback-page .rate-disclaimer svg { width:15px; height:15px; flex:0 0 auto; margin-top:1px; }
+.gov-buyback-page .rate-row { display:flex; align-items:center; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); }
+.gov-buyback-page .rate-row:last-child { border-bottom:none; }
+.gov-buyback-page .rate-row .rt-name { display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--ink-900); }
+.gov-buyback-page .rate-row .rt-name .sw { width:8px; height:8px; border-radius:50%; flex:0 0 auto; }
+.gov-buyback-page .rate-row .rt-val { font-family:var(--font-mono); font-size:12.5px; color:var(--ink-600); }
 
 /* ===== Detail panel additions ===== */
-.crop-banner{
+.gov-buyback-page .crop-banner {
   height:120px; border-radius:var(--radius-lg) var(--radius-lg) 0 0;
   display:flex; align-items:flex-end; justify-content:space-between; padding:14px;
   position:relative; color:#fff;
 }
-.crop-banner .crop-icon{
+.gov-buyback-page .crop-banner .crop-icon {
   position:absolute; top:14px; left:14px; width:38px; height:38px; border-radius:50%;
   background:rgba(255,255,255,0.18); display:flex; align-items:center; justify-content:center;
 }
-.crop-banner .crop-icon svg{ width:19px; height:19px; }
+.gov-buyback-page .crop-banner .crop-icon svg { width:19px; height:19px; }
 
-.calc-box{
+.gov-buyback-page .calc-box {
   background:var(--cream-50); border:1px solid var(--line); border-radius:var(--radius-md);
   padding:12px 14px; margin:14px 0; font-size:12.5px;
 }
-.calc-box .row{ display:flex; justify-content:space-between; padding:4px 0; color:var(--ink-600); }
-.calc-box .row.total{ border-top:1px solid var(--line); margin-top:6px; padding-top:8px; font-weight:700; color:var(--ink-900); }
-.calc-box .row .v{ font-family:var(--font-mono); }
+.gov-buyback-page .calc-box .row { display:flex; justify-content:space-between; padding:4px 0; color:var(--ink-600); }
+.gov-buyback-page .calc-box .row.total { border-top:1px solid var(--line); margin-top:6px; padding-top:8px; font-weight:700; color:var(--ink-900); }
+.gov-buyback-page .calc-box .row .v { font-family:var(--font-mono); }
 
 @media (max-width:1050px){
-  .residue-workspace{ grid-template-columns:1fr; }
-  .rf-sources{ gap:16px; }
+.gov-buyback-page .residue-workspace { grid-template-columns:1fr; }
+.gov-buyback-page .rf-sources { gap:16px; }
 }
 
 /* ===== Panels ===== */

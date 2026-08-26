@@ -4,134 +4,7 @@ import { apiFetch } from '../../../shared/lib/api';
 import GovDetailMap from '../../../shared/components/layout/GovDetailMap';
 import { incidentsApi } from '../../../services/incidentsApi';
 
-const SEEDED_COMPLAINTS = [
-  {
-    id: "SS-24816",
-    title: "Overflowing bin near Sarat Colony market",
-    severity: "high",
-    status: "submitted",
-    locality: "Sarat Colony, Ward 14",
-    distance: "0.4 km",
-    time: "18 min ago",
-    coords: "23.6739° N, 86.9524° E",
-    jurisdiction: "Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo: "linear-gradient(135deg,#6b7d63,#3a4a35)",
-    desc: "Citizen reports a municipal bin overflowing onto the footpath for 3+ days, blocking pedestrian access and attracting stray animals.",
-    aiNote: "Visual model detects large uncollected waste volume with pedestrian obstruction. Pattern matches recurring hotspot (4th report in 30 days).",
-    confidence: 94,
-    mapTop: "44%",
-    mapLeft: "30%",
-    farmScore: 72
-  },
-  {
-    id: "SS-24815",
-    title: "Illegal dumping behind Girls' High School",
-    severity: "high",
-    status: "submitted",
-    locality: "Ushagram, Ward 14",
-    distance: "1.1 km",
-    time: "42 min ago",
-    coords: "23.6812° N, 86.9601° E",
-    jurisdiction: "Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo: "linear-gradient(135deg,#5c4a3a,#2e2419)",
-    desc: "Construction debris and household waste dumped on vacant plot adjacent to school boundary wall. Proximity to children flagged as priority.",
-    aiNote: "Mixed construction and organic waste detected. Proximity to educational institution (18m) raises priority tier automatically.",
-    confidence: 89,
-    mapTop: "58%",
-    mapLeft: "52%",
-    farmScore: 34
-  },
-  {
-    id: "SS-24802",
-    title: "Blocked drain causing waterlogging",
-    severity: "medium",
-    status: "assigned",
-    locality: "Court Road, Ward 14",
-    distance: "0.8 km",
-    time: "3 hr ago",
-    coords: "23.6765° N, 86.9552° E",
-    jurisdiction: "Ward 14 → Bhubaneshwar Municipal Corporation → Drainage Cell",
-    photo: "linear-gradient(135deg,#3d5f7a,#1f3547)",
-    desc: "Plastic and silt buildup blocking roadside drain, causing water to pool near shop entrances after light rain.",
-    aiNote: "Standing water with visible plastic debris identified. Weather correlation suggests risk increases with forecasted rainfall this week.",
-    confidence: 81,
-    mapTop: "70%",
-    mapLeft: "38%",
-    farmScore: 18
-  },
-  {
-    id: "SS-24798",
-    title: "Uncollected garbage — residential lane",
-    severity: "medium",
-    status: "progress",
-    locality: "Rambandhu Talab, Ward 14",
-    distance: "1.6 km",
-    time: "Yesterday",
-    coords: "23.6721° N, 86.9487° E",
-    jurisdiction: "Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 2",
-    photo: "linear-gradient(135deg,#7a6a3d,#473c1f)",
-    desc: "Household waste accumulating for over a week after missed collection rounds; residents report odor complaints.",
-    aiNote: "Moderate waste volume, residential context. Missed-collection pattern flagged for scheduling review, not just one-off cleanup.",
-    confidence: 76,
-    mapTop: "22%",
-    mapLeft: "44%",
-    farmScore: 61
-  },
-  {
-    id: "SS-24790",
-    title: "Litter along riverside walking path",
-    severity: "low",
-    status: "progress",
-    locality: "Damodar Ghat, Ward 14",
-    distance: "2.3 km",
-    time: "Yesterday",
-    coords: "23.6698° N, 86.9445° E",
-    jurisdiction: "Ward 14 → Bhubaneshwar Municipal Corporation → Parks & Riverside",
-    photo: "linear-gradient(135deg,#3d7a5f,#1f472e)",
-    desc: "Scattered plastic wrappers and bottles along the public walking path, likely from weekend foot traffic.",
-    aiNote: "Low-density scattered litter, no health hazard indicators. Suitable for routine sweep rather than dedicated dispatch.",
-    confidence: 71,
-    mapTop: "66%",
-    mapLeft: "70%",
-    farmScore: 9
-  },
-  {
-    id: "SS-24771",
-    title: "Public toilet waste disposal issue",
-    severity: "medium",
-    status: "resolved",
-    locality: "Bus Stand Area, Ward 14",
-    distance: "0.6 km",
-    time: "2 days ago",
-    coords: "23.6754° N, 86.9538° E",
-    jurisdiction: "Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 3",
-    photo: "linear-gradient(135deg,#7a3d4a,#471f27)",
-    desc: "Overflow from public toilet waste bin near the bus stand, cleared and sanitized by Team Green-3.",
-    aiNote: "Cleanup verified against before/after photo pair. Waste volume reduced to baseline; no further action required.",
-    confidence: 97,
-    mapTop: "32%",
-    mapLeft: "62%",
-    farmScore: 22
-  },
-  {
-    id: "SS-24759",
-    title: "Roadside dumping near market entrance",
-    severity: "low",
-    status: "resolved",
-    locality: "Hutton Road, Ward 14",
-    distance: "1.2 km",
-    time: "3 days ago",
-    coords: "23.6788° N, 86.9569° E",
-    jurisdiction: "Ward 14 → Bhubaneshwar Municipal Corporation → Sanitation Zone 1",
-    photo: "linear-gradient(135deg,#5f7a3d,#324719)",
-    desc: "Vegetable market spillover waste cleared during scheduled morning collection route.",
-    aiNote: "Confirmed resolved via routine collection log cross-reference. No citizen follow-up complaint received.",
-    confidence: 92,
-    mapTop: "38%",
-    mapLeft: "78%",
-    farmScore: 84
-  }
-];
+const SEEDED_COMPLAINTS = [];
 
 const STEPS = ["submitted", "assigned", "progress", "resolved"];
 const STEP_LABELS = { submitted: "Submitted", assigned: "Assigned", progress: "In Progress", resolved: "Resolved" };
@@ -139,8 +12,8 @@ const SEV_LABEL = { high: "High", medium: "Medium", low: "Low" };
 const STATUS_LABEL = { submitted: "Submitted", assigned: "Assigned", progress: "In Progress", resolved: "Resolved" };
 
 export default function GovOverviewPage({ onNavigate }) {
-  const [complaints, setComplaints] = useState(SEEDED_COMPLAINTS);
-  const [selectedId, setSelectedId] = useState(SEEDED_COMPLAINTS[1].id);
+  const [complaints, setComplaints] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
   const [activeFilter, setActiveFilter] = useState('All');
   const [assignedTeam, setAssignedTeam] = useState('');
 
@@ -186,6 +59,7 @@ export default function GovOverviewPage({ onNavigate }) {
             });
             return merged;
           });
+          setSelectedId(mapped[0].id);
         }
       } catch (err) {
         console.error("Error loading incidents:", err);
@@ -332,7 +206,14 @@ export default function GovOverviewPage({ onNavigate }) {
     );
   };
 
-  const selectedComplaint = complaints.find(c => c.id === selectedId) || complaints[0];
+  // Calculate dynamic stats
+  const totalCount = complaints.length;
+  const awaitingCount = complaints.filter(c => c.status === 'submitted' || c.status === 'reported').length;
+  const progressCount = complaints.filter(c => c.status === 'progress' || c.status === 'in_progress' || c.status === 'assigned').length;
+  const resolvedCount = complaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
+  const urgentCount = complaints.filter(c => c.severity === 'high' && (c.status === 'submitted' || c.status === 'reported')).length;
+
+  const selectedComplaint = complaints.find(c => c.id === selectedId) || complaints[0] || null;
 
   // Filters logic
   const filteredComplaints = complaints.filter(c => {
@@ -412,6 +293,7 @@ export default function GovOverviewPage({ onNavigate }) {
 
   // Advance Status workflow transition
   const handleAdvanceStatus = () => {
+    if (!selectedComplaint) return;
     const currentIndex = STEPS.indexOf(selectedComplaint.status);
     if (currentIndex === -1 || currentIndex === STEPS.length - 1) {
       triggerToast('Incident is already resolved');
@@ -441,7 +323,7 @@ export default function GovOverviewPage({ onNavigate }) {
             </div>
             <span className="trend up">+12%</span>
           </div>
-          <div className="value">248</div>
+          <div className="value">{totalCount}</div>
           <div className="label">Total complaints — this month</div>
         </div>
 
@@ -454,7 +336,7 @@ export default function GovOverviewPage({ onNavigate }) {
             </div>
             <span className="trend down">-4%</span>
           </div>
-          <div className="value">36</div>
+          <div className="value">{awaitingCount}</div>
           <div className="label">Awaiting assignment</div>
         </div>
 
@@ -467,7 +349,7 @@ export default function GovOverviewPage({ onNavigate }) {
             </div>
             <span className="trend up">+6%</span>
           </div>
-          <div className="value">54</div>
+          <div className="value">{progressCount}</div>
           <div className="label">In progress</div>
         </div>
 
@@ -480,7 +362,7 @@ export default function GovOverviewPage({ onNavigate }) {
             </div>
             <span className="trend up">+18%</span>
           </div>
-          <div className="value">158</div>
+          <div className="value">{resolvedCount}</div>
           <div className="label">Resolved &amp; verified</div>
         </div>
 
@@ -493,7 +375,7 @@ export default function GovOverviewPage({ onNavigate }) {
             </div>
             <span className="trend down">Action</span>
           </div>
-          <div className="value">7</div>
+          <div className="value">{urgentCount}</div>
           <div className="label">High-severity, unassigned</div>
         </div>
       </section>

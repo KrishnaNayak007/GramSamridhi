@@ -1,0 +1,221 @@
+:root {
+    --forest:#1F4B34;
+    --forest-deep:#153826;
+    --leaf:#4C9A5A;
+    --leaf-light:#6FB77C;
+    --sprout:#E3F1E3;
+    --sprout-line:#CFE6CF;
+    --soil:#F7F5F0;
+    --paper:#FFFFFF;
+    --clay:#C97B4A;
+    --clay-light:#F4E3D6;
+    --wheat:#E0A233;
+    --wheat-light:#FBEDD3;
+    --sky:#3B7DBF;
+    --sky-light:#E1EDF7;
+    --silver:#94A3A0;
+    --silver-light:#EDF1F0;
+    --bronze:#B0764C;
+    --bronze-light:#F3E4D5;
+    --ink:#1C2620;
+    --ink-soft:#5B6B60;
+    --ink-faint:#8A968D;
+    --line:#E7E3D9;
+    --radius-lg:20px;
+    --radius-md:14px;
+    --shadow: 0 1px 2px rgba(28,38,32,0.04), 0 8px 24px -12px rgba(28,38,32,0.10);
+  }
+
+.agriculture-leaderboard-page {
+    background: transparent;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    min-height: auto;
+  }
+
+.agriculture-leaderboard-page .wrap { max-width: 1200px; margin: 0 auto; }
+
+  /* ---------- Header ---------- */
+.agriculture-leaderboard-page .page-header {
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 24px;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+  }
+.agriculture-leaderboard-page .eyebrow {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color: var(--leaf);
+    margin-bottom:10px;
+  }
+.agriculture-leaderboard-page .eyebrow::before {
+    content:"";
+    width:6px; height:6px; border-radius:50%;
+    background: var(--leaf);
+  }
+.agriculture-leaderboard-page h1.page-title {
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size: 34px;
+    letter-spacing: -0.01em;
+    color: var(--forest-deep);
+    line-height:1.08;
+  }
+.agriculture-leaderboard-page .page-sub { color: var(--ink-soft); font-size: 14px; margin-top: 8px; }
+
+.agriculture-leaderboard-page .tabs { display:flex; gap:6px; background: var(--paper); border:1px solid var(--line); padding:4px; border-radius:999px; box-shadow: var(--shadow); }
+.agriculture-leaderboard-page .tab { padding: 8px 18px; border-radius:999px; font-size:12.5px; font-weight:600; color: var(--ink-soft); cursor:pointer; border:none; background:transparent; }
+.agriculture-leaderboard-page .tab.active { background: var(--forest); color:#fff; }
+
+  /* ---------- Your village highlight card ---------- */
+.agriculture-leaderboard-page .your-village {
+    background: linear-gradient(150deg, var(--forest) 0%, var(--forest-deep) 100%);
+    border-radius: var(--radius-lg);
+    padding: 26px 30px;
+    color:#fff;
+    box-shadow: var(--shadow);
+    margin-bottom: 22px;
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:24px;
+    flex-wrap:wrap;
+  }
+.agriculture-leaderboard-page .your-village::after {
+    content:"";
+    position:absolute; right:-40px; top:-40px;
+    width:180px; height:180px; border-radius:50%;
+    background: rgba(255,255,255,0.05);
+  }
+.agriculture-leaderboard-page .yv-left { display:flex; align-items:center; gap:18px; position:relative; z-index:1; }
+.agriculture-leaderboard-page .yv-rank {
+    width:58px; height:58px; border-radius:16px;
+    background: rgba(255,255,255,0.12);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Fraunces', serif; font-size:24px; font-weight:600;
+    flex-shrink:0;
+  }
+.agriculture-leaderboard-page .yv-eyebrow { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color: var(--leaf-light); margin-bottom:5px; }
+.agriculture-leaderboard-page .yv-name { font-family:'Fraunces', serif; font-size:24px; font-weight:600; }
+.agriculture-leaderboard-page .yv-meta { font-size:13px; color: rgba(255,255,255,0.7); margin-top:3px; }
+
+.agriculture-leaderboard-page .yv-stats { display:flex; gap:28px; position:relative; z-index:1; }
+.agriculture-leaderboard-page .yv-stat { text-align:right; }
+.agriculture-leaderboard-page .yv-stat-val { font-family:'IBM Plex Mono', monospace; font-size:19px; font-weight:600; }
+.agriculture-leaderboard-page .yv-stat-label { font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color: rgba(255,255,255,0.6); margin-top:3px; }
+.agriculture-leaderboard-page .yv-stat-val.up { color: var(--leaf-light); }
+
+  /* ---------- Podium (top 3) ---------- */
+.agriculture-leaderboard-page .podium {
+    display:grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap:16px;
+    margin-bottom: 22px;
+    align-items:end;
+  }
+.agriculture-leaderboard-page .pod-card {
+    background: var(--paper);
+    border-radius: var(--radius-md);
+    border:1px solid var(--line);
+    box-shadow: var(--shadow);
+    padding: 20px 18px 18px;
+    text-align:center;
+    position:relative;
+  }
+.agriculture-leaderboard-page .pod-card.gold { padding-top:28px; border-top:3px solid var(--wheat); }
+.agriculture-leaderboard-page .pod-card.silver { border-top:3px solid var(--silver); }
+.agriculture-leaderboard-page .pod-card.bronze { border-top:3px solid var(--bronze); }
+
+.agriculture-leaderboard-page .pod-medal {
+    width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    margin: 0 auto 10px;
+    font-family:'Fraunces', serif; font-weight:700; font-size:16px;
+  }
+.agriculture-leaderboard-page .pod-card.gold .pod-medal { background: var(--wheat-light); color:#8B6412; }
+.agriculture-leaderboard-page .pod-card.silver .pod-medal { background: var(--silver-light); color:#5C6B67; }
+.agriculture-leaderboard-page .pod-card.bronze .pod-medal { background: var(--bronze-light); color:#8A5A34; }
+
+.agriculture-leaderboard-page .pod-village { font-family:'Fraunces', serif; font-size:16.5px; font-weight:600; color: var(--forest-deep); }
+.agriculture-leaderboard-page .pod-block { font-size:11.5px; color: var(--ink-faint); margin-top:2px; margin-bottom:12px; }
+.agriculture-leaderboard-page .pod-tonnes { font-family:'IBM Plex Mono', monospace; font-size:20px; font-weight:600; color: var(--ink); }
+.agriculture-leaderboard-page .pod-unit { font-size:11px; color: var(--ink-faint); margin-top:1px; }
+
+  /* ---------- Leaderboard table ---------- */
+.agriculture-leaderboard-page .panel {
+    background: var(--paper);
+    border-radius: var(--radius-lg);
+    border:1px solid var(--line);
+    box-shadow: var(--shadow);
+    padding: 8px 24px 6px;
+    margin-bottom: 22px;
+  }
+.agriculture-leaderboard-page .panel-head { display:flex; align-items:center; justify-content:space-between; padding: 16px 8px 10px; }
+.agriculture-leaderboard-page .panel-title { font-family:'Fraunces', serif; font-size: 17px; font-weight:600; color: var(--forest-deep); }
+.agriculture-leaderboard-page .panel-note { font-size:12px; color: var(--ink-faint); }
+
+.agriculture-leaderboard-page table.lb { width:100%; border-collapse: collapse; }
+.agriculture-leaderboard-page table.lb thead th {
+    text-align:left;
+    font-size: 11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color: var(--ink-faint);
+    padding: 10px 8px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+.agriculture-leaderboard-page table.lb thead th.num { text-align:right; }
+.agriculture-leaderboard-page table.lb tbody td {
+    padding: 14px 8px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+    vertical-align: middle;
+  }
+.agriculture-leaderboard-page table.lb tbody tr:last-child td { border-bottom:none; }
+.agriculture-leaderboard-page table.lb tbody tr:hover { background: var(--soil); }
+.agriculture-leaderboard-page table.lb tbody tr.me { background: var(--sprout); }
+.agriculture-leaderboard-page table.lb tbody tr.me:hover { background: var(--sprout); }
+.agriculture-leaderboard-page table.lb tbody tr.me td:first-child { border-radius: 10px 0 0 10px; }
+.agriculture-leaderboard-page table.lb tbody tr.me td:last-child { border-radius: 0 10px 10px 0; }
+
+.agriculture-leaderboard-page .rank-cell { display:flex; align-items:center; gap:6px; font-family:'IBM Plex Mono', monospace; font-weight:700; color: var(--ink-soft); }
+.agriculture-leaderboard-page .rank-move { font-size:10.5px; font-weight:700; }
+.agriculture-leaderboard-page .rank-move.up { color: var(--leaf); }
+.agriculture-leaderboard-page .rank-move.down { color: #C24E3D; }
+.agriculture-leaderboard-page .rank-move.same { color: var(--ink-faint); }
+
+.agriculture-leaderboard-page .village-cell { display:flex; align-items:center; gap:12px; }
+.agriculture-leaderboard-page .village-icon {
+    width:34px; height:34px; border-radius:10px;
+    background: var(--sprout); display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+.agriculture-leaderboard-page .village-icon svg { width:16px; height:16px; stroke: var(--forest); }
+.agriculture-leaderboard-page .village-name { font-weight:700; color: var(--ink); }
+.agriculture-leaderboard-page .village-name .you-tag { font-size:10px; font-weight:700; color: var(--forest); background:#fff; padding:2px 7px; border-radius:999px; margin-left:8px; }
+.agriculture-leaderboard-page .village-block { font-size:11.5px; color: var(--ink-faint); }
+
+.agriculture-leaderboard-page .num-mono { text-align:right; font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:13.5px; color: var(--ink); }
+.agriculture-leaderboard-page .num-mono.leaf { color: var(--forest); }
+
+.agriculture-leaderboard-page .bar-wrap { width:90px; height:6px; background: var(--sprout-line); border-radius:999px; overflow:hidden; margin-left:auto; }
+.agriculture-leaderboard-page .bar-fill { height:100%; background: var(--leaf); border-radius:999px; }
+
+  /* ---------- Footer note ---------- */
+.agriculture-leaderboard-page .table-foot { display:flex; align-items:center; justify-content:space-between; padding: 14px 8px 16px; font-size:12px; color: var(--ink-faint); }
+
+  @media (max-width: 820px){
+.agriculture-leaderboard-page .podium { grid-template-columns: 1fr; }
+.agriculture-leaderboard-page .yv-stats { gap:16px; }
+  }

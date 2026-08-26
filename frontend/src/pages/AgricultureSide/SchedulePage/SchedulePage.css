@@ -1,0 +1,611 @@
+/* ---------- COLLECTION SCHEDULE STANDALONE CSS ---------- */
+.agriculture-schedule-page {
+  /* CSS Variables from User Design */
+  --forest: #1F4B34;
+  --forest-deep: #153826;
+  --leaf: #4C9A5A;
+  --leaf-light: #6FB77C;
+  --sprout: #E3F1E3;
+  --sprout-line: #CFE6CF;
+  --soil: #F7F5F0;
+  --paper: #FFFFFF;
+  --clay: #C97B4A;
+  --clay-light: #F4E3D6;
+  --wheat: #E0A233;
+  --wheat-light: #FBEDD3;
+  --sky: #3B7DBF;
+  --sky-light: #E1EDF7;
+  --ink: #1C2620;
+  --ink-soft: #5B6B60;
+  --ink-faint: #8A968D;
+  --line: #E7E3D9;
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --shadow: 0 1px 2px rgba(28,38,32,0.04), 0 8px 24px -12px rgba(28,38,32,0.10);
+
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  padding: 0;
+  background: transparent;
+  min-height: auto;
+}
+
+.agriculture-schedule-page .wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Header ---------- */
+.agriculture-schedule-page .page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+}
+
+.agriculture-schedule-page .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  margin-bottom: 10px;
+}
+
+.agriculture-schedule-page .eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--leaf);
+}
+
+.agriculture-schedule-page h1.page-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 34px;
+  letter-spacing: -0.01em;
+  color: var(--forest-deep);
+  line-height: 1.08;
+}
+
+.agriculture-schedule-page .page-sub {
+  color: var(--ink-soft);
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+/* Header actions (Location select & Add button) */
+.agriculture-schedule-page .page-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.agriculture-schedule-page .btn-add-slot {
+  background: var(--forest);
+  color: #fff;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 30px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s;
+}
+
+.agriculture-schedule-page .btn-add-slot:hover {
+  background: var(--forest-deep);
+}
+
+.agriculture-schedule-page .loc-selector-btn {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 10px 18px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+}
+
+/* ---------- Metrics Grid ---------- */
+.agriculture-schedule-page .metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.agriculture-schedule-page .metric-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.agriculture-schedule-page .metric-card.highlight {
+  background: linear-gradient(150deg, var(--forest) 0%, var(--forest-deep) 100%);
+  color: #fff;
+  border: none;
+}
+
+.agriculture-schedule-page .metric-card .lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.agriculture-schedule-page .metric-card.highlight .lbl {
+  color: var(--leaf-light);
+}
+
+.agriculture-schedule-page .metric-card .val {
+  font-family: 'Fraunces', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--forest-deep);
+}
+
+.agriculture-schedule-page .metric-card.highlight .val {
+  color: #fff;
+}
+
+.agriculture-schedule-page .metric-card .sub {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+}
+
+.agriculture-schedule-page .metric-card.highlight .sub {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ---------- Timeline Row Tracker Card ---------- */
+.agriculture-schedule-page .weekly-route-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.agriculture-schedule-page .route-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.agriculture-schedule-page .route-card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--forest-deep);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.agriculture-schedule-page .route-card-title span {
+  font-family: 'Inter', sans-serif;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+.agriculture-schedule-page .route-legend {
+  display: flex;
+  gap: 16px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.agriculture-schedule-page .leg-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--ink-soft);
+}
+
+.agriculture-schedule-page .leg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.agriculture-schedule-page .leg-dot.collected { background: var(--leaf); }
+.agriculture-schedule-page .leg-dot.today { background: var(--wheat); }
+.agriculture-schedule-page .leg-dot.upcoming { background: var(--ink-faint); }
+.agriculture-schedule-page .leg-dot.missed { background: var(--clay); }
+
+.agriculture-schedule-page .days-timeline-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  position: relative;
+  margin-top: 15px;
+}
+
+/* Horizontal dotted path line connecting the items */
+.agriculture-schedule-page .days-timeline-row::after {
+  content: "";
+  position: absolute;
+  top: 52px;
+  left: 6%;
+  right: 6%;
+  height: 2px;
+  background: transparent;
+  border-top: 2px dashed var(--sprout-line);
+  z-index: 1;
+}
+
+.agriculture-schedule-page .day-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  z-index: 2;
+  position: relative;
+  padding: 12px 6px;
+  border-radius: 12px;
+}
+
+.agriculture-schedule-page .day-col.active-day {
+  background: var(--sprout);
+  box-shadow: 0 4px 12px rgba(76, 154, 90, 0.08);
+}
+
+.agriculture-schedule-page .day-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.agriculture-schedule-page .day-num {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+
+.agriculture-schedule-page .day-indicator {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--paper);
+  border: 2px solid var(--sprout-line);
+  display: grid;
+  place-items: center;
+  font-size: 13px;
+  margin-bottom: 8px;
+  box-shadow: var(--shadow);
+  font-weight: bold;
+}
+
+.agriculture-schedule-page .day-col.done .day-indicator {
+  background: var(--sprout);
+  border-color: var(--leaf);
+  color: var(--forest-deep);
+}
+
+.agriculture-schedule-page .day-col.missed .day-indicator {
+  background: var(--clay-light);
+  border-color: var(--clay);
+  color: #a8421e;
+}
+
+.agriculture-schedule-page .day-col.transit .day-indicator {
+  background: var(--wheat-light);
+  border-color: var(--wheat);
+  color: #966b1a;
+}
+
+.agriculture-schedule-page .day-loc {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.agriculture-schedule-page .day-time {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 1px;
+}
+
+.agriculture-schedule-page .day-status-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 2.5px 8px;
+  border-radius: 10px;
+  margin-top: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.agriculture-schedule-page .day-status-badge.done { background: var(--sprout); color: var(--forest-deep); }
+.agriculture-schedule-page .day-status-badge.missed { background: var(--clay-light); color: var(--clay); }
+.agriculture-schedule-page .day-status-badge.transit { background: var(--wheat-light); color: var(--wheat); }
+.agriculture-schedule-page .day-status-badge.upcoming { background: #f1f3f5; color: var(--ink-soft); }
+
+/* ---------- Bottom Layout Grid ---------- */
+.agriculture-schedule-page .schedule-layout-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  margin-bottom: 30px;
+}
+
+.agriculture-schedule-page .plan-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow);
+}
+
+.agriculture-schedule-page .plan-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.agriculture-schedule-page .plan-card-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--forest-deep);
+}
+
+.agriculture-schedule-page .panel-link {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--leaf);
+  text-decoration: none;
+}
+
+.agriculture-schedule-page .plan-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.agriculture-schedule-page .plan-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  letter-spacing: 0.05em;
+}
+
+.agriculture-schedule-page .plan-table td {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+}
+
+.agriculture-schedule-page .plan-table tr:last-child td {
+  border-bottom: none;
+}
+
+.agriculture-schedule-page .plan-zone {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.agriculture-schedule-page .plan-zone span {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-top: 2px;
+}
+
+.agriculture-schedule-page .status-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  text-transform: uppercase;
+}
+
+.agriculture-schedule-page .status-badge.collected { background: var(--sprout); color: var(--forest-deep); }
+.agriculture-schedule-page .status-badge.rescheduled { background: var(--wheat-light); color: var(--wheat); }
+.agriculture-schedule-page .status-badge.transit { background: var(--sky-light); color: var(--sky); }
+.agriculture-schedule-page .status-badge.scheduled { background: #f1f3f5; color: var(--ink-soft); }
+
+/* ---------- Right Column Cards ---------- */
+.agriculture-schedule-page .next-pickup-card {
+  background: linear-gradient(150deg, var(--forest) 0%, var(--forest-deep) 100%);
+  color: #fff;
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.agriculture-schedule-page .next-pickup-card::after {
+  content: "";
+  position: absolute;
+  right: -20px;
+  top: -20px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.agriculture-schedule-page .next-pickup-card .card-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--leaf-light);
+  letter-spacing: 0.07em;
+}
+
+.agriculture-schedule-page .next-pickup-card h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.agriculture-schedule-page .next-pickup-card p {
+  font-size: 13.5px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.agriculture-schedule-page .countdown-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.agriculture-schedule-page .countdown-box {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  text-align: center;
+}
+
+.agriculture-schedule-page .countdown-box strong {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 20px;
+  font-weight: 600;
+  display: block;
+}
+
+.agriculture-schedule-page .countdown-box span {
+  font-size: 9px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.05em;
+}
+
+.agriculture-schedule-page .btn-track-white {
+  background: var(--paper);
+  color: var(--forest-deep);
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.agriculture-schedule-page .btn-track-white:hover {
+  background: #f1f7f2;
+}
+
+/* Pending Confirmations list */
+.agriculture-schedule-page .confirmations-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  margin-top: 24px;
+}
+
+.agriculture-schedule-page .conf-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.agriculture-schedule-page .conf-item:last-child {
+  border-bottom: none;
+}
+
+.agriculture-schedule-page .conf-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--sprout);
+  color: var(--forest);
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 11.5px;
+}
+
+.agriculture-schedule-page .conf-info {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.agriculture-schedule-page .conf-name {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.agriculture-schedule-page .conf-desc {
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+.agriculture-schedule-page .conf-qty {
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--forest-deep);
+}
+
+@media (max-width: 900px) {
+  .agriculture-schedule-page .schedule-layout-grid {
+    grid-template-columns: 1fr;
+  }
+  .agriculture-schedule-page .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .agriculture-schedule-page .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  .agriculture-schedule-page .days-timeline-row {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .agriculture-schedule-page .days-timeline-row::after {
+    display: none;
+  }
+}
+

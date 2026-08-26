@@ -1,0 +1,250 @@
+:root {
+    --forest:#1F4B34;
+    --forest-deep:#153826;
+    --leaf:#4C9A5A;
+    --leaf-light:#6FB77C;
+    --sprout:#E3F1E3;
+    --sprout-line:#CFE6CF;
+    --soil:#F7F5F0;
+    --paper:#FFFFFF;
+    --clay:#C97B4A;
+    --clay-light:#F4E3D6;
+    --wheat:#E0A233;
+    --wheat-light:#FBEDD3;
+    --sky:#3B7DBF;
+    --sky-light:#E1EDF7;
+    --rose:#C24E3D;
+    --rose-light:#FBE7E3;
+    --ink:#1C2620;
+    --ink-soft:#5B6B60;
+    --ink-faint:#8A968D;
+    --line:#E7E3D9;
+    --radius-lg:20px;
+    --radius-md:14px;
+    --shadow: 0 1px 2px rgba(28,38,32,0.04), 0 8px 24px -12px rgba(28,38,32,0.10);
+  }
+
+.agriculture-payment-history-page {
+    background: transparent;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    min-height: auto;
+  }
+
+.agriculture-payment-history-page .wrap { max-width: 1200px; margin: 0 auto; }
+
+  /* ---------- Header ---------- */
+.agriculture-payment-history-page .page-header {
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 24px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+.agriculture-payment-history-page .eyebrow {
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12.5px;
+    font-weight:600;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    color: var(--leaf);
+    margin-bottom:10px;
+  }
+.agriculture-payment-history-page .eyebrow::before {
+    content:"";
+    width:6px; height:6px; border-radius:50%;
+    background: var(--leaf);
+  }
+.agriculture-payment-history-page h1.page-title {
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size: 34px;
+    letter-spacing: -0.01em;
+    color: var(--forest-deep);
+    line-height:1.08;
+  }
+.agriculture-payment-history-page .page-sub {
+    color: var(--ink-soft);
+    font-size: 14px;
+    margin-top: 8px;
+  }
+.agriculture-payment-history-page .farmer-pill {
+    display:flex; align-items:center; gap:10px;
+    background: var(--paper);
+    border:1px solid var(--line);
+    padding: 8px 16px 8px 8px;
+    border-radius: 999px;
+    box-shadow: var(--shadow);
+  }
+.agriculture-payment-history-page .farmer-avatar {
+    width:34px; height:34px; border-radius:50%;
+    background: var(--forest);
+    color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    font-weight:700; font-size:13px;
+  }
+.agriculture-payment-history-page .farmer-info-name { font-size:13.5px; font-weight:700; color:var(--ink); line-height:1.2; }
+.agriculture-payment-history-page .farmer-info-loc { font-size:11.5px; color:var(--ink-faint); }
+
+  /* ---------- Summary strip ---------- */
+.agriculture-payment-history-page .stat-strip {
+    display:grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap:16px;
+    margin-bottom: 24px;
+  }
+.agriculture-payment-history-page .stat-card {
+    background: var(--paper);
+    border-radius: var(--radius-md);
+    padding: 20px 22px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--line);
+  }
+.agriculture-payment-history-page .stat-card.hero {
+    background: linear-gradient(135deg, var(--forest) 0%, var(--forest-deep) 100%);
+    color:#fff;
+    border:none;
+    position:relative;
+    overflow:hidden;
+  }
+.agriculture-payment-history-page .stat-card.hero::after {
+    content:"";
+    position:absolute; right:-30px; bottom:-30px;
+    width:120px; height:120px; border-radius:50%;
+    background: rgba(255,255,255,0.05);
+  }
+.agriculture-payment-history-page .stat-label {
+    font-size:11px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color: var(--ink-faint);
+    margin-bottom:8px;
+  }
+.agriculture-payment-history-page .stat-card.hero .stat-label { color: rgba(255,255,255,0.65); }
+.agriculture-payment-history-page .stat-value {
+    font-family:'Fraunces', serif;
+    font-size: 26px;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    position:relative; z-index:1;
+  }
+.agriculture-payment-history-page .stat-value span.unit { font-size:13px; font-weight:500; opacity:.7; margin-left:3px; }
+.agriculture-payment-history-page .stat-foot { font-size:11.5px; color: var(--ink-faint); margin-top: 8px; position:relative; z-index:1; }
+.agriculture-payment-history-page .stat-card.hero .stat-foot { color: rgba(255,255,255,0.7); }
+.agriculture-payment-history-page .stat-foot b { color: var(--leaf); font-weight:700; }
+.agriculture-payment-history-page .stat-card.hero .stat-foot b { color: var(--leaf-light); }
+
+  /* ---------- Filter row ---------- */
+.agriculture-payment-history-page .filter-row {
+    display:flex; align-items:center; justify-content:space-between;
+    gap:16px; margin-bottom:16px; flex-wrap:wrap;
+  }
+.agriculture-payment-history-page .tabs { display:flex; gap:6px; background: var(--paper); border:1px solid var(--line); padding:4px; border-radius:999px; }
+.agriculture-payment-history-page .tab {
+    padding: 7px 16px; border-radius:999px; font-size:12.5px; font-weight:600;
+    color: var(--ink-soft); cursor:pointer; border:none; background:transparent;
+  }
+.agriculture-payment-history-page .tab.active { background: var(--forest); color:#fff; }
+.agriculture-payment-history-page .search-mini {
+    display:flex; align-items:center; gap:8px;
+    background: var(--paper); border:1px solid var(--line); border-radius:10px;
+    padding: 8px 14px; font-size:12.5px; color: var(--ink-faint);
+  }
+.agriculture-payment-history-page .search-mini svg { width:14px; height:14px; stroke: var(--ink-faint); }
+
+  /* ---------- Payment table panel ---------- */
+.agriculture-payment-history-page .panel {
+    background: var(--paper);
+    border-radius: var(--radius-lg);
+    border:1px solid var(--line);
+    box-shadow: var(--shadow);
+    padding: 8px 24px 8px;
+    margin-bottom: 22px;
+  }
+.agriculture-payment-history-page table.pay { width:100%; border-collapse: collapse; }
+.agriculture-payment-history-page table.pay thead th {
+    text-align:left;
+    font-size: 11px;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color: var(--ink-faint);
+    padding: 16px 8px 12px;
+    border-bottom: 1px solid var(--line);
+  }
+.agriculture-payment-history-page table.pay thead th.num { text-align:right; }
+.agriculture-payment-history-page table.pay tbody td {
+    padding: 15px 8px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13.5px;
+    vertical-align: middle;
+  }
+.agriculture-payment-history-page table.pay tbody tr:last-child td { border-bottom:none; }
+.agriculture-payment-history-page table.pay tbody tr:hover { background: var(--soil); }
+
+.agriculture-payment-history-page .pay-cell { display:flex; align-items:center; gap:12px; }
+.agriculture-payment-history-page .pay-icon {
+    width:34px; height:34px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+.agriculture-payment-history-page .pay-icon.leaf { background: var(--sprout); }
+.agriculture-payment-history-page .pay-icon.leaf svg { stroke: var(--forest); }
+.agriculture-payment-history-page .pay-icon.clay { background: var(--clay-light); }
+.agriculture-payment-history-page .pay-icon.clay svg { stroke: var(--clay); }
+.agriculture-payment-history-page .pay-icon svg { width:16px; height:16px; }
+.agriculture-payment-history-page .pay-title { font-weight:700; color: var(--ink); font-size:13.5px; }
+.agriculture-payment-history-page .pay-sub { font-size:11.5px; color: var(--ink-faint); margin-top:1px; }
+
+.agriculture-payment-history-page .txn-id { font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--ink-faint); }
+.agriculture-payment-history-page .pay-date { font-size:13px; color: var(--ink-soft); }
+.agriculture-payment-history-page .pay-date .day { font-weight:600; color: var(--ink); }
+
+.agriculture-payment-history-page .amt { text-align:right; font-family:'IBM Plex Mono', monospace; font-weight:700; font-size:14px; color: var(--forest); }
+.agriculture-payment-history-page .amt.neg { color: var(--rose); }
+
+.agriculture-payment-history-page .badge { display:inline-flex; align-items:center; gap:5px; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px; }
+.agriculture-payment-history-page .badge.b-leaf { background: var(--sprout); color: var(--forest); }
+.agriculture-payment-history-page .badge.b-wheat { background: var(--wheat-light); color:#8B6412; }
+.agriculture-payment-history-page .badge.b-sky { background: var(--sky-light); color: var(--sky); }
+
+.agriculture-payment-history-page .mode { font-size:12.5px; color: var(--ink-soft); display:flex; align-items:center; gap:6px; }
+.agriculture-payment-history-page .mode svg { width:13px; height:13px; stroke: var(--ink-faint); }
+
+  /* ---------- Footer / pagination ---------- */
+.agriculture-payment-history-page .table-foot {
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 8px 18px;
+    font-size:12.5px; color: var(--ink-faint);
+  }
+.agriculture-payment-history-page .pg-btns { display:flex; gap:6px; }
+.agriculture-payment-history-page .pg-btn {
+    width:30px; height:30px; border-radius:8px; border:1px solid var(--line);
+    background: var(--paper); color: var(--ink-soft); font-size:12.5px; font-weight:600;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+.agriculture-payment-history-page .pg-btn.active { background: var(--forest); color:#fff; border-color: var(--forest); }
+
+  /* ---------- Payout method strip ---------- */
+.agriculture-payment-history-page .payout-strip {
+    background: var(--sky-light);
+    border: 1px solid #CBDFF0;
+    border-radius: var(--radius-md);
+    padding: 16px 22px;
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    flex-wrap:wrap;
+  }
+.agriculture-payment-history-page .payout-text { font-size:13px; color: #234D6E; display:flex; align-items:center; gap:10px; }
+.agriculture-payment-history-page .payout-text svg { width:17px; height:17px; stroke:#3B7DBF; flex-shrink:0; }
+.agriculture-payment-history-page .payout-text b { font-weight:700; }
+.agriculture-payment-history-page .btn-link-sky { background: transparent; border:1.5px solid #3B7DBF; color:#3B7DBF; padding:8px 16px; border-radius:9px; font-weight:700; font-size:12px; cursor:pointer; white-space:nowrap; }
+
+  @media (max-width: 820px){
+.agriculture-payment-history-page .stat-strip { grid-template-columns: repeat(2,1fr); }
+.agriculture-payment-history-page table.pay { font-size:12px; }
+  }

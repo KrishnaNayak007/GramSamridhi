@@ -1,0 +1,516 @@
+/* =====================================================
+   SELL CROP RESIDUE — standalone form page scoped css.
+   ===================================================== */
+
+.agriculture-residue-page {
+  --forest-950:#0c2519;
+  --forest-900:#0F3520;
+  --forest-800:#123D26;
+  --forest-700:#175232;
+  --green-600:#1F7A4D;
+  --green-500:#2C9660;
+  --leaf-500:#5FAE3D;
+  --leaf-300:#8FCB63;
+  --leaf-100:#DCEFCC;
+  --cream-50:#F5F7F1;
+  --cream-100:#EDF0E6;
+  --card:#FFFFFF;
+  --ink-900:#12201A;
+  --ink-600:#42544A;
+  --ink-400:#7C8B81;
+  --line:#E1E6DC;
+  --amber-500:#E2A73B;
+  --amber-100:#FBF0DA;
+  --radius-lg:18px;
+  --radius-md:12px;
+  --radius-sm:8px;
+  --shadow-1:0 1px 2px rgba(11,42,27,0.06), 0 1px 1px rgba(11,42,27,0.04);
+  --shadow-2:0 10px 28px rgba(11,42,27,0.12);
+  --font-display:'Space Grotesk', sans-serif;
+  --font-body:'Inter', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  -webkit-font-smoothing: antialiased;
+  background: transparent;
+  padding: 10px 0;
+}
+
+.agriculture-residue-page .sr-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0px 24px 70px;
+}
+
+/* ===== header ===== */
+.agriculture-residue-page .sr-header {
+  margin-bottom: 28px;
+}
+
+.agriculture-residue-page .sr-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--green-600);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.agriculture-residue-page .sr-eyebrow::before {
+  content: '';
+  width: 18px;
+  height: 2px;
+  background: var(--leaf-500);
+  border-radius: 2px;
+}
+
+.agriculture-residue-page .sr-header h1 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--forest-900);
+  letter-spacing: -0.3px;
+}
+
+.agriculture-residue-page .sr-header p {
+  font-size: 13.5px;
+  color: var(--ink-400);
+  margin-top: 8px;
+  max-width: 540px;
+  line-height: 1.6;
+}
+
+.agriculture-residue-page .sr-layout {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+/* ===== form sections ===== */
+.agriculture-residue-page .sr-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  padding: 24px 26px;
+  margin-bottom: 20px;
+  transition: box-shadow .2s ease, border-color .2s ease;
+}
+
+.agriculture-residue-page .sr-card:hover {
+  box-shadow: var(--shadow-2);
+  border-color: #d3ddcd;
+}
+
+.agriculture-residue-page .sr-card-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.agriculture-residue-page .sr-card-head .num {
+  width: 28px;
+  height: 28px;
+  border-radius: 9px;
+  flex: 0 0 auto;
+  background: linear-gradient(160deg, var(--leaf-100), #cfe8bd);
+  color: var(--forest-900);
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.agriculture-residue-page .sr-card-head h2 {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--forest-900);
+}
+
+.agriculture-residue-page .sr-card-head .sub {
+  font-size: 11.5px;
+  color: var(--ink-400);
+  margin-top: 2px;
+}
+
+.agriculture-residue-page .sr-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.agriculture-residue-page .sr-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.agriculture-residue-page .sr-field.full {
+  grid-column: 1 / -1;
+}
+
+.agriculture-residue-page .sr-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-600);
+}
+
+.agriculture-residue-page .sr-field .hint {
+  font-size: 10.5px;
+  color: var(--ink-400);
+  font-weight: 400;
+}
+
+.agriculture-residue-page .sr-field input[type="text"],
+.agriculture-residue-page .sr-field input[type="tel"],
+.agriculture-residue-page .sr-field input[type="number"],
+.agriculture-residue-page .sr-field input[type="date"],
+.agriculture-residue-page .sr-field select,
+.agriculture-residue-page .sr-field textarea {
+  border: 1.5px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 11px 13px;
+  font-size: 13px;
+  font-family: var(--font-body);
+  color: var(--ink-900);
+  background: var(--cream-50);
+  width: 100%;
+  transition: border-color .15s ease, background .15s ease, box-shadow .15s ease;
+  outline: none;
+}
+
+.agriculture-residue-page .sr-field input:hover, 
+.agriculture-residue-page .sr-field select:hover {
+  border-color: #c7d3bf;
+}
+
+.agriculture-residue-page .sr-field input:focus-visible,
+.agriculture-residue-page .sr-field select:focus-visible,
+.agriculture-residue-page .sr-field textarea:focus-visible {
+  border-color: var(--leaf-500);
+  background: var(--card);
+  box-shadow: 0 0 0 3px rgba(95,174,61,0.16);
+}
+
+.agriculture-residue-page .sr-field textarea {
+  resize: vertical;
+  min-height: 76px;
+  font-family: inherit;
+  line-height: 1.5;
+}
+
+.agriculture-residue-page .sr-unit-row {
+  display: flex;
+  gap: 8px;
+}
+
+.agriculture-residue-page .sr-unit-row input {
+  flex: 1;
+}
+
+.agriculture-residue-page .sr-unit-row select {
+  width: 126px;
+  flex: 0 0 auto;
+}
+
+.agriculture-residue-page .sr-pill-group {
+  display: flex;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.agriculture-residue-page .sr-pill {
+  border: 1.5px solid var(--line);
+  border-radius: 22px;
+  padding: 9px 16px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--ink-600);
+  cursor: pointer;
+  background: var(--cream-50);
+  transition: all .15s ease;
+  user-select: none;
+}
+
+.agriculture-residue-page .sr-pill:hover {
+  border-color: #c7d3bf;
+  transform: translateY(-1px);
+}
+
+.agriculture-residue-page .sr-pill.active {
+  background: linear-gradient(160deg, var(--leaf-100), #d3ecc2);
+  border-color: var(--leaf-300);
+  color: var(--green-600);
+  box-shadow: 0 2px 8px rgba(95,174,61,0.18);
+}
+
+/* ===== sticky estimate panel ===== */
+.agriculture-residue-page .sr-sticky {
+  position: sticky;
+  top: 24px;
+}
+
+.agriculture-residue-page .sr-estimate {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(165deg, var(--forest-900), var(--forest-950));
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  color: #fff;
+  margin-bottom: 18px;
+  box-shadow: var(--shadow-2);
+}
+
+.agriculture-residue-page .sr-estimate::before {
+  content: '';
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(95,174,61,0.28), transparent 70%);
+  top: -70px;
+  right: -60px;
+  pointer-events: none;
+}
+
+.agriculture-residue-page .sr-estimate .lab {
+  position: relative;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .6px;
+  color: var(--leaf-300);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.agriculture-residue-page .sr-estimate .lab::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--leaf-500);
+  box-shadow: 0 0 0 3px rgba(95,174,61,0.25);
+}
+
+.agriculture-residue-page .sr-estimate .amount {
+  position: relative;
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  margin: 10px 0 16px;
+  letter-spacing: -0.5px;
+}
+
+.agriculture-residue-page .sr-estimate .row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255,255,255,0.12);
+  color: #CFE0D3;
+}
+
+.agriculture-residue-page .sr-estimate .row b {
+  color: #fff;
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+.agriculture-residue-page .sr-estimate .cta {
+  position: relative;
+  width: 100%;
+  margin-top: 18px;
+  padding: 13px;
+  border: none;
+  border-radius: 11px;
+  background: var(--leaf-500);
+  color: #0c2519;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+  transition: background .15s ease, transform .1s ease;
+}
+
+.agriculture-residue-page .sr-estimate .cta:hover {
+  background: #7fc25e;
+}
+
+.agriculture-residue-page .sr-estimate .cta:active {
+  transform: scale(0.98);
+}
+
+.agriculture-residue-page .sr-rates {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-1);
+  margin-bottom: 18px;
+}
+
+.agriculture-residue-page .sr-rates h3 {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  color: var(--forest-900);
+  margin-bottom: 12px;
+}
+
+.agriculture-residue-page .sr-rate-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+
+.agriculture-residue-page .sr-rate-row:last-child {
+  border-bottom: none;
+}
+
+.agriculture-residue-page .sr-rate-row .rn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-600);
+}
+
+.agriculture-residue-page .sr-rate-row .rn .sw {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--leaf-500);
+  flex: 0 0 auto;
+}
+
+.agriculture-residue-page .sr-rate-row .rv {
+  font-family: var(--font-mono);
+  color: var(--ink-900);
+  font-weight: 600;
+}
+
+.agriculture-residue-page .sr-disclaimer {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  background: var(--amber-100);
+  border: 1px solid #f0dfb0;
+  border-radius: var(--radius-md);
+  padding: 11px 13px;
+  font-size: 11px;
+  color: #7a5c14;
+  line-height: 1.5;
+}
+
+.agriculture-residue-page .sr-disclaimer svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+/* ===== success state ===== */
+.agriculture-residue-page .sr-success {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-2);
+  padding: 46px 30px;
+  text-align: center;
+}
+
+.agriculture-residue-page .sr-success.show {
+  display: block;
+  animation: sr-rise .35s ease both;
+}
+
+@keyframes sr-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.agriculture-residue-page .sr-success .ico {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: var(--leaf-100);
+  color: var(--green-600);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  box-shadow: 0 0 0 8px rgba(95, 174, 61, 0.10);
+}
+
+.agriculture-residue-page .sr-success .ico svg {
+  width: 28px;
+  height: 28px;
+}
+
+.agriculture-residue-page .sr-success h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--forest-900);
+  margin-bottom: 9px;
+}
+
+.agriculture-residue-page .sr-success p {
+  font-size: 13px;
+  color: var(--ink-400);
+  max-width: 400px;
+  margin: 0 auto 20px;
+  line-height: 1.6;
+}
+
+.agriculture-residue-page .sr-success .req-id {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--leaf-100);
+  color: var(--green-600);
+  padding: 9px 18px;
+  border-radius: 20px;
+  display: inline-block;
+  font-weight: 700;
+  letter-spacing: .3px;
+  margin-bottom: 24px;
+}
+
+.agriculture-residue-page .cta-back {
+  display: block;
+  margin: 0 auto;
+  padding: 11px 22px;
+  border: none;
+  border-radius: 10px;
+  background: var(--green-600);
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .15s ease;
+}
+
+.agriculture-residue-page .cta-back:hover {
+  background: var(--forest-700);
+}
+
+/* ===== responsive ===== */
+@media (max-width: 900px) {
+  .agriculture-residue-page .sr-layout { grid-template-columns: 1fr; }
+  .agriculture-residue-page .sr-grid { grid-template-columns: 1fr; }
+  .agriculture-residue-page .sr-sticky { position: static; }
+  .agriculture-residue-page .sr-header h1 { font-size: 24px; }
+}

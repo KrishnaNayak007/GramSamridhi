@@ -1,0 +1,735 @@
+.gov-schedule-page {
+  background: transparent;
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  padding: 10px 0 40px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.gov-schedule-page .wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+}
+
+/* ---------- Header ---------- */
+.gov-schedule-page .page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.gov-schedule-page .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--leaf);
+  margin-bottom: 10px;
+}
+
+.gov-schedule-page .eyebrow::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--leaf);
+}
+
+.gov-schedule-page h1.page-title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 38px;
+  letter-spacing: -0.01em;
+  color: var(--forest-deep);
+  line-height: 1.08;
+}
+
+.gov-schedule-page .page-sub {
+  color: var(--ink-soft);
+  font-size: 14.5px;
+  margin-top: 8px;
+  max-width: 480px;
+}
+
+.gov-schedule-page .header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.gov-schedule-page .zone-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 10px 16px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--forest-deep);
+  box-shadow: var(--shadow);
+}
+
+.gov-schedule-page .zone-pill svg {
+  width: 15px;
+  height: 15px;
+  stroke: var(--leaf);
+}
+
+.gov-schedule-page .btn-primary {
+  background: var(--forest);
+  color: #fff;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 999px;
+  font-family: 'Inter';
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 6px 16px -6px rgba(31,75,52,0.45);
+  transition: transform .15s ease, background .15s ease;
+}
+
+.gov-schedule-page .btn-primary:hover {
+  background: var(--forest-deep);
+  transform: translateY(-1px);
+}
+
+.gov-schedule-page .btn-primary svg {
+  width: 15px;
+  height: 15px;
+}
+
+/* ---------- Stat strip ---------- */
+.gov-schedule-page .stat-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 26px;
+}
+
+.gov-schedule-page .stat-card {
+  background: var(--paper);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+
+.gov-schedule-page .stat-card.hero {
+  background: linear-gradient(135deg, var(--forest) 0%, var(--forest-deep) 100%);
+  color: #fff;
+  border: none;
+}
+
+.gov-schedule-page .stat-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.gov-schedule-page .stat-card:not(.hero) .stat-icon {
+  background: var(--sprout);
+}
+
+.gov-schedule-page .stat-card:not(.hero) .stat-icon svg {
+  stroke: var(--forest);
+  width: 17px;
+  height: 17px;
+}
+
+.gov-schedule-page .stat-card.hero .stat-icon {
+  background: rgba(255,255,255,0.14);
+}
+
+.gov-schedule-page .stat-card.hero .stat-icon svg {
+  stroke: #fff;
+  width: 17px;
+  height: 17px;
+}
+
+.gov-schedule-page .stat-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.gov-schedule-page .stat-card.hero .stat-label {
+  color: rgba(255,255,255,0.65);
+}
+
+.gov-schedule-page .stat-value {
+  font-family: 'Fraunces', serif;
+  font-size: 27px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.gov-schedule-page .stat-value span.unit {
+  font-size: 14px;
+  font-weight: 500;
+  opacity: .7;
+  margin-left: 3px;
+}
+
+.gov-schedule-page .stat-foot {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-top: 8px;
+}
+
+.gov-schedule-page .stat-card.hero .stat-foot {
+  color: rgba(255,255,255,0.7);
+}
+
+.gov-schedule-page .stat-foot b {
+  color: var(--leaf);
+  font-weight: 700;
+}
+
+.gov-schedule-page .stat-card.hero .stat-foot b {
+  color: var(--leaf-light);
+}
+
+/* ---------- Route trail (signature element) ---------- */
+.gov-schedule-page .trail-card {
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: 26px 26px 20px;
+  margin-bottom: 24px;
+}
+
+.gov-schedule-page .trail-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gov-schedule-page .trail-title {
+  font-family: 'Fraunces', serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--forest-deep);
+}
+
+.gov-schedule-page .trail-title span {
+  font-family: 'Inter';
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--ink-faint);
+  margin-left: 8px;
+}
+
+.gov-schedule-page .legend {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.gov-schedule-page .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.gov-schedule-page .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.gov-schedule-page .dot.done {
+  background: var(--leaf);
+}
+
+.gov-schedule-page .dot.today {
+  background: var(--clay);
+}
+
+.gov-schedule-page .dot.upcoming {
+  background: var(--ink-faint);
+  opacity: .5;
+}
+
+.gov-schedule-page .dot.missed {
+  background: #C24E3D;
+}
+
+.gov-schedule-page .trail {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  padding-top: 6px;
+}
+
+.gov-schedule-page .trail::before {
+  content: "";
+  position: absolute;
+  top: 61px;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  background: repeating-linear-gradient(to right, var(--sprout-line) 0 8px, transparent 8px 14px);
+  z-index: 0;
+}
+
+.gov-schedule-page .day {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 6px 14px;
+  border-radius: var(--radius-md);
+  transition: background .15s ease;
+}
+
+.gov-schedule-page .day-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+
+.gov-schedule-page .day-num {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  margin-top: 2px;
+  margin-bottom: 14px;
+}
+
+.gov-schedule-page .node {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  border: 2px solid var(--sprout-line);
+  margin-bottom: 12px;
+  position: relative;
+}
+
+.gov-schedule-page .node svg {
+  width: 19px;
+  height: 19px;
+}
+
+.gov-schedule-page .day.done .node {
+  border-color: var(--leaf);
+  background: var(--sprout);
+}
+
+.gov-schedule-page .day.done .node svg {
+  stroke: var(--forest);
+}
+
+.gov-schedule-page .day.today .node {
+  border-color: var(--clay);
+  background: var(--clay);
+  box-shadow: 0 0 0 5px var(--clay-light);
+}
+
+.gov-schedule-page .day.today .node svg {
+  stroke: #fff;
+}
+
+.gov-schedule-page .day.upcoming .node {
+  border-color: var(--sprout-line);
+}
+
+.gov-schedule-page .day.upcoming .node svg {
+  stroke: var(--ink-faint);
+}
+
+.gov-schedule-page .day.missed .node {
+  border-color: #C24E3D;
+  background: #FBE7E3;
+}
+
+.gov-schedule-page .day.missed .node svg {
+  stroke: #C24E3D;
+}
+
+.gov-schedule-page .day-village {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.gov-schedule-page .day-time {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 3px;
+}
+
+.gov-schedule-page .day-status {
+  margin-top: 8px;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  padding: 3px 9px;
+  border-radius: 999px;
+}
+
+.gov-schedule-page .day.done .day-status {
+  background: var(--sprout);
+  color: var(--forest);
+}
+
+.gov-schedule-page .day.today .day-status {
+  background: var(--clay-light);
+  color: var(--clay);
+}
+
+.gov-schedule-page .day.upcoming .day-status {
+  background: var(--soil);
+  color: var(--ink-faint);
+}
+
+.gov-schedule-page .day.missed .day-status {
+  background: #FBE7E3;
+  color: #C24E3D;
+}
+
+.gov-schedule-page .day.today {
+  background: rgba(201,123,74,0.05);
+}
+
+/* ---------- Main grid ---------- */
+.gov-schedule-page .main-grid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.gov-schedule-page .panel {
+  background: var(--paper);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: 24px 24px 8px;
+}
+
+.gov-schedule-page .panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.gov-schedule-page .panel-title {
+  font-family: 'Fraunces', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--forest-deep);
+}
+
+.gov-schedule-page .panel-link {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--leaf);
+  text-decoration: none;
+}
+
+.gov-schedule-page table.sched {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.gov-schedule-page table.sched thead th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--ink-faint);
+  padding: 10px 8px;
+  border-bottom: 1px solid var(--line);
+}
+
+.gov-schedule-page table.sched tbody td {
+  padding: 14px 8px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13.5px;
+  vertical-align: middle;
+}
+
+.gov-schedule-page table.sched tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.gov-schedule-page .village-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.gov-schedule-page .village-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--sprout);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.gov-schedule-page .village-icon svg {
+  width: 15px;
+  height: 15px;
+  stroke: var(--forest);
+}
+
+.gov-schedule-page .village-name {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.gov-schedule-page .village-farmers {
+  font-size: 11.5px;
+  color: var(--ink-faint);
+}
+
+.gov-schedule-page .time-mono {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.gov-schedule-page .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.gov-schedule-page .badge.b-leaf {
+  background: var(--sprout);
+  color: var(--forest);
+}
+
+.gov-schedule-page .badge.b-clay {
+  background: var(--clay-light);
+  color: var(--clay);
+}
+
+.gov-schedule-page .badge.b-sky {
+  background: var(--sky-light);
+  color: var(--sky);
+}
+
+.gov-schedule-page .badge.b-wheat {
+  background: var(--wheat-light);
+  color: #8B6412;
+}
+
+.gov-schedule-page .veh {
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+/* ---------- Sidebar cards ---------- */
+.gov-schedule-page .side-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gov-schedule-page .next-card {
+  background: linear-gradient(160deg, var(--forest) 0%, var(--forest-deep) 100%);
+  border-radius: var(--radius-lg);
+  padding: 22px 22px 20px;
+  color: #fff;
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.gov-schedule-page .next-card::after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  bottom: -30px;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+
+.gov-schedule-page .next-eyebrow {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--leaf-light);
+  margin-bottom: 10px;
+}
+
+.gov-schedule-page .next-village {
+  font-family: 'Fraunces', serif;
+  font-size: 23px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.gov-schedule-page .next-detail {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  margin-bottom: 18px;
+}
+
+.gov-schedule-page .next-countdown {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.gov-schedule-page .cd-block {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+  padding: 10px 14px;
+  text-align: center;
+  flex: 1;
+}
+
+.gov-schedule-page .cd-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 19px;
+  font-weight: 600;
+}
+
+.gov-schedule-page .cd-label {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: rgba(255,255,255,0.6);
+  margin-top: 2px;
+}
+
+.gov-schedule-page .next-btn {
+  width: 100%;
+  background: #fff;
+  color: var(--forest-deep);
+  border: none;
+  padding: 11px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  position: relative;
+  z-index: 1;
+}
+
+.gov-schedule-page .list-card .panel-title {
+  font-size: 16.5px;
+}
+
+.gov-schedule-page .req-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.gov-schedule-page .req-row:last-child {
+  border-bottom: none;
+}
+
+.gov-schedule-page .req-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--sky-light);
+  color: var(--sky);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.gov-schedule-page .req-name {
+  font-weight: 700;
+  font-size: 13.5px;
+  color: var(--ink);
+}
+
+.gov-schedule-page .req-meta {
+  font-size: 12px;
+  color: var(--ink-faint);
+  margin-top: 2px;
+}
+
+.gov-schedule-page .req-amt {
+  margin-left: auto;
+  text-align: right;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12.5px;
+  color: var(--forest);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.gov-schedule-page .side-stack .panel {
+  padding-bottom: 6px;
+}
+
+@media (max-width: 980px) {
+  .gov-schedule-page .main-grid {
+    grid-template-columns: 1fr;
+  }
+  .gov-schedule-page .stat-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .gov-schedule-page .trail {
+    grid-template-columns: repeat(4, 1fr);
+    row-gap: 20px;
+  }
+  .gov-schedule-page .trail::before {
+    display: none;
+  }
+}

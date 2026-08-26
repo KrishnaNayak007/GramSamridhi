@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../../assets/logo.png";
+import { incidentsApi } from "../../../services/incidentsApi";
 
 export default function GovSidebar({
   currentTab,
@@ -8,6 +9,23 @@ export default function GovSidebar({
   user,
   handleLogout,
 }) {
+  const [openCount, setOpenCount] = useState(0);
+
+  useEffect(() => {
+    async function loadCount() {
+      try {
+        const data = await incidentsApi.getAll();
+        if (data) {
+          const count = data.filter(c => c.status === 'open' || c.status === 'reported' || c.status === 'submitted').length;
+          setOpenCount(count);
+        }
+      } catch (err) {
+        console.error("Error loading sidebar count:", err);
+      }
+    }
+    loadCount();
+  }, []);
+
   const getInitials = () => {
     if (user?.username === "bmc_ward24_officer") return "MS";
     if (user?.username === "kudiary_gp_secretary") return "KD";
@@ -64,7 +82,7 @@ export default function GovSidebar({
             <path d="M12 9v5M12 17h.01" />
           </svg>
           Complaint Queue
-          <span className="count">7</span>
+          <span className="count">{openCount}</span>
         </button>
         <button
           onClick={() => setCurrentTab("map")}
@@ -101,6 +119,23 @@ export default function GovSidebar({
 
       <div className="nav-label">FARMER PROGRAM</div>
       <nav className="nav">
+        <button
+          onClick={() => setCurrentTab("schedule")}
+          className={`nav-item ${currentTab === "schedule" ? "active" : ""}`}
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+          </svg>
+          Collection Schedule
+        </button>
         <button
           onClick={() => setCurrentTab("buyback")}
           className={`nav-item ${currentTab === "buyback" ? "active" : ""}`}

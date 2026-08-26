@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './GovBuybackPage.css';
+import { agricultureApi } from '../../../services/agricultureApi';
 
 const RATES = {
   "Rice Straw": 1500,
@@ -17,29 +18,70 @@ const RESIDUE_STREAM = {
   "Irrigation Pipe": "inorganic"
 };
 
-const INITIAL_RECORDS = [
-  { id: "RB-1042", farmer: "Ramesh Mahato", village: "Village Kelejora", crop: "Paddy", residue: "Rice Straw", qty: 2.5, status: "collected", requested: "6 days ago", pickup: "Confirmed · Aug 20" },
-  { id: "RB-1041", farmer: "Sunita Devi", village: "Village Jamuria", crop: "Wheat", residue: "Wheat Straw", qty: 1.8, status: "approved", requested: "3 days ago", pickup: "Pending confirmation" },
-  { id: "RB-1040", farmer: "Amit Kumar", village: "Village Kelejora", crop: "Paddy", residue: "Rice Straw", qty: 3.0, status: "paid", requested: "9 days ago", pickup: "Confirmed · Aug 15" },
-  { id: "RB-1039", farmer: "Bimal Soren", village: "Village Ratibati", crop: "Sugarcane", residue: "Sugarcane Trash", qty: 4.2, status: "requested", requested: "1 day ago", pickup: "Awaiting approval" },
-  { id: "RB-1038", farmer: "Kajal Rani", village: "Village Jamuria", crop: "Wheat", residue: "Wheat Straw", qty: 2.1, status: "collected", requested: "5 days ago", pickup: "Confirmed · Aug 19" },
-  { id: "RB-1037", farmer: "Debashish Roy", village: "Village Barabani", crop: "Paddy", residue: "Rice Straw", qty: 1.6, status: "paid", requested: "11 days ago", pickup: "Confirmed · Aug 13" },
-  { id: "RB-1034", farmer: "Puja Bagdi", village: "Village Kelejora", crop: "Paddy", residue: "Rice Straw", qty: 2.8, status: "collected", requested: "4 days ago", pickup: "Confirmed · Aug 20" },
-  { id: "RB-1033", farmer: "Santosh Murmu", village: "Village Jamuria", crop: "Wheat", residue: "Wheat Straw", qty: 1.4, status: "paid", requested: "14 days ago", pickup: "Confirmed · Aug 10" },
-];
+const INITIAL_RECORDS = [];
 
 const STATUS_LABEL = { requested: "Requested", approved: "Approved", collected: "Collected", paid: "Paid" };
 const STATUS_STEPS = ["requested", "approved", "collected", "paid"];
 
 export default function GovBuybackPage() {
-  const [records, setRecords] = useState(INITIAL_RECORDS);
-  const [selectedId, setSelectedId] = useState(INITIAL_RECORDS[0].id);
+  const [records, setRecords] = useState([]);
+  const [selectedId, setSelectedId] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    async function fetchPickups() {
+      try {
+        const data = await agricultureApi.getPickups();
+        if (data && data.length > 0) {
+          const mapped = data.map(inc => {
+            const status = inc.status === 'pending' ? 'requested' : inc.status === 'scheduled' ? 'approved' : inc.status === 'collected' ? 'collected' : 'paid';
+            const residue = inc.residue_type || "Rice Straw";
+            return {
+              id: inc.id || `RB-mock-${Math.floor(1000 + Math.random() * 9000)}`,
+              farmer: inc.farmer_name || "Farmer",
+              village: inc.location_name || "Village Kelejora",
+              crop: inc.residue_type?.includes("Paddy") || inc.residue_type?.includes("Rice") ? "Paddy" : "Wheat",
+              residue: residue,
+              qty: (inc.weight_kg || 1000) / 1000,
+              status: status,
+              requested: 'Recently',
+              pickup: inc.scheduled_slot || "Awaiting schedule"
+            };
+          });
+          setRecords(mapped);
+          setSelectedId(mapped[0].id);
+        }
+      } catch (err) {
+        console.error("Error loading buyback pickups:", err);
+      }
+    }
+    fetchPickups();
+  }, []);
+
   const amountFor = (r) => {
+    if (!r || !RATES[r.residue]) return 0;
     return Math.round(r.qty * RATES[r.residue]);
   };
+
+  const uniqueFarmers = new Set(records.map(r => r.farmer)).size;
+  const totalPaid = records.filter(r => r.status === 'paid').reduce((sum, r) => sum + amountFor(r), 0);
+  const pendingRequests = records.filter(r => r.status === 'requested').length;
+  const scheduledPickups = records.filter(r => r.status === 'approved' || r.status === 'collected').length;
+  const avgPayment = uniqueFarmers > 0 ? Math.round(records.reduce((sum, r) => sum + amountFor(r), 0) / uniqueFarmers) : 0;
+
+  const organicTotal = records
+    .filter(r => RESIDUE_STREAM[r.residue] === 'organic')
+    .reduce((sum, r) => sum + r.qty, 0);
+  const inorganicTotal = records
+    .filter(r => RESIDUE_STREAM[r.residue] === 'inorganic')
+    .reduce((sum, r) => sum + r.qty, 0);
+  const totalMaterial = organicTotal + inorganicTotal;
+
+  const countRequested = records.filter(r => r.status === 'requested').length;
+  const countApproved = records.filter(r => r.status === 'approved').length;
+  const countCollected = records.filter(r => r.status === 'collected').length;
+  const countPaid = records.filter(r => r.status === 'paid').length;
 
   const handleAdvanceStatus = () => {
     setRecords(prev => prev.map(r => {
@@ -112,18 +154,18 @@ export default function GovBuybackPage() {
                 </svg>
               </div>
             </div>
-            <div className="value">426</div>
+            <div className="value">{uniqueFarmers}</div>
             <div className="label">Farmers Participating</div>
           </div>
           <div className="stat-card resolved">
-            <div class="top-row">
+            <div className="top-row">
               <div className="icon">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
                 </svg>
               </div>
             </div>
-            <div className="value">₹8.4L</div>
+            <div className="value">₹{totalPaid.toLocaleString('en-IN')}</div>
             <div className="label">Paid to Farmers</div>
           </div>
           <div className="stat-card pending">
@@ -134,7 +176,7 @@ export default function GovBuybackPage() {
                 </svg>
               </div>
             </div>
-            <div className="value">86</div>
+            <div className="value">{pendingRequests}</div>
             <div className="label">Requests Pending</div>
           </div>
           <div className="stat-card in-progress">
@@ -145,7 +187,7 @@ export default function GovBuybackPage() {
                 </svg>
               </div>
             </div>
-            <div className="value">37</div>
+            <div className="value">{scheduledPickups}</div>
             <div className="label">Pickups Scheduled</div>
           </div>
           <div className="stat-card urgent">
@@ -156,7 +198,7 @@ export default function GovBuybackPage() {
                 </svg>
               </div>
             </div>
-            <div className="value">₹1,972</div>
+            <div className="value">₹{avgPayment.toLocaleString('en-IN')}</div>
             <div className="label">Avg. Payment / Farmer</div>
           </div>
         </section>
@@ -176,12 +218,12 @@ export default function GovBuybackPage() {
                     <div className="rf-source organic">
                       <div className="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2C7 6 6 10 6 13a6 6 0 0 0 12 0c0-3-1-7-6-11z"/></svg></div>
                       <div className="lab">🌱 Organic</div>
-                      <div className="val">1,240 T</div>
+                      <div className="val">{organicTotal.toFixed(1)} T</div>
                     </div>
                     <div className="rf-source inorganic">
                       <div className="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m2 0-1 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L6 6"/></svg></div>
                       <div className="lab">♻️ Inorganic</div>
-                      <div className="val">680 T</div>
+                      <div className="val">{inorganicTotal.toFixed(1)} T</div>
                     </div>
                   </div>
                   <div className="rf-connector">
@@ -194,7 +236,7 @@ export default function GovBuybackPage() {
                   </div>
                   <div className="rf-total">
                     <div className="lab">Total Material Recovered</div>
-                    <div className="val">1,920 T</div>
+                    <div className="val">{totalMaterial.toFixed(1)} T</div>
                   </div>
                 </div>
               </div>
@@ -207,13 +249,13 @@ export default function GovBuybackPage() {
                 <span className="count-badge">Requested → Approved → Collected → Paid</span>
               </div>
               <div className="funnel">
-                <div className="funnel-step"><span className="dot" style={{ background: 'var(--ink-400)' }}></span><div className="n">512</div><div className="l">Requested</div></div>
+                <div className="funnel-step"><span className="dot" style={{ background: 'var(--ink-400)' }}></span><div className="n">{countRequested}</div><div className="l">Requested</div></div>
                 <div className="funnel-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-                <div className="funnel-step"><span class="dot" style={{ background: 'var(--amber-500)' }}></span><div className="n">480</div><div className="l">Approved</div></div>
+                <div className="funnel-step"><span className="dot" style={{ background: 'var(--amber-500)' }}></span><div className="n">{countApproved}</div><div className="l">Approved</div></div>
                 <div className="funnel-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-                <div className="funnel-step"><span class="dot" style={{ background: 'var(--inorganic)' }}></span><div className="n">426</div><div className="l">Collected</div></div>
+                <div className="funnel-step"><span className="dot" style={{ background: 'var(--inorganic)' }}></span><div className="n">{countCollected}</div><div className="l">Collected</div></div>
                 <div className="funnel-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg></div>
-                <div className="funnel-step"><span class="dot" style={{ background: 'var(--green-600)' }}></span><div className="n">398</div><div className="l">Paid</div></div>
+                <div className="funnel-step"><span className="dot" style={{ background: 'var(--green-600)' }}></span><div className="n">{countPaid}</div><div className="l">Paid</div></div>
               </div>
             </div>
 
