@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "GramSamridhii API",
+    "title": "GramSamridhi API",
     "version": "1.0.0",
-    "description": "API endpoints for GramSamridhii: Smart Waste Complaint (SWC) and Agriculture/Crop Residue Buy-back management."
+    "description": "API endpoints for GramSamridhi: Smart Waste Complaint (SWC) and Agriculture/Crop Residue Buy-back management."
   },
   "paths": {
     "/api/v1/agriculture/pickups/": {
@@ -39,7 +39,7 @@
                   "weight_kg": { "type": "number", "example": 650.0 },
                   "location_address": {
                     "type": "string",
-                    "example": "Bhadana Village, Karnal, Haryana"
+                    "example": "Kanas Village, Puri, Haryana"
                   },
                   "scheduled_slot": {
                     "type": "string",

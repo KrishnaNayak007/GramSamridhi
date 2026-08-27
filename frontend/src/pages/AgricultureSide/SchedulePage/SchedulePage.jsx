@@ -25,11 +25,11 @@ export default function SchedulePage() {
           <div>
             <div className="eyebrow">WASTE TO RESOURCE · GOVERNMENT OPERATIONS</div>
             <h1 className="page-title">Collection Schedule</h1>
-            <p className="page-sub">Weekly farmer pickup routes across Karnal district — plan, track and confirm biomass &amp; organic waste collection.</p>
+            <p className="page-sub">Weekly farmer pickup routes across Puri district — plan, track and confirm biomass &amp; organic waste collection.</p>
           </div>
           <div className="page-header-actions">
             <button className="loc-selector-btn">
-              <span>📍</span> Karnal · Bhadana Village
+              <span>📍</span> Puri · Kanas Village
             </button>
             <button className="btn-add-slot" onClick={() => alert('Add pickup slot dialog opened.')}>
               <span>+</span> Add Pickup Slot
@@ -81,7 +81,7 @@ export default function SchedulePage() {
               <span className="day-lbl">Mon</span>
               <span className="day-num">18</span>
               <div className="day-indicator">✓</div>
-              <span className="day-loc">Bhadana</span>
+              <span className="day-loc">Kanas</span>
               <span className="day-time">08:30 AM</span>
               <span className="day-status-badge done">Done</span>
             </div>
@@ -162,7 +162,7 @@ export default function SchedulePage() {
               </thead>
               <tbody>
                 <tr>
-                  <td className="plan-zone">Bhadana Village <span>38 farmers</span></td>
+                  <td className="plan-zone">Kanas Village <span>38 farmers</span></td>
                   <td>Crop Residue</td>
                   <td style={{ fontFamily: 'IBM Plex Mono, monospace' }}>08:30 – 09:15</td>
                   <td>Truck · HR-05-CJ 3312</td>
@@ -245,7 +245,7 @@ export default function SchedulePage() {
                   <div className="conf-avatar">RY</div>
                   <div className="conf-info">
                     <span className="conf-name">Ramesh Yadav</span>
-                    <span className="conf-desc">Bhadana · Paddy straw</span>
+                    <span className="conf-desc">Kanas · Paddy straw</span>
                   </div>
                   <span className="conf-qty">350 kg</span>
                 </div>
@@ -268,7 +268,7 @@ export default function SchedulePage() {
                 <div className="conf-item">
                   <div className="conf-avatar">AS</div>
                   <div className="conf-info">
-                    <span className="conf-name">Amit Singh</span>
+                    <span className="conf-name">Amit Sahu</span>
                     <span className="conf-desc">Assandh · Crop residue</span>
                   </div>
                   <span className="conf-qty">460 kg</span>

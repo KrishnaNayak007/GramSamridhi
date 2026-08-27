@@ -29,9 +29,9 @@ export default function OverviewPage({ onNavigate }) {
     loadData();
   }, []);
 
-  const username = user?.username || 'devinder_singh';
-  const isDemoDevinder = username.toLowerCase() === 'devinder_singh';
-  const name = isDemoDevinder ? 'Devinder Singh' : username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  const username = user?.username || 'devinder_Sahu';
+  const isDemoDevinder = username.toLowerCase() === 'devinder_Sahu';
+  const name = isDemoDevinder ? 'Devinder Sahu' : username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 
   // Compute dynamic stats
   const totalOrganicAgricultures = pickups
@@ -78,12 +78,12 @@ export default function OverviewPage({ onNavigate }) {
 
   return (
     <div className="content" id="overview">
-      <div className="crumb">⌖ Village Kelejora, Ward 14, Bhubaneshwar Municipal Corp.</div>
+      <div className="crumb">⌖ Village Kanas,Kanas Gram panchayat</div>
       <h1>Welcome back, {name}! 👋</h1>
       <p className="subtitle">Here's your village activity, earnings and sustainability impact.</p>
 
       <div className="pillars">
-        <span><i className="green-dot"></i> Swachh Gram</span>
+        <span><i className="green-dot"></i> Swach Gram</span>
         <span><i className="gold-dot"></i> Samridh Kisan</span>
         <span><i className="blue-dot"></i> Satat Vikas</span>
       </div>
@@ -185,7 +185,7 @@ export default function OverviewPage({ onNavigate }) {
             <div>
               <b>Organic Waste</b>
               <p>Tomorrow · 8:30 AM</p>
-              <small>Pickup zone: Village Kelejora</small>
+              <small>Pickup zone: Village kanas</small>
             </div>
           </div>
           <div className="progress"><span></span></div>
@@ -277,7 +277,7 @@ export default function OverviewPage({ onNavigate }) {
             <h3>Ask KrishiSahyog</h3>
           </div>
           <p className="assistant">
-            {chatResponse || "Hi Ramesh! I can help with waste reporting, crop residue, collection schedules, payments and Surplus Hub."}
+            {chatResponse || "Hi Devinder! I can help with waste reporting, crop residue, collection schedules, payments and Surplus Hub."}
           </p>
           <div className="chips">
             <button type="button" onClick={() => handleChipClick("How do I sell my crop residue?")}>How do I sell my crop residue?</button>

@@ -2,12 +2,12 @@ import React from 'react';
 import './Navbar.css';
 
 export default function Navbar({ handleLogout, user, currentTab, setCurrentTab, setSidebarOpen }) {
-  const username = user?.username || 'devinder_singh';
-  const isDemoDevinder = username.toLowerCase() === 'devinder_singh';
-  const name = isDemoDevinder ? 'Devinder Singh' : username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  const username = user?.username || 'devinder_Sahu';
+  const isDemoDevinder = username.toLowerCase() === 'devinder_Sahu';
+  const name = isDemoDevinder ? 'Devinder Sahu' : username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
   const initials = isDemoDevinder ? 'DS' : name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
 
-  const activeLocation = 'Bhadana Village · Karnal';
+  const activeLocation = 'Kanas Village · Puri';
 
   const tabList = [
     { tab: 'dashboard', label: 'GramSamridhi', icon: '▦' },

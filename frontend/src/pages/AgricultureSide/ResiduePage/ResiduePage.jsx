@@ -22,14 +22,14 @@ export default function ResiduePage() {
   // Form states
   const [fullName, setFullName] = useState('Ramesh Mahato');
   const [mobileNumber, setMobileNumber] = useState('9876543210');
-  const [location, setLocation] = useState('Village Bhadana, Karnal');
+  const [location, setLocation] = useState('Village Kanas, Puri');
   const [landArea, setLandArea] = useState('');
   const [landUnit, setLandUnit] = useState('acre');
   const [ownership, setOwnership] = useState('Owned');
   const [crop, setCrop] = useState('paddy');
   const [residueType, setResidueType] = useState('Rice Straw');
   const [quantity, setQuantity] = useState('2.5');
-  const [pickupLocation, setPickupLocation] = useState('Village Bhadana, Karnal');
+  const [pickupLocation, setPickupLocation] = useState('Village Kanas, Puri');
   const [pickupDate, setPickupDate] = useState('');
   const [timeSlot, setTimeSlot] = useState('Morning (7 AM – 11 AM)');
   const [notes, setNotes] = useState('');
@@ -52,8 +52,8 @@ export default function ResiduePage() {
     
     // Auto-fill from logged-in user profile
     if (storedUser.username) {
-      const isDemoDevinder = storedUser.username.toLowerCase() === 'devinder_singh';
-      const cleanName = isDemoDevinder ? 'Devinder Singh' : storedUser.username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      const isDemoDevinder = storedUser.username.toLowerCase() === 'devinder_Sahu';
+      const cleanName = isDemoDevinder ? 'Devinder Sahu' : storedUser.username.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
       setFullName(cleanName);
     }
     if (storedUser.phone) {
@@ -195,7 +195,7 @@ export default function ResiduePage() {
                     <label>Village / Location</label>
                     <input 
                       type="text" 
-                      placeholder="e.g. Village Kelejora, Ward 14" 
+                      placeholder="e.g. Village kanas, Ward 14" 
                       value={location}
                       onChange={(e) => setLocation(e.target.value)}
                       readOnly={!isEditable}

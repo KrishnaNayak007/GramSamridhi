@@ -27,13 +27,13 @@ export default function GovSidebar({
   }, []);
 
   const getInitials = () => {
-    if (user?.username === "bmc_ward24_officer") return "MS";
+    if (user?.username === "Block_level_officer") return "MS";
     if (user?.username === "kudiary_gp_secretary") return "KD";
     return "RB";
   };
 
   const getDisplayName = () => {
-    if (user?.username === "bmc_ward24_officer") return "Mahi Sharma";
+    if (user?.username === "Block_level_officer") return "Mahi Sharma";
     if (user?.username === "kudiary_gp_secretary") return "Kalinga Das";
     return user?.username || "R. Banerjee";
   };

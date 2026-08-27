@@ -15,15 +15,15 @@ from apps.evidence.models import Evidence
 from apps.surplus.models import Category
 
 class Command(BaseCommand):
-    help = "Seeds real administrative hierarchy for Odisha (Urban/Rural) and runs PostGIS resolution demo."
+    help = "Seeds real administrative hierarchy for Bhubaneswar (Urban/Rural) and runs PostGIS resolution demo."
 
     def handle(self, *args, **options):
-        self.stdout.write("Loading Odisha administrative hierarchy JSON...")
-        json_path = os.path.join(settings.BASE_DIR, 'apps', 'geography', 'fixtures', 'odisha_hierarchy.json')
+        self.stdout.write("Loading Bhubaneswar administrative hierarchy JSON...")
+        json_path = os.path.join(settings.BASE_DIR, 'apps', 'geography', 'fixtures', 'Bhubaneswar_hierarchy.json')
         with open(json_path, 'r', encoding='utf-8') as f:
             hierarchy_data = json.load(f)
 
-        self.stdout.write("Configuring Odisha dataset (State -> District -> Subdistricts -> ULBs/Wards/Blocks/GPs/Villages)...")
+        self.stdout.write("Configuring Bhubaneswar dataset (State -> District -> Subdistricts -> ULBs/Wards/Blocks/GPs/Villages)...")
 
         try:
             with transaction.atomic():
@@ -33,14 +33,14 @@ class Command(BaseCommand):
                 AdministrativeArea.objects.all_with_deleted().hard_delete()
                 Category.objects.all_with_deleted().hard_delete()
 
-                # 1. State: Odisha (Code: 21)
-                # Broad bounding box polygon containing Odisha coordinates
-                odisha_poly = Polygon(((81.0, 17.0), (81.0, 23.5), (87.5, 23.5), (87.5, 17.0), (81.0, 17.0)))
-                odisha_mpoly = MultiPolygon(odisha_poly)
+                # 1. State: Bhubaneswar (Code: 21)
+                # Broad bounding box polygon containing Bhubaneswar coordinates
+                Bhubaneswar_poly = Polygon(((81.0, 17.0), (81.0, 23.5), (87.5, 23.5), (87.5, 17.0), (81.0, 17.0)))
+                Bhubaneswar_mpoly = MultiPolygon(Bhubaneswar_poly)
                 state, _ = AdministrativeArea.objects.get_or_create(
                     name="Odisha",
                     area_type="STATE",
-                    defaults={"boundary": odisha_mpoly}
+                    defaults={"boundary": Odisha_mpoly}
                 )
 
                 # 2. Seed all 30 Districts and 317 Subdistricts from JSON
@@ -133,7 +133,7 @@ class Command(BaseCommand):
                     defaults={"boundary": village_mpoly}
                 )
 
-                self.stdout.write(self.style.SUCCESS("Odisha Administrative Area Trees populated (Urban BMC & Rural Jatni)."))
+                self.stdout.write(self.style.SUCCESS("Bhubaneswar Administrative Area Trees populated (Urban BMC & Rural Jatni)."))
 
                 # 4. Sanitation Department
                 department, _ = Department.objects.get_or_create(
@@ -157,9 +157,9 @@ class Command(BaseCommand):
                 # 6. Government Officers
                 # Urban Nigam Officer: Mahi Sharma (BMC Ward 24 Officer)
                 urban_officer, created_uo = User.objects.get_or_create(
-                    username="bmc_ward24_officer",
+                    username="Block_level_officer",
                     defaults={
-                        "email": "bmc.ward24@odisha.gov.in",
+                        "email": "bmc.ward24@Bhubaneswar.gov.in",
                         "phone": "+919999900024",
                         "role": "officer"
                     }
@@ -179,7 +179,7 @@ class Command(BaseCommand):
                 rural_officer, created_ro = User.objects.get_or_create(
                     username="kudiary_gp_secretary",
                     defaults={
-                        "email": "kudiary.gp@odisha.gov.in",
+                        "email": "kudiary.gp@Bhubaneswar.gov.in",
                         "phone": "+919999900025",
                         "role": "officer"
                     }
@@ -199,7 +199,7 @@ class Command(BaseCommand):
 
                 # 7. Seed Citizen User
                 citizen, _ = User.objects.get_or_create(
-                    username="odisha_citizen",
+                    username="Bhubaneswar_citizen",
                     defaults={
                         "email": "citizen.bbsr@gmail.com",
                         "phone": "+919000000000",
@@ -255,7 +255,7 @@ class Command(BaseCommand):
             
             self.stdout.write(f"   -> Authority Resolver matched Department: {auth.department.name}")
             assigned_officer = OfficerProfile.objects.filter(department=auth.department, jurisdiction=auth.administrative_area).first()
-            officer_name = assigned_officer.user.username if assigned_officer else 'bmc_ward24_officer'
+            officer_name = assigned_officer.user.username if assigned_officer else 'Block_level_officer'
             role_title = assigned_officer.role_title if assigned_officer else 'BMC Ward Sanitation Officer'
             self.stdout.write(f"   -> Routed to officer: {officer_name} ({role_title})")
 
@@ -279,5 +279,5 @@ class Command(BaseCommand):
             self.stdout.write("=========================================================================\n")
 
         except Exception as e:
-            self.stderr.write(self.style.ERROR(f"Odisha Seeding failed: {e}"))
+            self.stderr.write(self.style.ERROR(f"Bhubaneswar Seeding failed: {e}"))
             sys.exit(1)

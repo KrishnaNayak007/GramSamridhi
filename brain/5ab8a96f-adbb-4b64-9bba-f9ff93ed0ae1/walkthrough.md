@@ -1,4 +1,4 @@
-# Walkthrough: Odisha Seeding, Modular Styling, Homepage & SWC Layout Fixes
+# Walkthrough: Bhubaneswar Seeding, Modular Styling, Homepage & SWC Layout Fixes
 
 I have successfully updated the database models, generalized the spatial containment resolving logic, split the CSS styles into modular component files, fixed the homepage layout slideshow, resolved layout collision/overlapping bugs, restored correct SWC component colors/states, and reverted the sidebar navigation design to its original solid-green active state.
 
@@ -61,7 +61,7 @@ We split the monolithic `style.css` stylesheet into clean, individual, component
 
 ## 7. Administrative Area Choices & Spatial Resolver
 
-- **Choices Expanded**: Added `ULB_CORP`, `ULB_MUNI`, `ULB_NAC`, `WARD`, `BLOCK`, `PANCHAYAT`, and `VILLAGE` to **[`geography.models.AdministrativeArea`](file:///c:/Users/krish/OneDrive/Desktop/swachsahyog/backend/apps/geography/models.py)** to represent both Odisha's urban municipal wards and rural village/GP administrative hierarchies.
+- **Choices Expanded**: Added `ULB_CORP`, `ULB_MUNI`, `ULB_NAC`, `WARD`, `BLOCK`, `PANCHAYAT`, and `VILLAGE` to **[`geography.models.AdministrativeArea`](file:///c:/Users/krish/OneDrive/Desktop/swachsahyog/backend/apps/geography/models.py)** to represent both Bhubaneswar's urban municipal wards and rural village/GP administrative hierarchies.
 - **PostGIS Resolver**: Updated `resolve_administrative_area(point)` in **[`geography/services.py`](file:///c:/Users/krish/OneDrive/Desktop/swachsahyog/backend/apps/geography/services.py)** to query containing polygons or find the nearest node for both wards and rural villages.
-- **Odisha Dataset Seeder**: Added a seed command to populate Khordha district administrative units, departments, authorities, and assigned government officers.
+- **Bhubaneswar Dataset Seeder**: Added a seed command to populate Khordha district administrative units, departments, authorities, and assigned government officers.
 - **End-to-End API Integration**: Connected the SWC page forms to POST image uploads to `/api/v1/evidence/upload/` and tickets to `/api/v1/incidents/reports/`, fully integrated with our local-storage offline fallback interceptor.

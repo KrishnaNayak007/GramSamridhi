@@ -26,7 +26,7 @@ const defaultListings = [
   },
   {
     id: 'l2',
-    owner: { username: 'odisha_citizen' },
+    owner: { username: 'Bhubaneswar_citizen' },
     title: 'Grade 10 Textbook Set',
     category: defaultCategories[1],
     condition: 'new',
@@ -42,9 +42,9 @@ const defaultListings = [
 const defaultReports = [
   {
     id: 'r1',
-    citizen: { username: 'odisha_citizen' },
-    description: 'Delayed garbage clearance at BMC sector 4. Pile has been accumulating for 3 days.',
-    location: { name: 'BMC Ward 24, Bhubaneswar' },
+    citizen: { username: 'Bhubaneswar_citizen' },
+    description: ' garbage clearance at kanas village. Pile has been accumulating for 3 days.',
+    location: { name: 'kanas', district: 'Puri' },
     submitted_at: new Date(Date.now() - 1800000).toISOString(),
     incident: { status: 'open', priority_score: 8.5 }
   }
@@ -155,7 +155,7 @@ function handleMockRequest(url, options) {
       const selectedCat = defaultCategories.find(c => c.id === body.category_id) || defaultCategories[5];
       const newListing = {
         id: 'mock-listing-' + Math.random().toString(36).substr(2, 9),
-        owner: JSON.parse(localStorage.getItem('user') || '{"username": "odisha_citizen"}'),
+        owner: JSON.parse(localStorage.getItem('user') || '{"username": "Bhubaneswar_citizen"}'),
         title: body.title,
         category: selectedCat,
         condition: body.condition || 'good',
@@ -194,7 +194,7 @@ function handleMockRequest(url, options) {
     if (method === 'POST') {
       const newReport = {
         id: 'mock-report-' + Math.random().toString(36).substr(2, 9),
-        citizen: JSON.parse(localStorage.getItem('user') || '{"username": "odisha_citizen"}'),
+        citizen: JSON.parse(localStorage.getItem('user') || '{"username": "Bhubaneswar_citizen"}'),
         description: body.description,
         location: { name: 'BMC Ward 24, Bhubaneswar' },
         submitted_at: new Date().toISOString(),
@@ -287,7 +287,7 @@ function handleMockRequest(url, options) {
         code: 'SANITATION'
       },
       assigned_officer: {
-        name: 'bmc_ward24_officer',
+        name: 'Block_level_officer',
         role_title: 'BMC Ward Sanitation Officer'
       }
     });
@@ -312,7 +312,7 @@ function handleMockRequest(url, options) {
     const newReport = {
       id: 'mock-report-' + Math.floor(10000 + Math.random() * 89999),
       citizen: {
-        username: 'odisha_citizen',
+        username: 'Bhubaneswar_citizen',
         first_name: 'Goutam',
         last_name: 'Soni'
       },

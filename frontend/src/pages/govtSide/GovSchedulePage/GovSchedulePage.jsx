@@ -11,7 +11,7 @@ export default function GovSchedulePage() {
           <div>
             <div className="eyebrow">Waste to Resource · Government Operations</div>
             <h1 className="page-title">Collection Schedule</h1>
-            <p className="page-sub">Weekly farmer pickup routes across Karnal district — plan, track and confirm biomass &amp; organic waste collection.</p>
+            <p className="page-sub">Weekly farmer pickup routes across Puri district — plan, track and confirm biomass &amp; organic waste collection.</p>
           </div>
           <div className="header-actions">
             <div className="zone-pill">
@@ -19,7 +19,7 @@ export default function GovSchedulePage() {
                 <path d="M12 21s-7-6.1-7-11a7 7 0 0 1 14 0c0 4.9-7 11-7 11z" />
                 <circle cx="12" cy="10" r="2.5" />
               </svg>
-              Karnal · Bhadana Village
+              Puri · Kanas Village
             </div>
             <button className="btn-primary" onClick={() => alert('Add Pickup Slot feature: Scheduled slot configuration form modal opens.')}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
@@ -101,7 +101,7 @@ export default function GovSchedulePage() {
                   <path d="M20 6 9 17l-5-5" />
                 </svg>
               </div>
-              <div className="day-village">Bhadana</div>
+              <div className="day-village">Kanas</div>
               <div className="day-time">08:30 AM</div>
               <div className="day-status">Done</div>
             </div>
@@ -209,7 +209,7 @@ export default function GovSchedulePage() {
                         </svg>
                       </div>
                       <div>
-                        <div className="village-name">Bhadana Village</div>
+                        <div className="village-name">Kanas Village</div>
                         <div className="village-farmers">38 farmers</div>
                       </div>
                     </div>
@@ -341,7 +341,7 @@ export default function GovSchedulePage() {
                 <div className="req-avatar">RY</div>
                 <div>
                   <div className="req-name">Ramesh Yadav</div>
-                  <div className="req-meta">Bhadana · Paddy straw</div>
+                  <div className="req-meta">Kanas · Paddy straw</div>
                 </div>
                 <div className="req-amt">350 kg</div>
               </div>
@@ -364,7 +364,7 @@ export default function GovSchedulePage() {
               <div className="req-row">
                 <div className="req-avatar">AS</div>
                 <div>
-                  <div className="req-name">Amit Singh</div>
+                  <div className="req-name">Amit Sahu</div>
                   <div className="req-meta">Assandh · Crop residue</div>
                 </div>
                 <div className="req-amt">460 kg</div>

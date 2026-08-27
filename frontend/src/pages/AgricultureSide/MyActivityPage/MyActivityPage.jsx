@@ -134,7 +134,7 @@ export default function MyActivityPage() {
         rawId: report.id,
         type: 'swc',
         typeLabel: 'SWC Complaint',
-        title: report.description || 'Garbage accumulation near Ward 24',
+        title: report.description || 'Garbage accumulation near village chowk',
         location: report.location?.name || 'Local Area',
         status: report.incident?.status || 'pending',
         date: report.submitted_at || report.created_at,
@@ -247,7 +247,7 @@ export default function MyActivityPage() {
           </svg>
         </div>
         <div className="activity-header-text">
-          <p className="activity-eyebrow">My Activity · Ward 24</p>
+          <p className="activity-eyebrow">My Activity · Kanas</p>
           <h1 className="activity-title">My Activity</h1>
           <p className="activity-subtitle">Track your reports, listings and your contribution towards a cleaner and better community.</p>
         </div>

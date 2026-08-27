@@ -19,13 +19,13 @@ export const authApi = {
       );
       // Dummy user success payload
       const isFarmer =
-        username?.toLowerCase() === "devinder_singh" ||
+        username?.toLowerCase() === "devinder_Sahu" ||
         username?.toLowerCase().includes("farmer");
       return {
         access: "dummy_access_token",
         refresh: "dummy_refresh_token",
         user: {
-          username: username || "odisha_citizen",
+          username: username || "Bhubaneswar_citizen",
           email: `${username || "citizen"}@GramSamridhi.in`,
           phone: "+919999900024",
           role: isFarmer ? "farmer" : "citizen",

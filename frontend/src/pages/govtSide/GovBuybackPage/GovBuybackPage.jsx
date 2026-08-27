@@ -40,7 +40,7 @@ export default function GovBuybackPage() {
             return {
               id: inc.id || `RB-mock-${Math.floor(1000 + Math.random() * 9000)}`,
               farmer: inc.farmer_name || "Farmer",
-              village: inc.location_name || "Village Kelejora",
+              village: inc.location_name || "Village kanas",
               crop: inc.residue_type?.includes("Paddy") || inc.residue_type?.includes("Rice") ? "Paddy" : "Wheat",
               residue: residue,
               qty: (inc.weight_kg || 1000) / 1000,

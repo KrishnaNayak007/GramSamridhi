@@ -21,12 +21,12 @@ export default function PaymentHistoryPage() {
 
   // Static fallback data if database is empty
   const mockPayments = [
-    { id: 'TXN-88213', title: 'Paddy Straw', desc: '350 kg · SWC Bhadana', date: 'Today · 11:20 AM', mode: 'UPI', amount: 525, status: 'Pending', type: 'leaf' },
-    { id: 'TXN-88109', title: 'Wheat Residue', desc: '280 kg · SWC Bhadana', date: '18 Aug · 09:05 AM', mode: 'UPI', amount: 420, status: 'Paid', type: 'leaf' },
-    { id: 'TXN-87960', title: 'Recyclables (Plastic + Metal)', desc: '42 kg · SWC Bhadana', date: '11 Aug · 04:40 PM', mode: 'Bank Transfer', amount: 189, status: 'Paid', type: 'clay' },
-    { id: 'TXN-87710', title: 'Organic Waste', desc: '200 kg · SWC Bhadana', date: '04 Aug · 10:12 AM', mode: 'UPI', amount: 310, status: 'Paid', type: 'leaf' },
-    { id: 'TXN-87502', title: 'Glass & Paper', desc: '30 kg · SWC Bhadana', date: '27 Jul · 02:15 PM', mode: 'Bank Transfer', amount: 96, status: 'Paid', type: 'clay' },
-    { id: 'TXN-87284', title: 'Paddy Straw', desc: '310 kg · SWC Bhadana', date: '15 Jul · 08:50 AM', mode: 'UPI', amount: 465, status: 'Paid', type: 'leaf' }
+    { id: 'TXN-88213', title: 'Paddy Straw', desc: '350 kg · SWC Kanas', date: 'Today · 11:20 AM', mode: 'UPI', amount: 525, status: 'Pending', type: 'leaf' },
+    { id: 'TXN-88109', title: 'Wheat Residue', desc: '280 kg · SWC Kanas', date: '18 Aug · 09:05 AM', mode: 'UPI', amount: 420, status: 'Paid', type: 'leaf' },
+    { id: 'TXN-87960', title: 'Recyclables (Plastic + Metal)', desc: '42 kg · SWC Kanas', date: '11 Aug · 04:40 PM', mode: 'Bank Transfer', amount: 189, status: 'Paid', type: 'clay' },
+    { id: 'TXN-87710', title: 'Organic Waste', desc: '200 kg · SWC Kanas', date: '04 Aug · 10:12 AM', mode: 'UPI', amount: 310, status: 'Paid', type: 'leaf' },
+    { id: 'TXN-87502', title: 'Glass & Paper', desc: '30 kg · SWC Kanas', date: '27 Jul · 02:15 PM', mode: 'Bank Transfer', amount: 96, status: 'Paid', type: 'clay' },
+    { id: 'TXN-87284', title: 'Paddy Straw', desc: '310 kg · SWC Kanas', date: '15 Jul · 08:50 AM', mode: 'UPI', amount: 465, status: 'Paid', type: 'leaf' }
   ];
 
   // Map dynamic pickups to payment history structures
@@ -207,10 +207,10 @@ export default function PaymentHistoryPage() {
               <rect x="2" y="5" width="20" height="14" rx="2"/>
               <path d="M2 10h20"/>
             </svg>
-            Payouts go to UPI ID <b>devinder.singh@okhdfc</b>
+            Payouts go to UPI ID <b>devinder.Sahu@okhdfc</b>
           </div>
           <button className="btn-link-sky" onClick={() => {
-            const newUpi = prompt("Enter your new UPI ID:", "devinder.singh@okhdfc");
+            const newUpi = prompt("Enter your new UPI ID:", "devinder.Sahu@okhdfc");
             if (newUpi) alert("UPI ID updated to: " + newUpi);
           }}>Change Payout Method</button>
         </div>

@@ -799,7 +799,7 @@
             "district_name_en": "Cuttack",
             "subdistrict_code": "2944",
             "subdistrict_version": 2,
-            "subdistrict_name_en": "Narsinghpur",
+            "subdistrict_name_en": "NarSahupur",
             "subdistrict_name_local": "ନରସିଂହପୁର",
             "census_2001_code": "18",
             "census_2011_code": "02944"
@@ -1360,15 +1360,15 @@
         "s_no": 12,
         "district_code": "355",
         "district_version": 2,
-        "district_name_en": "Jagatsinghapur",
-        "district_name_local": "JAGATSINGHAPUR",
+        "district_name_en": "JagatSahuapur",
+        "district_name_local": "JAGATSahuAPUR",
         "census_2001_code": "11",
         "census_2011_code": "380",
         "subdistricts": [
           {
             "s_no": 19,
             "district_code": "355",
-            "district_name_en": "Jagatsinghapur",
+            "district_name_en": "JagatSahuapur",
             "subdistrict_code": "2943",
             "subdistrict_version": 2,
             "subdistrict_name_en": "Balikuda",
@@ -1379,7 +1379,7 @@
           {
             "s_no": 61,
             "district_code": "355",
-            "district_name_en": "Jagatsinghapur",
+            "district_name_en": "JagatSahuapur",
             "subdistrict_code": "2941",
             "subdistrict_version": 1,
             "subdistrict_name_en": "Biridi",
@@ -1390,7 +1390,7 @@
           {
             "s_no": 102,
             "district_code": "355",
-            "district_name_en": "Jagatsinghapur",
+            "district_name_en": "JagatSahuapur",
             "subdistrict_code": "2938",
             "subdistrict_version": 3,
             "subdistrict_name_en": "Ersama",
@@ -1401,10 +1401,10 @@
           {
             "s_no": 126,
             "district_code": "355",
-            "district_name_en": "Jagatsinghapur",
+            "district_name_en": "JagatSahuapur",
             "subdistrict_code": "2940",
             "subdistrict_version": 4,
-            "subdistrict_name_en": "Jagatsinghapur",
+            "subdistrict_name_en": "JagatSahuapur",
             "subdistrict_name_local": null,
             "census_2001_code": "7",
             "census_2011_code": "02940"
@@ -1412,7 +1412,7 @@
           {
             "s_no": 190,
             "district_code": "355",
-            "district_name_en": "Jagatsinghapur",
+            "district_name_en": "JagatSahuapur",
             "subdistrict_code": "2936",
             "subdistrict_version": 7,
             "subdistrict_name_en": "Kujang",
@@ -1423,7 +1423,7 @@
           {
             "s_no": 224,
             "district_code": "355",
-            "district_name_en": "Jagatsinghapur",
+            "district_name_en": "JagatSahuapur",
             "subdistrict_code": "2942",
             "subdistrict_version": 2,
             "subdistrict_name_en": "Naugaon",
@@ -1434,7 +1434,7 @@
           {
             "s_no": 255,
             "district_code": "355",
-            "district_name_en": "Jagatsinghapur",
+            "district_name_en": "JagatSahuapur",
             "subdistrict_code": "7513",
             "subdistrict_version": 3,
             "subdistrict_name_en": "Raghunathapur",
@@ -1445,7 +1445,7 @@
           {
             "s_no": 310,
             "district_code": "355",
-            "district_name_en": "Jagatsinghapur",
+            "district_name_en": "JagatSahuapur",
             "subdistrict_code": "2939",
             "subdistrict_version": 3,
             "subdistrict_name_en": "Tirtol",

@@ -54,7 +54,7 @@ export default function App() {
         const storedUser = JSON.parse(localStorage.getItem("user"));
         setUser(storedUser);
       } catch (err) {
-        setUser({ username: "odisha_citizen" });
+        setUser({ username: "Bhubaneswar_citizen" });
       }
     } else {
       setUser(null);
@@ -99,7 +99,7 @@ export default function App() {
 
   // Active page router mapping
   const renderActivePage = () => {
-    const isAgriculture = user?.role === "farmer" || user?.username?.includes("farmer") || user?.username === "devinder_singh";
+    const isAgriculture = user?.role === "farmer" || user?.username?.includes("farmer") || user?.username === "devinder_Sahu";
     const isOfficer =
       user?.role === "officer" ||
       user?.role === "government" ||
@@ -234,7 +234,7 @@ export default function App() {
   const isAgriculture =
     user?.role === "farmer" ||
     user?.username?.includes("farmer") ||
-    user?.username === "devinder_singh";
+    user?.username === "devinder_Sahu";
 
   if (isAgriculture) {
     return (
@@ -283,7 +283,7 @@ export default function App() {
       {/* SIDEBAR */}
       <aside className="sidebar">
         <div className="brand brand-vertical">
-          <img className="brand-logo" src={logo} alt="GramSamridhii logo" />
+          <img className="brand-logo" src={logo} alt="GramSamridhi logo" />
           <span className="brand-tagline">Swach Gram • Samridh Kisan</span>
         </div>
 
@@ -561,7 +561,7 @@ export default function App() {
               <span>
                 {activeLocation
                   ? activeLocation.name
-                  : "Bhadana Village, Karnal, Haryana"}
+                  : "Kanas Village, Puri, Haryana"}
               </span>
               <svg
                 className="chev"
@@ -640,7 +640,7 @@ export default function App() {
               </div>
               <div className="user-chip-text">
                 <span className="user-name">
-                  {user ? user.username : "odisha_citizen"}
+                  {user ? user.username : "Bhubaneswar_citizen"}
                 </span>
                 <span className="user-role">Urban Citizen</span>
               </div>

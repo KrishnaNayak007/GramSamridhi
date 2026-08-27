@@ -83,7 +83,7 @@ export default function ImpactPage() {
           .reduce((sum, p) => sum + parseFloat(p.payment_amount || 0), 0);
 
         const uniqueVillages = new Set([
-          ...picks.map(p => p.location_name || 'Kelejora'),
+          ...picks.map(p => p.location_name || 'kanas'),
           ...comps.map(c => c.representative_location?.name || 'BMC Ward 24')
         ].filter(Boolean));
         const villagesCountVal = uniqueVillages.size || 1;
@@ -676,7 +676,7 @@ export default function ImpactPage() {
               <span className="activity-dot green"></span>
               <div>
                 <strong>Crop residue collected</strong>
-                <small>Bhadana Village · 650 kg</small>
+                <small>Kanas Village · 650 kg</small>
               </div>
               <time>Today</time>
             </li>
@@ -692,7 +692,7 @@ export default function ImpactPage() {
               <span className="activity-dot green"></span>
               <div>
                 <strong>Farmer payment processed</strong>
-                <small>Bhadana Village · ₹12,500</small>
+                <small>Kanas Village · ₹12,500</small>
               </div>
               <time>2 days ago</time>
             </li>
@@ -700,7 +700,7 @@ export default function ImpactPage() {
               <span className="activity-dot cream"></span>
               <div>
                 <strong>Compost delivered</strong>
-                <small>Bhadana Village · 320 kg</small>
+                <small>Kanas Village · 320 kg</small>
               </div>
               <time>4 days ago</time>
             </li>

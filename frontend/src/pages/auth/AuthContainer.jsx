@@ -19,7 +19,7 @@ export default function AuthContainer({
 
   // Citizen Form State
   const [civilianName, setCivilianName] = useState("");
-  const [civilianEmail, setCivilianEmail] = useState("odisha_citizen");
+  const [civilianEmail, setCivilianEmail] = useState("Bhubaneswar_citizen");
   const [civilianPhone, setCivilianPhone] = useState("");
   const [civilianAddress, setCivilianAddress] = useState("");
   const [civilianPassword, setCivilianPassword] = useState("citizen123");
@@ -28,7 +28,7 @@ export default function AuthContainer({
 
   // Farmer Form State
   const [farmerName, setFarmerName] = useState("");
-  const [farmerEmail, setFarmerEmail] = useState("devinder_singh");
+  const [farmerEmail, setFarmerEmail] = useState("devinder_Sahu");
   const [farmerPhone, setFarmerPhone] = useState("");
   const [farmerAddress, setFarmerAddress] = useState("");
   const [farmerPassword, setFarmerPassword] = useState("citizen123");
@@ -37,9 +37,9 @@ export default function AuthContainer({
   const [farmerProfession, setFarmerProfession] = useState("farmer");
 
   // Government Form State
-  const [govId, setGovId] = useState("bmc_ward24_officer");
+  const [govId, setGovId] = useState("Block_level_officer");
   const [govPassword, setGovPassword] = useState("officer123");
-  const [govState, setGovState] = useState("Odisha");
+  const [govState, setGovState] = useState("Bhubaneswar");
   const [govDistrict, setGovDistrict] = useState("Bhubaneswar");
   const [govArea, setGovArea] = useState("urban"); // 'rural' | 'urban'
   const [govBlock, setGovBlock] = useState("");
@@ -49,7 +49,7 @@ export default function AuthContainer({
   const [govError, setGovError] = useState("");
 
   // State / District Autocomplete Search States
-  const [stateSearch, setStateSearch] = useState("Odisha");
+  const [stateSearch, setStateSearch] = useState("Bhubaneswar");
   const [showStateList, setShowStateList] = useState(false);
   const [districtSearch, setDistrictSearch] = useState("Bhubaneswar");
   const [showDistrictList, setShowDistrictList] = useState(false);
@@ -296,9 +296,9 @@ export default function AuthContainer({
   };
 
   const getStepLabel = () => {
-    if (activePanel === "role") return "Welcome to GramSamridhii";
+    if (activePanel === "role") return "Welcome to GramSamridhi";
     if (activePanel === "civilian") return "Citizen access";
-    if (activePanel === "farmer") return "Agriculture Portal";
+    if (activePanel === "farmer") return "Farmer/Citizen Access";
     return "Government access";
   };
 
@@ -314,8 +314,7 @@ export default function AuthContainer({
         )
       : [];
 
-  const areaData =
-    govState && govDistrict ? jurisdictionData[govState][govDistrict] : null;
+  const areaData = jurisdictionData?.[govState]?.[govDistrict] ?? null;
 
   return (
     <div className="auth-page">
@@ -344,10 +343,10 @@ export default function AuthContainer({
         <section className="hero" aria-hidden="false">
           <div className="hero__top">
             <div className="hero__logo">
-              <img src={logo} alt="GramSamridhii logo" />
+              <img src={logo} alt="GramSamridhi logo" />
             </div>
             <div className="hero__brand">
-              GramSamridhii
+              GramSamridhi
               <span>SMART CIVIC &amp; SUSTAINABLE PLATFORM</span>
             </div>
           </div>
@@ -395,7 +394,7 @@ export default function AuthContainer({
                   className="role-card"
                   onClick={() => {
                     setActivePanel("farmer");
-                    setFarmerEmail("devinder_singh");
+                    setFarmerEmail("devinder_Sahu");
                     setFarmerPassword("citizen123");
                     setFarmerMode("login");
                   }}
@@ -412,13 +411,13 @@ export default function AuthContainer({
                       className="role-card__title"
                       style={{ display: "block" }}
                     >
-                      Agriculture Portal
+                      Farmer/Citizen Access
                     </span>
                     <span
                       className="role-card__desc"
                       style={{ display: "block" }}
                     >
-                      Access collection schedules, residue buyback, marketplace and local support
+                      Access collection schedules, residue buyback,Garbage dump complaints and Local governance services
                     </span>
                   </span>
                   <span className="role-card__arrow" aria-hidden="true">
@@ -473,7 +472,7 @@ export default function AuthContainer({
               </button>
               <h2>Citizen access</h2>
               <p className="sub">
-                Log in or create your GramSamridhii account.
+                Log in or create your GramSamridhi account.
               </p>
 
               <div
@@ -536,7 +535,7 @@ export default function AuthContainer({
                     >
                       <li>
                         To test <b>Citizen (Urban Area)</b>: Use{" "}
-                        <code>odisha_citizen</code>
+                        <code>Bhubaneswar_citizen</code>
                       </li>
                     </ul>
                     <small
@@ -651,7 +650,7 @@ export default function AuthContainer({
               >
                 ← Back
               </button>
-              <h2>Agriculture Portal</h2>
+              <h2>Farmer/Citizen Access</h2>
               <p className="sub">Log in or create your GramSamridhi account.</p>
 
               <div
@@ -714,7 +713,7 @@ export default function AuthContainer({
                     >
                       <li>
                         To test <b>Farmer (Rural Area)</b>: Use{" "}
-                        <code>devinder_singh</code>
+                        <code>devinder_Sahu</code>
                       </li>
                     </ul>
                     <small
@@ -793,6 +792,8 @@ export default function AuthContainer({
                         }}
                       >
                         <option value="farmer">Farmer</option>
+                        <option value="Civilian">Civilian</option>
+                        <option value="agriculture">Agriculture Worker</option>
                         <option value="dairy">Dairy</option>
                         <option value="other">Other</option>
                       </select>
@@ -857,13 +858,13 @@ export default function AuthContainer({
 
               <form onSubmit={handleGovSubmit} noValidate>
                 <div className="field">
-                  <label htmlFor="govId">Employee / officer ID</label>
+                  <label htmlFor="govId">Employee /Official ID </label>
                   <input
                     type="text"
                     id="govId"
                     value={govId}
                     onChange={(e) => setGovId(e.target.value)}
-                    placeholder="e.g. bmc_ward24_officer"
+                    placeholder="e.g. Block_level_officer"
                     required
                   />
                 </div>
@@ -1014,15 +1015,15 @@ export default function AuthContainer({
                       </select>
                     </div>
                     <div className="field">
-                      <label htmlFor="ruralWard">Ward number</label>
+                      <label htmlFor="ruralWard">Gram panchayat</label>
                       <select
                         id="ruralWard"
                         value={govWard}
                         onChange={(e) => setGovWard(e.target.value)}
                         required
                       >
-                        <option value="">Select ward number</option>
-                        {["Ward 1", "Ward 2", "Ward 3", "Ward 4"].map((w) => (
+                        <option value="">Select Gram panchayat</option>
+                        {["Gadahaladia", "Malipur"].map((w) => (
                           <option key={w} value={w}>
                             {w}
                           </option>

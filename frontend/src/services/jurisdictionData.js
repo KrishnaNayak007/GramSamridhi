@@ -246,13 +246,13 @@ export const jurisdictionData = {
         "wards": ["Ward 1", "Ward 2", "Ward 3"]
       }
     },
-    "Karnal": {
+    "Puri": {
       "rural": {
-        "blocks": ["Karnal Block 1", "Karnal Block 2"],
-        "localBodies": ["Karnal Panchayat A", "Bhadana Village Panchayat"]
+        "blocks": ["Puri Block 1", "Puri Block 2"],
+        "localBodies": ["Puri Panchayat A", "Kanas Village Panchayat"]
       },
       "urban": {
-        "ulbs": ["Karnal Municipal Corporation"],
+        "ulbs": ["Puri Municipal Corporation"],
         "wards": ["Ward 1", "Ward 2", "Ward 3", "Ward 4", "Ward 5", "Ward 6", "Ward 7", "Ward 8", "Ward 9", "Ward 10"]
       }
     }
@@ -362,10 +362,10 @@ export const jurisdictionData = {
     }
   },
   "Odisha": {
-    "Bhubaneswar": {
+    "Khordha": {
       "rural": {
-        "blocks": ["Balianta", "Balipatna"],
-        "localBodies": ["Zilla Panchayat", "Tehsil"]
+        "blocks": ["Khordha","Begunia", "Balipatna"],
+        "localBodies": ["Gram Panchayat", "Tehsil"]
       },
       "urban": {
         "ulbs": ["Bhubaneswar Municipal Corporation"],
@@ -375,7 +375,7 @@ export const jurisdictionData = {
     "Cuttack": {
       "rural": {
         "blocks": ["Cuttack Sadar", "Niali", "Nischintakoili"],
-        "localBodies": ["Zilla Panchayat", "Tehsil"]
+        "localBodies": ["Gram Panchayat", "Tehsil"]
       },
       "urban": {
         "ulbs": ["Cuttack Municipal Corporation", "Choudwar Municipality"],

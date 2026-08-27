@@ -160,12 +160,12 @@ export default function IntroPage({ onLoginClick, onGetStartedClick }) {
                 <div className="dash-body">
                   <div className="dash-top">
                     <h5>Overview — This Week</h5>
-                    <span>Odisha Region</span>
+                    <span>Bhubaneswar Region</span>
                   </div>
                   <div className="dash-cards">
                     <div className="dcard">
                       <div className="k">Waste Complaints</div>
-                      <div className="v">1,284</div>
+                      <div className="v">1,</div>
                       <div className="bar-mini"><i style={{ width: "72%", background: "var(--fresh)" }}></i></div>
                     </div>
                     <div className="dcard">

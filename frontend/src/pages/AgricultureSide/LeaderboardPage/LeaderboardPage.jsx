@@ -12,7 +12,7 @@ export default function LeaderboardPage() {
           <div>
             <div className="eyebrow">Impact &amp; Insights · Community Ranking</div>
             <h1 className="page-title">Village Leaderboard</h1>
-            <p className="page-sub">See how Bhadana Village stacks up against other villages in Karnal this month.</p>
+            <p className="page-sub">See how Kanas Village stacks up against other villages in Puri this month.</p>
           </div>
           <div className="tabs">
             <button className={'tab ' + (timeframe === 'Weekly' ? 'active' : '')} onClick={() => setTimeframe('Weekly')}>Weekly</button>
@@ -27,8 +27,8 @@ export default function LeaderboardPage() {
             <div className="yv-rank">#3</div>
             <div>
               <div className="yv-eyebrow">Your Village</div>
-              <div className="yv-name">Bhadana Village</div>
-              <div className="yv-meta">38 active farmers · Karnal Block</div>
+              <div className="yv-name">Kanas Village</div>
+              <div className="yv-meta">38 active farmers · Puri Block</div>
             </div>
           </div>
           <div className="yv-stats">
@@ -41,7 +41,7 @@ export default function LeaderboardPage() {
               <div className="yv-stat-label">Rank Change</div>
             </div>
             <div className="yv-stat">
-              <div className="yv-stat-val">₹ 1,28,450</div>
+              <div className="yv-stat-val">₹ 1200</div>
               <div className="yv-stat-label">Farmer Earnings</div>
             </div>
           </div>
@@ -65,7 +65,7 @@ export default function LeaderboardPage() {
           </div>
           <div className="pod-card bronze">
             <div className="pod-medal">3</div>
-            <div className="pod-village">Bhadana</div>
+            <div className="pod-village">Kanas</div>
             <div className="pod-block">38 farmers</div>
             <div className="pod-tonnes">12.4</div>
             <div className="pod-unit">tonnes collected</div>
@@ -75,7 +75,7 @@ export default function LeaderboardPage() {
         {/* Full leaderboard */}
         <div className="panel">
           <div className="panel-head">
-            <div className="panel-title">Full Rankings — Karnal Block</div>
+            <div className="panel-title">Full Rankings — Puri Block</div>
             <div className="panel-note">Updated today, 09:00 AM</div>
           </div>
           <table className="lb">
@@ -101,7 +101,7 @@ export default function LeaderboardPage() {
                     </div>
                     <div>
                       <div className="village-name">Nissing</div>
-                      <div className="village-block">Karnal Block</div>
+                      <div className="village-block">Puri Block</div>
                     </div>
                   </div>
                 </td>
@@ -121,7 +121,7 @@ export default function LeaderboardPage() {
                     </div>
                     <div>
                       <div className="village-name">Kunjpura</div>
-                      <div className="village-block">Karnal Block</div>
+                      <div className="village-block">Puri Block</div>
                     </div>
                   </div>
                 </td>
@@ -140,8 +140,8 @@ export default function LeaderboardPage() {
                       </svg>
                     </div>
                     <div>
-                      <div className="village-name">Bhadana <span className="you-tag">Your village</span></div>
-                      <div className="village-block">Karnal Block</div>
+                      <div className="village-name">Kanas <span className="you-tag">Your village</span></div>
+                      <div className="village-block">Puri Block</div>
                     </div>
                   </div>
                 </td>
@@ -161,7 +161,7 @@ export default function LeaderboardPage() {
                     </div>
                     <div>
                       <div className="village-name">Assandh</div>
-                      <div className="village-block">Karnal Block</div>
+                      <div className="village-block">Puri Block</div>
                     </div>
                   </div>
                 </td>
@@ -181,7 +181,7 @@ export default function LeaderboardPage() {
                     </div>
                     <div>
                       <div className="village-name">Gharaunda</div>
-                      <div className="village-block">Karnal Block</div>
+                      <div className="village-block">Puri Block</div>
                     </div>
                   </div>
                 </td>
@@ -201,7 +201,7 @@ export default function LeaderboardPage() {
                     </div>
                     <div>
                       <div className="village-name">Indri</div>
-                      <div className="village-block">Karnal Block</div>
+                      <div className="village-block">Puri Block</div>
                     </div>
                   </div>
                 </td>
@@ -213,7 +213,7 @@ export default function LeaderboardPage() {
             </tbody>
           </table>
           <div className="table-foot">
-            <span>Showing 6 of 9 villages in Karnal Block</span>
+            <span>Showing 6 of 9 villages in Puri Block</span>
             <span>Ranked by tonnes of waste collected</span>
           </div>
         </div>
