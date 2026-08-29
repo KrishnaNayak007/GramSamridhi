@@ -31,4 +31,7 @@ urlpatterns = [
 
     # Agriculture / Crop residue support
     path('agriculture/', include('apps.agriculture.urls', namespace='agriculture')),
+
+    # Waste Classification Agent API
+    path('waste/', include('apps.waste_app.urls', namespace='waste')),
 ]

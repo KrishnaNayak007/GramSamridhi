@@ -763,6 +763,8 @@
   align-items:flex-start;
   gap:12px;
   flex:1;
+  width:25%;
+  min-width:0;
   position:relative;
 }
 
@@ -902,6 +904,14 @@
   font-size:12px;
   color:var(--muted);
   margin:0 0 16px;
+}
+
+.swc-page-container .dz-actions{
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:10px;
 }
 
 .swc-page-container .btn-solid{

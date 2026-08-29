@@ -4,8 +4,18 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+# Load local .env variables manually to ensure they are available before Django settings are evaluated
+env_file = BASE_DIR / '.env'
+if env_file.exists():
+    with open(env_file) as f:
+        for line in f:
+            if line.strip() and not line.startswith('#'):
+                try:
+                    key, val = line.strip().split('=', 1)
+                    val = val.strip('\'"')
+                    os.environ[key] = val
+                except ValueError:
+                    pass
 
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-swachsahyog-dev-key-change-in-prod')
 
@@ -47,6 +57,7 @@ INSTALLED_APPS = [
     'apps.impact',
     'apps.messaging',
     'apps.agriculture',
+    'apps.waste_app',
 ]
 
 MIDDLEWARE = [

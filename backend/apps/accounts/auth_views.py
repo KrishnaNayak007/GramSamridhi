@@ -13,7 +13,7 @@ class RegisterSerializer(serializers.Serializer):
     email = serializers.EmailField(required=False, allow_blank=True)
     phone = serializers.CharField(max_length=20, required=False, allow_blank=True)
     password = serializers.CharField(min_length=6, write_only=True)
-    role = serializers.ChoiceField(choices=(('citizen', 'Citizen'), ('officer', 'Officer')), default='citizen')
+    role = serializers.ChoiceField(choices=(('citizen', 'Citizen'), ('officer', 'Officer'), ('farmer', 'Farmer')), default='citizen')
     username = serializers.CharField(max_length=150, required=False)
 
     def validate(self, attrs):

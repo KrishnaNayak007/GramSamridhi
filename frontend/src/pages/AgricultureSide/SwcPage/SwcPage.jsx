@@ -332,22 +332,22 @@ export default function SwcPage({ onNavigate }) {
       {/* Stepper */}
       <div className="card stepper-card">
         <div className="stepper" id="stepper">
-          <div className={`step ${step === 1 ? "active" : step > 1 ? "complete" : ""}`} data-step="1">
+          <div className={`step ${step === 1 ? "active" : step > 1 ? "complete" : ""}`} data-step="1" style={{ position: "relative" }}>
             <div className="step-line"></div>
             <div className="step-num">01</div>
-            <div className="step-text"><div class="step-label">Capture</div><div class="step-desc">Take or upload a photo</div></div>
+            <div className="step-text"><div className="step-label">Capture</div><div className="step-desc">Take or upload a photo</div></div>
           </div>
-          <div className={`step ${step === 2 ? "active" : step > 2 ? "complete" : ""}`} data-step="2">
-            <div class="step-line"></div>
-            <div class="step-num">02</div>
-            <div class="step-text"><div class="step-label">AI Review</div><div class="step-desc">AI suggests the waste type</div></div>
+          <div className={`step ${step === 2 ? "active" : step > 2 ? "complete" : ""}`} data-step="2" style={{ position: "relative" }}>
+            <div className="step-line"></div>
+            <div className="step-num">02</div>
+            <div className="step-text"><div className="step-label">AI Review</div><div className="step-desc">AI suggests the waste type</div></div>
           </div>
-          <div className={`step ${step === 3 ? "active" : step > 3 ? "complete" : ""}`} data-step="3">
+          <div className={`step ${step === 3 ? "active" : step > 3 ? "complete" : ""}`} data-step="3" style={{ position: "relative" }}>
             <div className="step-line"></div>
             <div className="step-num">03</div>
             <div className="step-text"><div className="step-label">Confirm Details</div><div className="step-desc">Add location &amp; description</div></div>
           </div>
-          <div className={`step ${step === 4 ? "active" : ""}`} data-step="4">
+          <div className={`step ${step === 4 ? "active" : ""}`} data-step="4" style={{ position: "relative" }}>
             <div className="step-num">04</div>
             <div className="step-text"><div className="step-label">Submit</div><div className="step-desc">Sent to the right team</div></div>
           </div>
