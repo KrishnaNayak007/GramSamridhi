@@ -51,9 +51,9 @@ Rules:
 3. "Mixed" = both present together.
 4. Percentages must sum to 100."""
 
-        # Call Gemini 2.5 Flash
+        # Call Gemini 3.6 Flash
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.6-flash",
             contents=[prompt, image],
             config=types.GenerateContentConfig(
                 response_mime_type="application/json"
