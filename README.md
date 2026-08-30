@@ -1,23 +1,70 @@
-# SWC (Smart Waste Complaint) Platform
+# GramSamridhi (SWC + Residue Buy-Back Platform)
 
-SWC (Smart Waste Complaint) is a modular monolith designed to streamline civic waste reporting, aggregation, and resolution. Built as a high-reliability platform, it enables citizens to capture and submit waste issues (with offline-first mobile web queue support) and leverages artificial intelligence to analyze media uploads, categorize complaints, and route them to local urban bodies (ULBs). The platform groups duplicate or near-duplicate reports geospatially and temporally into actionable civic incidents, prioritizing them dynamically using a multi-factor scoring service to optimize municipal resource allocation.
+GramSamridhi is a modular monolith that turns two disconnected rural
+problems — civic waste complaints and crop residue disposal — into a single
+government-mediated circular economy. Citizens report waste and offer
+residue; the platform aggregates what comes in at the government level;
+government becomes the buyer and, in turn, the negotiator that supplies
+aggregated organic and recyclable material to registered processing
+companies (biogas/CNG plants, organic fertilizer producers, recyclers)
+under contract. Citizens and farmers never deal with processors directly —
+government is the market-maker.
 
 ## The Problem Being Solved
 
-Traditional civic complaint systems suffer from disjointed workflows, high rates of duplicate submissions, manual routing inefficiencies, and poor transparency for citizens. Local authorities are often overwhelmed by multiple reports of the same physical heap of trash, while citizens struggle to report issues in areas with low connectivity. SWC addresses these challenges by:
-- Intelligently deduplicating multiple citizen complaints into single resolved incidents.
-- Analyzing reports using AI to ensure correct classification, severity evaluation, and routing.
-- Maintaining an offline queue for report capture in remote or poorly connected areas.
-- Empowering officers with a prioritised dashboard to manage workloads based on SLA rules.
+Rural and peri-urban India has two chronic, related gaps:
+- Citizens have no reliable channel to report waste, and municipal bodies
+  have no way to deduplicate or prioritize the flood of overlapping reports
+  that follow.
+- Farmers burn or discard crop residue because there's no accessible,
+  trustworthy buyer for it, and processing companies (biogas, fertilizer,
+  recycling) have no visibility into how much recoverable material exists
+  in a given area or how to source it reliably.
+
+GramSamridhi addresses both by making local government the aggregation
+point: it collects and deduplicates civic waste reports geospatially, buys
+crop residue directly from farmers, rolls both into a running inventory of
+organic and recyclable material, and exposes that inventory to registered
+processing companies so government can negotiate supply contracts instead
+of leaving farmers and citizens to find buyers on their own.
 
 ## Key Features
 
-- **Offline-First Report Capture:** Media and GPS points are captured immediately on the client and stored in IndexedDB until connectivity is restored.
-- **AI-Driven Visual Analysis:** Uses Gemini to identify category, verify evidence legitimacy, estimate severity, and detect objects.
-- **PostGIS Geospatial Aggregation:** Intelligently groups reports near each other into single logical incidents, updating reporter counts dynamically.
-- **Dynamic Prioritization Engine:** Versioned, multi-factor scoring (based on report count, severity, category, and area sensitivity) kept in an append-only audit trail.
-- **Officer Dashboard:** Optimized geospatial map views and incident tables filtered by municipal jurisdiction.
-- **Modular Architecture:** A clean modular monolith permitting independent development of domains with a clear path to future expansion (e.g. SURPLUS).
+**Built and working:**
+- **Offline-First Report Capture:** Media and GPS points are captured
+  immediately on the client and stored in IndexedDB until connectivity is
+  restored.
+- **AI-Driven Visual Analysis:** Uses Gemini to identify category, verify
+  evidence legitimacy, estimate severity, and estimate organic-material
+  share ("Farm Score") for routing into the residue buy-back pipeline.
+- **PostGIS Geospatial Aggregation:** Groups reports near each other into
+  single logical incidents, bounded by administrative area, updating
+  reporter counts dynamically.
+- **Dynamic Prioritization Engine:** Versioned, multi-factor scoring (report
+  count, severity, category, area sensitivity) kept in an append-only
+  audit trail.
+- **Officer Dashboard:** Geospatial map views and incident tables filtered
+  by municipal jurisdiction.
+- **Residue Buy-Back Flow:** Farmers request pickup of crop residue;
+  government tracks and pays for it through a `requested → approved →
+  collected → paid` status pipeline.
+- **Async AI Pipeline:** Image classification runs as a Celery background
+  task, not inline in the request cycle.
+
+**Roadmap (not yet built — the differentiating layer):**
+- **Government Inventory Aggregation:** Rolling totals of organic and
+  recyclable material by administrative area, fed by paid buy-back records
+  and resolved civic incidents.
+- **Processing Company Registry:** Registration and capacity tracking for
+  biogas/CNG plants, fertilizer producers, and recyclers.
+- **Contract Negotiation Flow:** Processing companies request supply from
+  aggregated government inventory; government reviews and approves/fulfills
+  contracts. This is the mechanism that makes government the market-maker
+  rather than a pass-through reporting tool, and it's the current
+  development priority.
+- **SURPLUS Module:** Agri-produce and food-surplus redistribution, and a
+  trade-in channel for non-biotic recyclables, sitting beside the buy-back
+  flow without restructuring existing domains.
 
 ## SWC Workflow Diagram
 
@@ -26,39 +73,46 @@ graph TD
     Citizen([Citizen User]) -->|Captures Evidence offline/online| OfflineQueue[Offline IndexedDB Queue]
     OfflineQueue -->|Drains when online| API[Django REST API /api/v1/reports/]
     API -->|Validation & Persistence| ReportService[ReportSubmissionService]
-    
+
     ReportService -->|Calls Geography| GeoResolver[Geo Spatial Resolver]
     ReportService -->|Calls Aggregation| GeoMatcher[SimilarityMatcher]
-    
-    GeoMatcher -->|ST_DWithin Match Found?| MatchInc[Attach to Existing CivicIncident]
+
+    GeoMatcher -->|ST_DWithin Match, bounded by Administrative Area| MatchInc[Attach to Existing CivicIncident]
     GeoMatcher -->|No Match| NewInc[Create New CivicIncident]
-    
-    MatchInc & NewInc -->|Triggers Async Enrichment| AIAnalysis[AIAnalysisService]
+
+    MatchInc & NewInc -->|Queued via Celery| AIAnalysis[AIAnalysisService]
     MatchInc & NewInc -->|Triggers Recalculation| PriorityService[PriorityService]
-    
-    AIAnalysis -->|Gemini Analysis & Schema Check| AnalysisResult[AIAnalysisResult]
+
+    AIAnalysis -->|Gemini Analysis incl. Farm Score| AnalysisResult[AIAnalysisResult]
     PriorityService -->|Calculate Score| PriorityAssessment[PriorityAssessment]
-    
+
     NewInc & MatchInc -->|Status/Assignment| WorkflowService[WorkflowService]
     WorkflowService -->|Dashboard Sync| OfficerDash[Officer Dashboard / Map]
+
+    AnalysisResult -->|Organic material routed| BuyBack[Residue Buy-Back Pipeline]
+    BuyBack -->|Roadmap| GovInventory[Government Inventory Aggregation]
+    GovInventory -->|Roadmap| ContractFlow[Processing Company Contract Requests]
 ```
 
 ## System Architecture Overview
 
-SWC is built as a **modular monolith** structured into strict domain boundaries. Read the detailed [Architecture Blueprint](file:///c:/Users/krish/OneDrive/Desktop/swachsahyog/docs/architecture/blueprint.md) to understand:
+GramSamridhi is built as a **modular monolith** structured into strict
+domain boundaries. Read the detailed
+[Architecture Blueprint](docs/architecture/blueprint.md) to understand:
 - The domain boundaries and app dependencies.
 - Database schemas (PostgreSQL + PostGIS mapping).
 - Offline synchronization architecture using IndexedDB.
 - AI validation and schema protection systems.
-- Strategic plans for integrating the SURPLUS module later.
+- Plans for the government inventory/contract-negotiation layer and the
+  SURPLUS module.
 
 ## Technology Stack
 
 - **Backend:** Python, Django, Django REST Framework (DRF), PostGIS (PostgreSQL spatial extension)
 - **Frontend:** React, JavaScript, Vite, TanStack Query, Vanilla CSS
 - **AI & Analysis:** Google Gemini API
-- **Infrastructure:** Docker, Docker Compose (PostgreSQL/PostGIS, Redis, Django, React)
-- **Task Queue (Post-MVP):** Celery, Redis
+- **Task Queue:** Celery, Redis (image classification runs async, not inline)
+- **Infrastructure:** Docker, Docker Compose (PostgreSQL/PostGIS, Redis, Celery worker, Gunicorn, React)
 
 ## Repository Structure
 
@@ -66,7 +120,7 @@ SWC is built as a **modular monolith** structured into strict domain boundaries.
 swc-platform/
 ├── backend/                      # Django backend project
 │   ├── config/                   # settings, urls, celery configurations
-│   ├── apps/                     # Domain bounded apps (accounts, geography, etc.)
+│   ├── apps/                     # Domain bounded apps (accounts, geography, agriculture, surplus, etc.)
 │   ├── core/                     # Shared kernel base classes, exceptions, and permissions
 │   ├── api/                      # Routing layer for v1 endpoints
 │   ├── manage.py                 # Django entrypoint
@@ -74,24 +128,24 @@ swc-platform/
 ├── frontend/                     # React Single Page Application
 │   ├── src/
 │   │   ├── app/                  # App shell, router definitions, and provider wrappers
-│   │   ├── routes/               # Route guard components and path constants
-│   │   ├── pages/                # Page component directories (DashboardPage, SettingsPage, etc.)
-│   │   ├── shared/               # Shared presentational components, hooks, formatting libs, and types
-│   │   ├── services/             # Endpoint API clients (authApi, surplusApi, etc.)
-│   │   └── main.jsx              # Main entry point
-│   ├── index.html                # HTML mount point
-│   ├── public/                   # Static assets
-│   ├── vite.config.js            # Vite bundler options
-│   └── package.json              # NPM manifest
-├── infrastructure/               # DevOps and environment files
-│   ├── docker/                   # Dockerfiles and Compose configurations
-│   └── env/                      # Env templates
-├── docs/                         # Platform documentation
-│   ├── architecture/             # Architecture specifications and ADRs
-│   ├── api/                      # OpenAPI schemas
-│   └── domain/                   # Domain glossary and diagrams
+│   │   ├── routes/                # Route guard components and path constants
+│   │   ├── pages/                 # Page component directories (DashboardPage, govtSide, AgricultureSide, etc.)
+│   │   ├── shared/                # Shared presentational components, hooks, formatting libs, and types
+│   │   ├── services/               # Endpoint API clients (authApi, agricultureApi, surplusApi, etc.)
+│   │   └── main.jsx                # Main entry point
+│   ├── index.html                 # HTML mount point
+│   ├── public/                    # Static assets
+│   ├── vite.config.js             # Vite bundler options
+│   └── package.json               # NPM manifest
+├── infrastructure/                # DevOps and environment files
+│   ├── docker/                    # Dockerfiles and Compose configurations
+│   └── env/                       # Env templates
+├── docs/                          # Platform documentation
+│   ├── architecture/              # Architecture specifications and ADRs
+│   ├── api/                       # OpenAPI schemas
+│   └── domain/                    # Domain glossary and diagrams
 └── tests/
-    └── integration/              # Cross-domain integration test suites
+    └── integration/                # Cross-domain integration test suites
 ```
 
 ## Local Development Setup
@@ -151,7 +205,7 @@ If running locally without Docker:
 ## How to Run the Project
 
 ### Using Docker Compose (Recommended)
-Launch the entire stack (PostgreSQL/PostGIS, Django Backend, React Frontend):
+Launch the entire stack (PostgreSQL/PostGIS, Redis, Celery worker, Django Backend via Gunicorn, React Frontend):
 ```bash
 docker-compose -f infrastructure/docker/docker-compose.yml up --build
 ```
@@ -161,6 +215,11 @@ docker-compose -f infrastructure/docker/docker-compose.yml up --build
   ```bash
   cd backend
   python manage.py runserver
+  ```
+- **Celery Worker:**
+  ```bash
+  cd backend
+  celery -A config worker -l info
   ```
 - **Frontend Vite Dev Server:**
   ```bash
@@ -207,13 +266,23 @@ Once the backend is running, you can explore the OpenAPI specifications and inte
 > [!WARNING]
 > Any commits containing hardcoded credentials or `.env` secrets will be rejected immediately, and the credentials must be rotated.
 
-## Future Roadmap (SURPLUS Integration)
+## Roadmap
 
-The SWC architecture has been deliberately decoupled to accommodate the **SURPLUS** platform (surplus food/item redistribution) in the future without modifying core SWC code:
-- **Shared infrastructure** (accounts, geography location tree, evidence media uploading, notifications, audit log) will be shared directly.
-- **SURPLUS apps** (e.g. `surplus_items`, `surplus_transactions`) will sit beside existing apps.
-- **Clean namespaces:** The API will expose `/api/v1/surplus/...` to avoid route overlap.
+- **Government Inventory & Contract Negotiation (current priority):** the
+  aggregation layer described above — without it, this platform is a
+  waste-complaint app with a residue marketplace bolted on, not a
+  government-mediated circular economy. See `docs/architecture/blueprint.md`
+  for the planned data model.
+- **SURPLUS Module:** agri-surplus/food redistribution and non-biotic
+  recyclable trade-in, sharing accounts, geography, evidence, and audit
+  infrastructure with SWC; exposed under `/api/v1/surplus/...`.
 
 ## SIH / Agriculture, FoodTech & Rural Development Context
 
-This project was built under the Smart India Hackathon (SIH) framework under the "Agriculture, FoodTech & Rural Development" theme. It serves as a proof of concept for farmers, local food networks, and municipal authorities to optimize crop residue recycling, automate waste and resource logistics, and foster rural-urban circular economy participation through smart geospatial deduplication and automated routing.
+Built under Smart India Hackathon PS26197 ("Student Innovation," Agriculture/
+FoodTech/Rural Development theme). The core proposal: local government
+becomes the aggregator and market-maker for rural waste and crop residue —
+buying directly from citizens and farmers, then negotiating supply contracts
+with processing companies (biogas/CNG, organic fertilizer, recycling) on
+their behalf — replacing informal burning/dumping and disconnected peer-to-
+peer resale with a single, transparent, government-mediated channel.
