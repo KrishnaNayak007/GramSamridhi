@@ -65,8 +65,9 @@ def submit_citizen_report(
             description=description,
             client_uuid=client_uuid
         )
-        # Attach temporary attribute for aggregation helper
+        # Attach temporary attributes for aggregation helper
         report.category = category
+        report.ward = ward
     except IntegrityError:
         raise ValidationError({"client_uuid": "A report with this submission ID already exists."})
 

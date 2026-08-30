@@ -3,7 +3,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .services import classify_waste_image
+from apps.evidence.services import create_evidence
+from .tasks import classify_waste_image_task
 
 class WasteClassificationView(APIView):
     permission_classes = [IsAuthenticated]
@@ -18,8 +19,20 @@ class WasteClassificationView(APIView):
             )
 
         try:
-            result = classify_waste_image(image_file)
-            return Response(result, status=status.HTTP_200_OK)
+            # 1. Persist the uploaded image/evidence first
+            evidence = create_evidence(file_obj=image_file)
+
+            # 2. Call the Celery task asynchronously
+            classify_waste_image_task.delay(str(evidence.id))
+
+            # 3. Return 202 Accepted immediately
+            return Response(
+                {
+                    "evidence_id": str(evidence.id),
+                    "status": "queued"
+                },
+                status=status.HTTP_202_ACCEPTED
+            )
         except Exception as e:
             return Response(
                 {"error": str(e)},

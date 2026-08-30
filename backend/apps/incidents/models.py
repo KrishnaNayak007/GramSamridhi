@@ -20,7 +20,7 @@ class CivicIncident(BaseModel):
         'geography.AdministrativeArea',
         on_delete=models.PROTECT,
         related_name='incidents',
-        db_index=True
+        db_index=False
     )
     authority = models.ForeignKey(
         'authorities.Authority',
@@ -30,8 +30,8 @@ class CivicIncident(BaseModel):
         related_name='incidents',
         db_index=True
     )
-    category = models.CharField(max_length=50, db_index=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='reported', db_index=True)
+    category = models.CharField(max_length=50)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='reported')
     representative_location = models.ForeignKey(
         'geography.Location',
         on_delete=models.PROTECT,
@@ -39,7 +39,12 @@ class CivicIncident(BaseModel):
     )
     citizen_report_count = models.PositiveIntegerField(default=1)
     first_reported_at = models.DateTimeField(db_index=True)
-    last_reported_at = models.DateTimeField(db_index=True)
+    last_reported_at = models.DateTimeField()
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['administrative_area', 'category', 'status', 'last_reported_at']),
+        ]
 
     def __str__(self):
         return f"Incident {self.id} - Category: {self.category} ({self.status})"

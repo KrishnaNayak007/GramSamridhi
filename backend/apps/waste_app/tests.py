@@ -4,6 +4,9 @@ from django.contrib.auth import get_user_model
 from rest_framework import status
 from io import BytesIO
 from PIL import Image
+from apps.evidence.models import Evidence
+from apps.ai_analysis.models import AIAnalysisResult
+from .tasks import classify_waste_image_task
 
 User = get_user_model()
 
@@ -42,11 +45,20 @@ class WasteClassificationTests(APITestCase):
         file_io.name = 'test_image.png'
 
         response = self.client.post(url, {'image': file_io}, format='multipart')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_202_ACCEPTED)
+        self.assertIn("evidence_id", response.data)
+        self.assertEqual(response.data["status"], "queued")
 
-        self.assertIn("category", response.data)
-        self.assertIn("breakdown", response.data)
-        self.assertIn("biotic_percentage", response.data["breakdown"])
-        self.assertIn("non_biotic_percentage", response.data["breakdown"])
-        self.assertIn("detected_items", response.data)
-        self.assertIn("reasoning", response.data)
+        evidence_id = response.data["evidence_id"]
+        evidence = Evidence.objects.get(id=evidence_id)
+        self.assertEqual(evidence.status, "pending")
+
+        # Execute Celery task synchronously for testing
+        task_res = classify_waste_image_task(evidence_id)
+        self.assertIsNotNone(task_res)
+        
+        # Verify result was written back onto AIAnalysisResult model
+        analysis_result = AIAnalysisResult.objects.get(id=task_res["analysis_result_id"])
+        self.assertEqual(analysis_result.evidence, evidence)
+        self.assertIn(analysis_result.category, ["Biotic", "Non-biotic", "Mixed"])
+        self.assertEqual(analysis_result.title, "Waste Image Classification")
