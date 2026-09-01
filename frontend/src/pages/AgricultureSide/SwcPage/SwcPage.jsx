@@ -89,7 +89,7 @@ export default function SwcPage({ onNavigate }) {
         const formData = new FormData();
         formData.append("file", file);
 
-        const response = await apiFetch("/api/v1/evidence/upload/", {
+        const response = await apiFetch("/api/v1/evidence/", {
           method: "POST",
           body: formData,
         });
@@ -188,15 +188,58 @@ export default function SwcPage({ onNavigate }) {
 
   const confirmSubmit = async () => {
     setShowConfirmModal(false);
-    if (!evidenceId) {
+
+    let currentEvidenceId = evidenceId;
+
+    // 1. If evidenceId wasn't uploaded yet but we have a photo file, upload it now
+    if (!currentEvidenceId && photo) {
+      try {
+        const formData = new FormData();
+        formData.append("file", photo);
+        const evRes = await apiFetch("/api/v1/evidence/", {
+          method: "POST",
+          body: formData,
+        });
+        if (evRes.ok) {
+          const evData = await evRes.json();
+          currentEvidenceId = evData.id;
+          setEvidenceId(evData.id);
+        }
+      } catch (err) {
+        console.error("Failed to upload evidence on submit:", err);
+      }
+    }
+
+    // 2. If still no evidenceId and previewSrc exists (e.g. sample image), convert to blob and upload
+    if (!currentEvidenceId && previewSrc) {
+      try {
+        const blob = await fetch(previewSrc).then((r) => r.blob());
+        const formData = new FormData();
+        formData.append("file", blob, "captured_evidence.jpg");
+        const evRes = await apiFetch("/api/v1/evidence/", {
+          method: "POST",
+          body: formData,
+        });
+        if (evRes.ok) {
+          const evData = await evRes.json();
+          currentEvidenceId = evData.id;
+          setEvidenceId(evData.id);
+        }
+      } catch (err) {
+        console.error("Failed to convert preview to evidence:", err);
+      }
+    }
+
+    if (!currentEvidenceId) {
       showToast("Please upload or capture a photo first.");
       return;
     }
+
     const coords = { latitude: 20.296, longitude: 85.824 };
 
     try {
       const submitData = {
-        evidence_id: evidenceId,
+        evidence_id: currentEvidenceId,
         latitude: coords.latitude,
         longitude: coords.longitude,
         description: description,
@@ -215,7 +258,20 @@ export default function SwcPage({ onNavigate }) {
         );
         setShowSuccessModal(true);
         setStep(4);
-        showToast("Complaint submitted successfully");
+        showToast("Complaint submitted and saved successfully!");
+
+        // Reset the form and complaint box after saving
+        setWasteType("");
+        setLocationStr("");
+        setDescription("");
+        setPhoto(null);
+        setPreviewSrc(null);
+        setEvidenceId("");
+        setAnalyzed(false);
+        setIsAnalyzing(false);
+        setScanStepIndex(-1);
+        setConfidence(0);
+        if (fileInputRef.current) fileInputRef.current.value = "";
       } else {
         const errData = await response.json().catch(() => ({}));
         showToast(errData.detail || "Failed to submit complaint to server");
