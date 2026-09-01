@@ -174,10 +174,10 @@ swc-platform/
    ```bash
    pip install -r requirements/dev.txt
    ```
-4. Perform migrations and seed initial data:
+4. Perform migrations and seed initial demo data:
    ```bash
    python manage.py migrate
-   python manage.py loaddata initial_geography
+   python manage.py seed_demo_data
    ```
 
 ### Frontend Setup

@@ -12,7 +12,8 @@ from apps.geography.services import resolve_administrative_area
 from apps.authorities.models import Department, Authority, OfficerProfile
 from apps.incidents.services import submit_citizen_report
 from apps.evidence.models import Evidence
-from apps.surplus.models import Category
+from apps.incidents.models import CivicIncident, CitizenReport
+from apps.surplus.models import Category, Listing, ListingEvent
 
 class Command(BaseCommand):
     help = "Seeds real administrative hierarchy for Bhubaneswar (Urban/Rural) and runs PostGIS resolution demo."
@@ -28,6 +29,10 @@ class Command(BaseCommand):
         try:
             with transaction.atomic():
                 # Cleanup existing records to prevent spatial resolution conflicts during the demo
+                CitizenReport.objects.all_with_deleted().hard_delete()
+                CivicIncident.objects.all_with_deleted().hard_delete()
+                ListingEvent.objects.all_with_deleted().hard_delete()
+                Listing.objects.all_with_deleted().hard_delete()
                 OfficerProfile.objects.all_with_deleted().hard_delete()
                 Authority.objects.all_with_deleted().hard_delete()
                 AdministrativeArea.objects.all_with_deleted().hard_delete()
