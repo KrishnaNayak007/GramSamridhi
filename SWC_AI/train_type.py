@@ -58,8 +58,9 @@ def main():
         exist_ok=True,
     )
 
-    # Ultralytics saves weights under models/waste_type_run/weights/best.pt
-    best_src = MODELS_DIR / "waste_type_run" / "weights" / "best.pt"
+    # Locate saved weights folder from Ultralytics trainer
+    run_dir = Path(model.trainer.save_dir) if hasattr(model, "trainer") and model.trainer else (MODELS_DIR / "waste_type_run")
+    best_src = run_dir / "weights" / "best.pt"
     best_dst = MODELS_DIR / "best_type.pt"
 
     if best_src.exists():
@@ -67,8 +68,14 @@ def main():
         shutil.copy2(best_src, best_dst)
         print(f"\nTraining complete. Best model saved to: {best_dst}")
     else:
-        print(f"[ERROR] Expected weights at {best_src} but they were not "
-              f"found. Check the training log above for errors.")
+        # Fallback check
+        alt_src = Path("runs/classify/models/waste_type_run/weights/best.pt")
+        if alt_src.exists():
+            import shutil
+            shutil.copy2(alt_src, best_dst)
+            print(f"\nTraining complete. Best model saved to: {best_dst}")
+        else:
+            print(f"[ERROR] Expected weights at {best_src} but they were not found.")
 
 
 if __name__ == "__main__":
