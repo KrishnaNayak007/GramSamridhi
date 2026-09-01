@@ -58,14 +58,16 @@ export default function SurplusPage() {
       const catRes = await apiFetch('/api/v1/surplus/categories/');
       if (catRes.ok) {
         const catData = await catRes.json();
-        setCategories(catData);
-        if (catData.length > 0) setCategoryId(catData[0].id);
+        const catList = Array.isArray(catData) ? catData : (catData.results || []);
+        setCategories(catList);
+        if (catList.length > 0) setCategoryId(catList[0].id);
       }
 
       const listRes = await apiFetch('/api/v1/surplus/listings/');
       if (listRes.ok) {
         const listData = await listRes.json();
-        setListings(listData);
+        const listItems = Array.isArray(listData) ? listData : (listData.results || []);
+        setListings(listItems);
       }
     } catch (err) {
       console.error('Error loading surplus data:', err);
@@ -230,7 +232,8 @@ export default function SurplusPage() {
   };
 
   // Filter listings
-  const filteredListings = listings.filter(item => {
+  const listArray = Array.isArray(listings) ? listings : [];
+  const filteredListings = listArray.filter(item => {
     // Category pill filter
     if (selectedCategoryPill !== 'All') {
       const matchCat = (item.category_name || '').toLowerCase() === selectedCategoryPill.toLowerCase();
@@ -261,7 +264,7 @@ export default function SurplusPage() {
   });
 
   // Count active listings in Ward
-  const activeListingsCount = combinedListings.filter(l => l.status !== 'claimed').length;
+  const activeListingsCount = listArray.filter(l => l.status !== 'claimed').length;
 
   return (
     <div className="surplus-page-container">
