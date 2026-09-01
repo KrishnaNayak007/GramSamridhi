@@ -34,7 +34,7 @@ def inspect_folder(raw_dir: Path, classes: list, title: str):
             continue
 
         valid_count = 0
-        for f in cls_dir.iterdir():
+        for f in cls_dir.rglob("*"):
             if f.is_file() and f.suffix.lower() in VALID_EXTENSIONS:
                 try:
                     with Image.open(f) as img:

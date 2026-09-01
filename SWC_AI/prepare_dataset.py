@@ -85,7 +85,7 @@ def prepare_dataset():
         images = []
         if cls_dir.exists():
             images = [
-                f for f in cls_dir.iterdir()
+                f for f in cls_dir.rglob("*")
                 if f.is_file() and f.suffix.lower() in VALID_EXTENSIONS
             ]
 

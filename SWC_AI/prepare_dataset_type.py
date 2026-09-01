@@ -31,7 +31,7 @@ def collect_images(class_dir: Path):
     if not class_dir.exists():
         return []
     return sorted(
-        p for p in class_dir.iterdir()
+        p for p in class_dir.rglob("*")
         if p.is_file() and p.suffix.lower() in VALID_EXT
     )
 
