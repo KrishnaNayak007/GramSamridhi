@@ -179,7 +179,7 @@ SIMPLE_JWT = {
 
 # Gemini API Integration Settings
 AI_ANALYSIS_ENABLED = os.environ.get('AI_ANALYSIS_ENABLED', 'True') == 'True'
-GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', None)
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY', '')
 
 # Custom User Model
 AUTH_USER_MODEL = 'accounts.User'

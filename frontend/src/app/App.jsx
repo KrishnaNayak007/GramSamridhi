@@ -32,6 +32,7 @@ import PaymentHistoryPage from "../pages/AgricultureSide/PaymentHistoryPage/Paym
 import LeaderboardPage from "../pages/AgricultureSide/LeaderboardPage/LeaderboardPage";
 import ResiduePage from "../pages/AgricultureSide/ResiduePage/ResiduePage";
 import Navbar from "../pages/AgricultureSide/Navbar/Navbar";
+import AskGramSamridhiModal from "../components/AskGramSamridhi/AskGramSamridhiModal";
 import "../pages/AgricultureSide/AgriculturePortal.css";
 import "../pages/govtSide/GovOverviewPage/GovSidebar.css";
 import "../pages/govtSide/GovOverviewPage/GovNavbar.css";
@@ -46,6 +47,7 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   // Sync auth state and load user details
   useEffect(() => {
@@ -263,11 +265,7 @@ export default function App() {
         {/* FLOATING AI AGRICULTURE ASSISTANT */}
         <div
           className="civic-assistant"
-          onClick={() =>
-            alert(
-              "Ask GramSamridhi: Speak in regional languages or voice commands to report issues!",
-            )
-          }
+          onClick={() => setIsChatOpen(prev => !prev)}
         >
           <div className="ca-icon">🎙️</div>
           <div>
@@ -275,6 +273,13 @@ export default function App() {
             <span className="ca-sub">Voice & regional language</span>
           </div>
         </div>
+
+        {/* ASK GRAMSAMRIDHI MODAL */}
+        <AskGramSamridhiModal 
+          isOpen={isChatOpen} 
+          onClose={() => setIsChatOpen(false)} 
+          user={user || { role: 'farmer' }} 
+        />
       </div>
     );
   }
@@ -666,18 +671,21 @@ export default function App() {
       {/* FLOATING AI CIVIC ASSISTANT */}
       <div
         className="civic-assistant"
-        onClick={() =>
-          alert(
-            "Ask SwachSahyog: Speak in regional languages or voice commands to report waste!",
-          )
-        }
+        onClick={() => setIsChatOpen(prev => !prev)}
       >
         <div className="ca-icon">🎙️</div>
         <div>
-          <span className="ca-title">Ask SwachSahyog</span>
+          <span className="ca-title">Ask GramSamridhi</span>
           <span className="ca-sub">Voice & regional language</span>
         </div>
       </div>
+
+      {/* ASK GRAMSAMRIDHI MODAL */}
+      <AskGramSamridhiModal 
+        isOpen={isChatOpen} 
+        onClose={() => setIsChatOpen(false)} 
+        user={user || {}} 
+      />
     </div>
   );
 }

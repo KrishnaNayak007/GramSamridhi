@@ -34,4 +34,7 @@ urlpatterns = [
 
     # Waste Classification Agent API
     path('waste/', include('apps.waste_app.urls', namespace='waste')),
+
+    # Chatbot / Ask GramSamridhi API
+    path('chat/', include('apps.chatbot.urls', namespace='chatbot')),
 ]

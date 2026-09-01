@@ -1,0 +1,325 @@
+/* ==========================================================
+   Ask GramSamridhi — AI Assistant Widget Modal
+   Exact match for user design & role-aware personas
+   ========================================================== */
+
+:root {
+  --ags-forest: #1F4B34;
+  --ags-forest-deep: #153826;
+  --ags-leaf: #4C9A5A;
+  --ags-leaf-light: #6FB77C;
+  --ags-sprout: #E3F1E3;
+  --ags-sprout-line: #CFE6CF;
+  --ags-soil: #F7F5F0;
+  --ags-paper: #FFFFFF;
+  --ags-ink: #1C2620;
+  --ags-ink-soft: #5B6B60;
+  --ags-ink-faint: #8A968D;
+  --ags-line: #E7E3D9;
+  --ags-radius-lg: 20px;
+  --ags-radius-md: 14px;
+  --ags-shadow: 0 16px 40px -12px rgba(28, 38, 32, 0.28);
+}
+
+.ags-widget {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 370px;
+  max-width: calc(100vw - 32px);
+  max-height: 580px;
+  background: var(--ags-paper);
+  border-radius: var(--ags-radius-lg);
+  border: 1px solid var(--ags-line);
+  box-shadow: var(--ags-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 9999;
+  animation: agsSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: var(--ags-ink);
+}
+
+@keyframes agsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.ags-widget-head {
+  background: linear-gradient(135deg, var(--ags-forest) 0%, var(--ags-forest-deep) 100%);
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ags-widget-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ags-widget-avatar svg {
+  width: 20px;
+  height: 20px;
+  stroke: #ffffff;
+}
+
+.ags-widget-titles {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.ags-widget-title {
+  font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.01em;
+}
+
+.ags-widget-sub {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.72);
+  font-weight: 400;
+}
+
+.ags-widget-head-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ags-widget-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ags-leaf-light);
+  box-shadow: 0 0 0 3px rgba(111, 183, 124, 0.25);
+  animation: agsPulse 2s infinite ease-in-out;
+}
+
+@keyframes agsPulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.15); opacity: 0.8; }
+}
+
+.ags-close-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.ags-close-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(1.05);
+}
+
+.ags-widget-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 16px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--ags-soil);
+  min-height: 220px;
+  max-height: 380px;
+}
+
+.ags-msg {
+  display: flex;
+  gap: 8px;
+  max-width: 90%;
+  animation: agsMsgFade 0.25s ease-out;
+}
+
+@keyframes agsMsgFade {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ags-msg.bot {
+  align-self: flex-start;
+}
+
+.ags-msg.user {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.ags-msg-bubble {
+  padding: 11px 14px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+.ags-msg.bot .ags-msg-bubble {
+  background: var(--ags-paper);
+  border: 1px solid var(--ags-line);
+  color: var(--ags-ink);
+  border-top-left-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.ags-msg.user .ags-msg-bubble {
+  background: var(--ags-forest);
+  color: #ffffff;
+  border-top-right-radius: 4px;
+}
+
+.ags-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 16px 12px;
+  background: var(--ags-soil);
+  border-top: 1px dashed rgba(28, 38, 32, 0.06);
+}
+
+.ags-chip {
+  background: var(--ags-paper);
+  border: 1px solid var(--ags-sprout-line);
+  color: var(--ags-forest);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 7px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.ags-chip:hover {
+  background: var(--ags-sprout);
+  border-color: var(--ags-leaf);
+  transform: translateY(-1px);
+}
+
+.ags-widget-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  border-top: 1px solid var(--ags-line);
+  background: var(--ags-paper);
+}
+
+.ags-widget-input input {
+  flex: 1;
+  border: 1px solid var(--ags-line);
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  font-family: inherit;
+  outline: none;
+  background: var(--ags-soil);
+  color: var(--ags-ink);
+  transition: border-color 0.2s ease;
+}
+
+.ags-widget-input input:focus {
+  border-color: var(--ags-leaf);
+  background: #ffffff;
+}
+
+.ags-send-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ags-forest);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.ags-send-btn:hover:not(:disabled) {
+  background: var(--ags-forest-deep);
+  transform: scale(1.05);
+}
+
+.ags-send-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.ags-send-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.ags-typing {
+  display: flex;
+  gap: 4px;
+  padding: 4px 6px;
+  align-items: center;
+}
+
+.ags-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ags-ink-faint);
+  animation: agsBounce 1.2s infinite ease-in-out;
+}
+
+.ags-typing span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ags-typing span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes agsBounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .ags-widget {
+    right: 12px;
+    left: 12px;
+    bottom: 12px;
+    width: auto;
+    max-height: 82vh;
+  }
+}
