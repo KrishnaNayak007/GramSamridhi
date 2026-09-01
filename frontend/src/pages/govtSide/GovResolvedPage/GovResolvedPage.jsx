@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './GovResolvedPage.css';
 import GovDetailMap from '../../../shared/components/layout/GovDetailMap';
 import { incidentsApi } from '../../../services/incidentsApi';
+import { formatCoordinates, formatJurisdiction } from '../../../shared/lib/formatCoords';
 
 const INITIAL_RESOLVED = [];
 
@@ -25,12 +26,12 @@ export default function GovResolvedPage() {
               id: inc.id || `SS-mock-${Math.floor(1000 + Math.random() * 9000)}`,
               title: inc.description || (inc.category ? inc.category.replace('_', ' ') : 'Uncategorized Waste'),
               severity: severity,
-              locality: inc.representative_location?.name || 'BMC Ward 24',
+              locality: inc.representative_location?.name || inc.administrative_area?.name || 'BMC Ward',
               distance: `${(Math.random() * 2 + 0.3).toFixed(1)} km`,
               resolvedTime: 'Recently',
-              coords: inc.representative_location ? `${inc.representative_location.latitude}° N, ${inc.representative_location.longitude}° E` : "23.6739° N, 86.9524° E",
+              coords: formatCoordinates(inc.representative_location),
               resolutionHours: 12.5,
-              jurisdiction: inc.representative_location ? `Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation` : "Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation Zone 3",
+              jurisdiction: formatJurisdiction(inc),
               photo: "linear-gradient(135deg,#6b7d63,#3a4a35)",
               desc: inc.description || 'No description provided.',
               aiNote: `AI priority score: ${inc.priority_score}. Category: ${inc.category || 'garbage_accumulation'}.`,
@@ -292,7 +293,7 @@ export default function GovResolvedPage() {
                     </svg>
                     <div>
                       <div className="l">Coordinates</div>
-                      <div className="v mono">{selectedCase.coords}</div>
+                      <div className="v mono">{selectedCase.coords || "Location unavailable"}</div>
                     </div>
                   </div>
                   <div className="d-row">

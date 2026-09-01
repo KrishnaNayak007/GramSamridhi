@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './GovMapPage.css';
 import GovDetailMap from '../../../shared/components/layout/GovDetailMap';
 import { incidentsApi } from '../../../services/incidentsApi';
+import { formatCoordinates, parseCoordinates, formatJurisdiction } from '../../../shared/lib/formatCoords';
 
 const INITIAL_PINS = [];
 
@@ -28,12 +29,12 @@ export default function GovMapPage() {
               title: inc.description || (inc.category ? inc.category.replace('_', ' ') : 'Uncategorized Waste'),
               severity: severity,
               status: status,
-              locality: inc.representative_location?.name || 'BMC Ward 24',
+              locality: inc.representative_location?.name || inc.administrative_area?.name || 'BMC Ward',
               distance: `${(Math.random() * 2 + 0.3).toFixed(1)} km`,
               time: 'Recently',
               officer: inc.assigned_officer?.name || null,
-              coords: inc.representative_location ? `${inc.representative_location.latitude}° N, ${inc.representative_location.longitude}° E` : "23.6739° N, 86.9524° E",
-              jurisdiction: inc.representative_location ? `Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation` : "Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation Zone 3",
+              coords: formatCoordinates(inc.representative_location),
+              jurisdiction: formatJurisdiction(inc),
               photo: "linear-gradient(135deg,#6b7d63,#3a4a35)",
               desc: inc.description || 'No description provided.',
               aiNote: `AI priority score: ${inc.priority_score}. Category: ${inc.category || 'garbage_accumulation'}.`,
@@ -68,21 +69,9 @@ export default function GovMapPage() {
   const googleMapRef = React.useRef(null);
   const markersRef = React.useRef({});
 
-  // Helper to parse coordinate string like "23.6739° N, 86.9524° E"
+  // Helper to parse coordinate string
   const parseCoords = (coordStr) => {
-    if (!coordStr) return { lat: 23.677, lng: 86.955 };
-    try {
-      const parts = coordStr.split(',');
-      const latPart = parts[0].trim();
-      const lngPart = parts[1].trim();
-      const latVal = parseFloat(latPart);
-      const lngVal = parseFloat(lngPart);
-      const lat = latPart.toUpperCase().includes('S') ? -latVal : latVal;
-      const lng = lngPart.toUpperCase().includes('W') ? -lngVal : lngVal;
-      return { lat: lat || 23.677, lng: lng || 86.955 };
-    } catch (e) {
-      return { lat: 23.677, lng: 86.955 };
-    }
+    return parseCoordinates(coordStr, { lat: 20.296, lng: 85.824 });
   };
 
   // Filtering Logic
@@ -131,7 +120,7 @@ export default function GovMapPage() {
       // Initialize Map if not already created
       if (!googleMapRef.current) {
         googleMapRef.current = new window.google.maps.Map(mapRef.current, {
-          center: { lat: 23.677, lng: 86.955 },
+          center: { lat: 20.296, lng: 85.824 },
           zoom: 14,
           disableDefaultUI: true,
           zoomControl: true,
@@ -494,7 +483,7 @@ export default function GovMapPage() {
                     </svg>
                     <div>
                       <div className="l">Coordinates</div>
-                      <div className="v mono">{selectedPin.coords}</div>
+                      <div className="v mono">{selectedPin.coords || "Location unavailable"}</div>
                     </div>
                   </div>
 

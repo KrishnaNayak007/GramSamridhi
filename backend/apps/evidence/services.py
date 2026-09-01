@@ -23,6 +23,8 @@ def create_evidence(*, file_obj, checksum: str = None, captured_at=None) -> Evid
     """
     if not checksum:
         checksum = calculate_checksum(file_obj)
+        if hasattr(file_obj, 'seek'):
+            file_obj.seek(0)
 
     # 1. Idempotency Check: Return existing evidence if checksum matches
     existing_evidence = Evidence.objects.filter(checksum=checksum).first()
@@ -30,6 +32,8 @@ def create_evidence(*, file_obj, checksum: str = None, captured_at=None) -> Evid
         return existing_evidence
 
     # 2. Save file to storage
+    if hasattr(file_obj, 'seek'):
+        file_obj.seek(0)
     file_path = default_storage.save(
         f"evidence/{checksum}_{file_obj.name}",
         ContentFile(file_obj.read())

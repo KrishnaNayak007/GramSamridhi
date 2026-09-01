@@ -1,11 +1,12 @@
 from rest_framework import serializers
 from .models import CitizenReport, CivicIncident
-from apps.geography.serializers import LocationSerializer
+from apps.geography.serializers import LocationSerializer, AdministrativeAreaSerializer
 from apps.evidence.serializers import EvidenceSerializer
 from apps.accounts.serializers import UserSerializer
 
 class CivicIncidentSerializer(serializers.ModelSerializer):
     representative_location = LocationSerializer(read_only=True)
+    administrative_area = AdministrativeAreaSerializer(read_only=True)
     priority_score = serializers.SerializerMethodField()
 
     class Meta:

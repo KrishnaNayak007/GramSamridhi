@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './GovSlaPage.css';
 import GovDetailMap from '../../../shared/components/layout/GovDetailMap';
 import { incidentsApi } from '../../../services/incidentsApi';
+import { formatCoordinates, formatJurisdiction } from '../../../shared/lib/formatCoords';
 
 const SLA_TARGET_HOURS = { high: 8, medium: 24, low: 72 };
 
@@ -34,12 +35,12 @@ export default function GovSlaPage() {
               title: inc.description || (inc.category ? inc.category.replace('_', ' ') : 'Uncategorized Waste'),
               severity: severity,
               status: status,
-              locality: inc.representative_location?.name || 'BMC Ward 24',
+              locality: inc.representative_location?.name || inc.administrative_area?.name || 'BMC Ward',
               distance: `${(Math.random() * 2 + 0.3).toFixed(1)} km`,
-              coords: inc.representative_location ? `${inc.representative_location.latitude}° N, ${inc.representative_location.longitude}° E` : "23.6739° N, 86.9524° E",
+              coords: formatCoordinates(inc.representative_location),
               elapsedHours: parseFloat(elapsed.toFixed(1)),
               assignedTeam: inc.assigned_officer?.name || "Unassigned",
-              jurisdiction: inc.representative_location ? `Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation` : "Ward 14 → Bhubaneshwar Municipal Corp. → Sanitation Zone 3",
+              jurisdiction: formatJurisdiction(inc),
               photo: "linear-gradient(135deg,#6b7d63,#3a4a35)",
               desc: inc.description || 'No description provided.',
               escalated: elapsed > (severity === 'high' ? 8 : severity === 'medium' ? 24 : 72)

@@ -220,6 +220,7 @@ export default function App() {
           <GovNavbar
             handleLogout={handleLogout}
             activeLocation={activeLocation}
+            user={user}
             setCurrentTab={setCurrentTab}
           />
 

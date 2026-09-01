@@ -92,7 +92,6 @@ export default function OverviewPage({ onNavigate }) {
         <article className="stat">
           <div className="stat-top">
             <span className="metric-icon green">♻</span>
-            <em>↑ 18%</em>
           </div>
           <strong>{totalOrganic} T</strong>
           <label>Waste Diverted</label>
@@ -101,7 +100,6 @@ export default function OverviewPage({ onNavigate }) {
         <article className="stat">
           <div className="stat-top">
             <span className="metric-icon gold">♨</span>
-            <em>↑ 9%</em>
           </div>
           <strong>{residueSold} T</strong>
           <label>Crop Residue Sold</label>
@@ -110,7 +108,6 @@ export default function OverviewPage({ onNavigate }) {
         <article className="stat">
           <div className="stat-top">
             <span className="metric-icon blue">₹</span>
-            <em>↑ 22%</em>
           </div>
           <strong>₹{displayEarnings.toLocaleString('en-IN')}</strong>
           <label>Earnings</label>
@@ -119,7 +116,6 @@ export default function OverviewPage({ onNavigate }) {
         <article className="stat">
           <div className="stat-top">
             <span className="metric-icon green">◇</span>
-            <em>↑ 11%</em>
           </div>
           <strong>24</strong>
           <label>Items Reused</label>
@@ -128,7 +124,6 @@ export default function OverviewPage({ onNavigate }) {
         <article className="stat">
           <div className="stat-top">
             <span className="metric-icon gold">⌁</span>
-            <em>↑ 4 pts</em>
           </div>
           <strong>86%</strong>
           <label>Community Impact</label>
@@ -194,7 +189,6 @@ export default function OverviewPage({ onNavigate }) {
         <article className="card earnings" id="payments" onClick={() => onNavigate('paymentHistory')} style={{ cursor: 'pointer' }}>
           <div className="card-head">
             <h3>Your Earnings</h3>
-            <span className="trend">↑ 16%</span>
           </div>
           <div className="earning-main">
             <strong>₹{(displayEarnings / 10.3).toFixed(0).toLocaleString('en-IN')}</strong>

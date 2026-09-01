@@ -187,9 +187,9 @@ export default function SurplusPage() {
         }
       }
 
-      // Default lat/lng if coords not synced
-      const latitude = coords?.latitude || 23.677;
-      const longitude = coords?.longitude || 86.955;
+      // Default lat/lng if coords not synced (Bhubaneswar default)
+      const latitude = coords?.latitude || 20.296;
+      const longitude = coords?.longitude || 85.824;
 
       const payload = {
         title: title.trim(),

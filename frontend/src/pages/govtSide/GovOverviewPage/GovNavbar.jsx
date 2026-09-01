@@ -1,11 +1,19 @@
 import React from 'react';
 
-export default function GovNavbar({ handleLogout, activeLocation, setCurrentTab }) {
+export default function GovNavbar({ handleLogout, activeLocation, user, setCurrentTab }) {
+  const currentDate = new Date().toLocaleDateString('en-GB', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric'
+  });
+  const areaLabel = activeLocation?.name || user?.assigned_area?.name || user?.assigned_ward || "Bhubaneswar Municipal Corp.";
+
   return (
     <header className="topbar">
       <div>
         <h1>Complaint Overview</h1>
-        <div className="sub">Ward 14, Bhubaneshwar · Wednesday, 19 Aug 2026</div>
+        <div className="sub">{areaLabel} · {currentDate}</div>
       </div>
       <div className="search-box">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>

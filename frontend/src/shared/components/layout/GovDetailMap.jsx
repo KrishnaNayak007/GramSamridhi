@@ -1,26 +1,10 @@
 import React, { useEffect, useRef } from 'react';
+import { parseCoordinates } from '../../lib/formatCoords';
 
 export default function GovDetailMap({ coords }) {
   const mapRef = useRef(null);
   const googleMapRef = useRef(null);
   const markerRef = useRef(null);
-
-  // Helper to parse coordinate string like "23.6739° N, 86.9524° E"
-  const parseCoords = (coordStr) => {
-    if (!coordStr) return { lat: 20.296, lng: 85.824 }; // Default Bhubaneshwar
-    try {
-      const parts = coordStr.split(',');
-      const latPart = parts[0].trim();
-      const lngPart = parts[1].trim();
-      const latVal = parseFloat(latPart);
-      const lngVal = parseFloat(lngPart);
-      const lat = latPart.toUpperCase().includes('S') ? -latVal : latVal;
-      const lng = lngPart.toUpperCase().includes('W') ? -lngVal : lngVal;
-      return { lat: lat || 20.296, lng: lng || 85.824 };
-    } catch (e) {
-      return { lat: 20.296, lng: 85.824 };
-    }
-  };
 
   useEffect(() => {
     const loadGoogleMapsScript = (callback) => {
@@ -46,7 +30,7 @@ export default function GovDetailMap({ coords }) {
       if (!mapRef.current) return;
       if (!window.google || !window.google.maps) return;
 
-      const position = parseCoords(coords);
+      const position = parseCoordinates(coords);
 
       if (!googleMapRef.current) {
         googleMapRef.current = new window.google.maps.Map(mapRef.current, {

@@ -173,9 +173,11 @@ export default function GovSidebar({
         <div className="jurisdiction-chip">
           <div className="lbl">ASSIGNED JURISDICTION</div>
           <div className="val">
-            {activeLocation
-              ? activeLocation.name
-              : "Ward 14 · Bhubaneshwar Municipal Corp."}
+            {activeLocation?.name ||
+             user?.assigned_area?.name ||
+             user?.assigned_ward ||
+             user?.location?.name ||
+             "Bhubaneshwar Municipal Corp."}
           </div>
         </div>
         <div
