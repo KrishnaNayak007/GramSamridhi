@@ -39,19 +39,19 @@ export default function AuthContainer({
   // Government Form State
   const [govId, setGovId] = useState("Block_level_officer");
   const [govPassword, setGovPassword] = useState("officer123");
-  const [govState, setGovState] = useState("Bhubaneswar");
-  const [govDistrict, setGovDistrict] = useState("Bhubaneswar");
+  const [govState, setGovState] = useState("Odisha");
+  const [govDistrict, setGovDistrict] = useState("Khordha");
   const [govArea, setGovArea] = useState("urban"); // 'rural' | 'urban'
   const [govBlock, setGovBlock] = useState("");
   const [govLocalBody, setGovLocalBody] = useState("");
   const [govULB, setGovULB] = useState("Bhubaneswar Municipal Corporation");
-  const [govWard, setGovWard] = useState("Ward 12");
+  const [govWard, setGovWard] = useState("Ward 24");
   const [govError, setGovError] = useState("");
 
   // State / District Autocomplete Search States
-  const [stateSearch, setStateSearch] = useState("Bhubaneswar");
+  const [stateSearch, setStateSearch] = useState("Odisha");
   const [showStateList, setShowStateList] = useState(false);
-  const [districtSearch, setDistrictSearch] = useState("Bhubaneswar");
+  const [districtSearch, setDistrictSearch] = useState("Khordha");
   const [showDistrictList, setShowDistrictList] = useState(false);
 
   // Global UI States
@@ -107,10 +107,26 @@ export default function AuthContainer({
 
   const handleAreaChange = (area) => {
     setGovArea(area);
-    setGovBlock("");
-    setGovLocalBody("");
-    setGovULB("");
-    setGovWard("");
+    if (area === "rural") {
+      setGovId("kudiary_gp_secretary");
+      setGovPassword("officer123");
+      setGovState("Odisha");
+      setStateSearch("Odisha");
+      setGovDistrict("Khordha");
+      setDistrictSearch("Khordha");
+      setGovBlock("Jatni");
+      setGovLocalBody("Kudiary Gram Panchayat");
+      setGovWard("Gadahaladia");
+    } else {
+      setGovId("Block_level_officer");
+      setGovPassword("officer123");
+      setGovState("Odisha");
+      setStateSearch("Odisha");
+      setGovDistrict("Khordha");
+      setDistrictSearch("Khordha");
+      setGovULB("Bhubaneswar Municipal Corporation");
+      setGovWard("Ward 24");
+    }
   };
 
   // Submit handler for Citizen Dashboard login or registration
@@ -855,6 +871,43 @@ export default function AuthContainer({
               <p className="sub">
                 Confirm your jurisdiction to open your workspace.
               </p>
+
+              <div style={{ marginBottom: "16px", display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <button
+                  type="button"
+                  style={{
+                    padding: "7px 12px",
+                    borderRadius: "20px",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    border: "1px solid #c9d8cb",
+                    background: govId === "Block_level_officer" ? "#20463c" : "#f4f7f4",
+                    color: govId === "Block_level_officer" ? "#fff" : "#20463c",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                  onClick={() => handleAreaChange("urban")}
+                >
+                  🏙️ Urban Officer (BMC Ward 24)
+                </button>
+                <button
+                  type="button"
+                  style={{
+                    padding: "7px 12px",
+                    borderRadius: "20px",
+                    fontSize: "12px",
+                    fontWeight: "600",
+                    border: "1px solid #c9d8cb",
+                    background: govId === "kudiary_gp_secretary" ? "#20463c" : "#f4f7f4",
+                    color: govId === "kudiary_gp_secretary" ? "#fff" : "#20463c",
+                    cursor: "pointer",
+                    transition: "all 0.2s ease"
+                  }}
+                  onClick={() => handleAreaChange("rural")}
+                >
+                  🌾 Rural Officer (Kudiary GP)
+                </button>
+              </div>
 
               <form onSubmit={handleGovSubmit} noValidate>
                 <div className="field">

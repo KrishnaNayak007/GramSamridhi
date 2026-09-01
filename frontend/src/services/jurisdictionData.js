@@ -364,11 +364,11 @@ export const jurisdictionData = {
   "Odisha": {
     "Khordha": {
       "rural": {
-        "blocks": ["Khordha","Begunia", "Balipatna"],
-        "localBodies": ["Gram Panchayat", "Tehsil"]
+        "blocks": ["Jatni", "Khordha", "Begunia", "Balipatna"],
+        "localBodies": ["Kudiary Gram Panchayat", "Gram Panchayat", "Tehsil"]
       },
       "urban": {
-        "ulbs": ["Bhubaneswar Municipal Corporation"],
+        "ulbs": ["Bhubaneswar Municipal Corporation", "Jatni Municipality"],
         "wards": ["Ward 1", "Ward 12", "Ward 24", "Ward 34", "Ward 56"]
       }
     },

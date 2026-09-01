@@ -188,10 +188,9 @@ class Command(BaseCommand):
                     reported_dt = now - timedelta(days=spec["days_ago"])
 
                     # Location
-                    loc, _ = Location.objects.get_or_create(
-                        point=spec["point"],
-                        defaults={"source": "GPS", "captured_at": reported_dt}
-                    )
+                    loc = Location.objects.filter(point=spec["point"]).first()
+                    if not loc:
+                        loc = Location.objects.create(point=spec["point"], source="GPS", captured_at=reported_dt)
 
                     # Evidence
                     evidence_checksum = f"chk-{spec['uuid']}"
@@ -501,10 +500,9 @@ class Command(BaseCommand):
                     if not cat:
                         cat, _ = Category.objects.get_or_create(name=s_spec["cat_name"])
 
-                    loc, _ = Location.objects.get_or_create(
-                        point=s_spec["point"],
-                        defaults={"source": "GPS", "captured_at": now}
-                    )
+                    loc = Location.objects.filter(point=s_spec["point"]).first()
+                    if not loc:
+                        loc = Location.objects.create(point=s_spec["point"], source="GPS", captured_at=now)
 
                     listing, created = Listing.objects.update_or_create(
                         owner=s_spec["owner"],

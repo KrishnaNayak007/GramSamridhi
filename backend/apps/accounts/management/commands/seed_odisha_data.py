@@ -7,7 +7,7 @@ from django.db import transaction
 from django.contrib.gis.geos import MultiPolygon, Polygon, Point
 
 from apps.accounts.models import User, UserPreferences
-from apps.geography.models import AdministrativeArea
+from apps.geography.models import AdministrativeArea, Location
 from apps.geography.services import resolve_administrative_area
 from apps.authorities.models import Department, Authority, OfficerProfile
 from apps.incidents.services import submit_citizen_report
@@ -37,6 +37,7 @@ class Command(BaseCommand):
                 Authority.objects.all_with_deleted().hard_delete()
                 AdministrativeArea.objects.all_with_deleted().hard_delete()
                 Category.objects.all_with_deleted().hard_delete()
+                Location.objects.all_with_deleted().hard_delete()
 
                 # 1. State: Odisha (Code: 21)
                 # Broad bounding box polygon containing Odisha coordinates
@@ -160,47 +161,57 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.SUCCESS("Authorities resolved for BMC Ward 24 and Kudiary GP."))
 
                 # 6. Government Officers
-                # Urban Nigam Officer: Mahi Sharma (BMC Ward 24 Officer)
-                urban_officer, created_uo = User.objects.get_or_create(
+                # Urban Nigam Officer: Ramesh Pattnaik (BMC Ward 24 Officer)
+                urban_officer, _ = User.objects.get_or_create(
                     username="Block_level_officer",
                     defaults={
                         "email": "bmc.ward24@Bhubaneswar.gov.in",
                         "phone": "+919999900024",
-                        "role": "officer"
+                        "role": "officer",
+                        "first_name": "Ramesh",
+                        "last_name": "Pattnaik"
                     }
                 )
-                if created_uo:
-                    urban_officer.set_password("officer123")
-                    urban_officer.save()
-                    UserPreferences.objects.get_or_create(user=urban_officer)
-                    OfficerProfile.objects.create(
-                        user=urban_officer,
-                        department=department,
-                        jurisdiction=ward24,
-                        role_title="BMC Ward Sanitation Officer"
-                    )
+                urban_officer.first_name = "Ramesh"
+                urban_officer.last_name = "Pattnaik"
+                urban_officer.set_password("officer123")
+                urban_officer.save()
+                UserPreferences.objects.get_or_create(user=urban_officer)
+                OfficerProfile.objects.update_or_create(
+                    user=urban_officer,
+                    defaults={
+                        "department": department,
+                        "jurisdiction": ward24,
+                        "role_title": "BMC Ward Sanitation Officer"
+                    }
+                )
 
                 # Rural GP Secretary: Kalinga Das (Jatni Block Kudiary GP Secretary)
-                rural_officer, created_ro = User.objects.get_or_create(
+                rural_officer, _ = User.objects.get_or_create(
                     username="kudiary_gp_secretary",
                     defaults={
                         "email": "kudiary.gp@Bhubaneswar.gov.in",
                         "phone": "+919999900025",
-                        "role": "officer"
+                        "role": "officer",
+                        "first_name": "Kalinga",
+                        "last_name": "Das"
                     }
                 )
-                if created_ro:
-                    rural_officer.set_password("officer123")
-                    rural_officer.save()
-                    UserPreferences.objects.get_or_create(user=rural_officer)
-                    OfficerProfile.objects.create(
-                        user=rural_officer,
-                        department=department,
-                        jurisdiction=kudiary_gp,
-                        role_title="GP Panchayat Executive Officer (PEO)"
-                    )
+                rural_officer.first_name = "Kalinga"
+                rural_officer.last_name = "Das"
+                rural_officer.set_password("officer123")
+                rural_officer.save()
+                UserPreferences.objects.get_or_create(user=rural_officer)
+                OfficerProfile.objects.update_or_create(
+                    user=rural_officer,
+                    defaults={
+                        "department": department,
+                        "jurisdiction": kudiary_gp,
+                        "role_title": "GP Panchayat Executive Officer (PEO)"
+                    }
+                )
 
-                self.stdout.write(self.style.SUCCESS("Government Officers and OfficerProfiles created for BMC and Jatni Block."))
+                self.stdout.write(self.style.SUCCESS("Government Officers and OfficerProfiles created for BMC (Urban) and Jatni Block (Rural)."))
 
                 # 7. Seed Citizen User
                 citizen, _ = User.objects.get_or_create(
