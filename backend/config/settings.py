@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'apps.messaging',
     'apps.agriculture',
     'apps.waste_app',
+    "apps.chatbot", 
 ]
 
 MIDDLEWARE = [
