@@ -39,15 +39,15 @@ export default function MyActivityPage() {
         const listingsList = Array.isArray(listData) ? listData : [];
         const loggedInUser = JSON.parse(localStorage.getItem('user') || '{}');
         const ownListings = listingsList.filter(item => item.owner?.username === loggedInUser.username);
-        const fetchedListings = ownListings.length > 0 ? ownListings : listingsList;
+        const fetchedListings = ownListings;
         setListings(fetchedListings);
 
         // Calculate and trigger count-up stats animations
         const total = reportsList.length + fetchedListings.length;
         const swcCount = reportsList.length;
         const surplusCount = fetchedListings.length;
-        const donatedCount = fetchedListings.filter(item => item.listing_type === 'donation' || item.status === 'completed').length;
-        const wasteCount = parseFloat((swcCount * 1.2).toFixed(1)); // mock calculation based on reports count
+        const donatedCount = fetchedListings.filter(item => item.listing_type === 'donation' || item.listing_type === 'give_away' || item.status === 'completed' || item.status === 'claimed').length;
+        const wasteCount = donatedCount > 0 ? donatedCount * 5 : 0;
 
         animateValue(0, total, 900, setCountTotal);
         animateValue(0, swcCount, 900, setCountSwc);

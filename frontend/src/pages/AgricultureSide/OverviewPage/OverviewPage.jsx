@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import './OverviewPage.css';
 import { incidentsApi } from '../../../services/incidentsApi';
 import { agricultureApi } from '../../../services/agricultureApi';
+import { surplusApi } from '../../../services/surplusApi';
 import heroImg from '../../../assets/gramsamridhi_hero.jpg';
 
 export default function OverviewPage({ onNavigate }) {
   const [user, setUser] = useState(null);
   const [complaints, setComplaints] = useState([]);
   const [pickups, setPickups] = useState([]);
+  const [surplusItems, setSurplusItems] = useState([]);
   const [chatInput, setChatInput] = useState('');
   const [chatResponse, setChatResponse] = useState('');
   const [loading, setLoading] = useState(false);
@@ -18,10 +20,14 @@ export default function OverviewPage({ onNavigate }) {
 
     async function loadData() {
       try {
-        const comps = await incidentsApi.getAll();
-        const picks = await agricultureApi.getPickups();
-        if (comps) setComplaints(comps);
-        if (picks) setPickups(picks);
+        const [comps, picks, surps] = await Promise.allSettled([
+          incidentsApi.getAll(),
+          agricultureApi.getPickups(),
+          surplusApi.getAll()
+        ]);
+        if (comps.status === 'fulfilled' && Array.isArray(comps.value)) setComplaints(comps.value);
+        if (picks.status === 'fulfilled' && Array.isArray(picks.value)) setPickups(picks.value);
+        if (surps.status === 'fulfilled' && Array.isArray(surps.value)) setSurplusItems(surps.value);
       } catch (err) {
         console.error("Error loading Overview metrics:", err);
       }
@@ -42,20 +48,27 @@ export default function OverviewPage({ onNavigate }) {
   const totalOrganicSWC = (resolvedCount * 50) / 1000; // 50kg per complaint
 
   const totalOrganic = (totalOrganicAgricultures + totalOrganicSWC).toFixed(1);
-  const totalRecyclable = (resolvedCount * 25 / 1000).toFixed(1); // Recyclable inorganic guess
+  const totalRecyclable = (resolvedCount * 25 / 1000).toFixed(1);
 
   const residueSold = totalOrganicAgricultures.toFixed(1);
 
   const farmerEarnings = pickups
-    .filter(p => p.status === 'paid')
+    .filter(p => p.payment_status === 'paid' || p.status === 'paid')
     .reduce((sum, p) => sum + parseFloat(p.payment_amount || 0), 0);
+
+  const pendingEarnings = pickups
+    .filter(p => p.payment_status !== 'paid' && p.status !== 'paid')
+    .reduce((sum, p) => sum + parseFloat(p.payment_amount || 0), 0);
+
+  const reusedCount = surplusItems.filter(l => l.status === 'claimed' || l.status === 'completed').length;
 
   const activeContributors = new Set([
     ...pickups.map(p => p.agriculture_name),
     ...complaints.map(c => c.citizen_name)
-  ].filter(Boolean)).size || 38;
+  ].filter(Boolean)).size;
 
-  const displayEarnings = farmerEarnings > 0 ? farmerEarnings : 128450;
+  const displayEarnings = farmerEarnings;
+  const contributionScore = Math.min(100, Math.round((resolvedCount * 15) + (pickups.length * 10) + (reusedCount * 10)));
 
   const handleChatSubmit = async (e) => {
     e.preventDefault();
@@ -117,7 +130,7 @@ export default function OverviewPage({ onNavigate }) {
           <div className="stat-top">
             <span className="metric-icon green">◇</span>
           </div>
-          <strong>24</strong>
+          <strong>{reusedCount}</strong>
           <label>Items Reused</label>
           <small>This month</small>
         </article>
@@ -125,7 +138,7 @@ export default function OverviewPage({ onNavigate }) {
           <div className="stat-top">
             <span className="metric-icon gold">⌁</span>
           </div>
-          <strong>86%</strong>
+          <strong>{contributionScore}%</strong>
           <label>Community Impact</label>
           <small>Contribution score</small>
         </article>
@@ -160,10 +173,10 @@ export default function OverviewPage({ onNavigate }) {
             <span>This month</span>
           </div>
           <div className="snapshot-grid">
-            <div><strong>12.4 T</strong><small>Waste collected</small></div>
-            <div><strong>3.6 T</strong><small>Crop residue recovered</small></div>
+            <div><strong>{totalOrganic} T</strong><small>Waste diverted</small></div>
+            <div><strong>{residueSold} T</strong><small>Crop residue recovered</small></div>
             <div><strong>{activeContributors}</strong><small>Active contributors</small></div>
-            <div><strong>84</strong><small>Items reused</small></div>
+            <div><strong>{reusedCount}</strong><small>Items reused</small></div>
           </div>
           <div className="snapshot-art"></div>
         </article>
@@ -191,12 +204,12 @@ export default function OverviewPage({ onNavigate }) {
             <h3>Your Earnings</h3>
           </div>
           <div className="earning-main">
-            <strong>₹{(displayEarnings / 10.3).toFixed(0).toLocaleString('en-IN')}</strong>
+            <strong>₹{displayEarnings.toLocaleString('en-IN')}</strong>
             <small>This month</small>
           </div>
           <div className="earning-cols">
-            <div><b>₹2,150</b><small>Pending</small></div>
-            <div><b>₹10,300</b><small>Completed</small></div>
+            <div><b>₹{pendingEarnings.toLocaleString('en-IN')}</b><small>Pending</small></div>
+            <div><b>₹{displayEarnings.toLocaleString('en-IN')}</b><small>Completed</small></div>
           </div>
         </article>
 

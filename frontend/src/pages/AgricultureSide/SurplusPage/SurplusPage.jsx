@@ -15,7 +15,6 @@ const CATEGORY_EMOJI = {
   Other: "📦"
 };
 
-const SEEDED_MOCKS = [];
 
 export default function SurplusPage() {
   const { coords } = useLocationContext();
@@ -128,13 +127,6 @@ export default function SurplusPage() {
 
   // Claim handler
   const handleClaim = async (listingId) => {
-    // If it's a mock listing, claim locally
-    if (String(listingId).startsWith('mock-')) {
-      triggerToast('Item Claimed', 'You have claimed this mock item locally.');
-      // Update mock item state in state listings
-      return;
-    }
-
     try {
       const res = await apiFetch(`/api/v1/surplus/listings/${listingId}/events/`, {
         method: 'POST',
@@ -237,17 +229,8 @@ export default function SurplusPage() {
     }
   };
 
-  // Combine real listings + seeded mock fallback listings
-  const combinedListings = [...listings];
-  SEEDED_MOCKS.forEach(mock => {
-    // Add mock if listing with that mock title doesn't exist
-    if (!listings.some(l => l.title === mock.title)) {
-      combinedListings.push(mock);
-    }
-  });
-
   // Filter listings
-  const filteredListings = combinedListings.filter(item => {
+  const filteredListings = listings.filter(item => {
     // Category pill filter
     if (selectedCategoryPill !== 'All') {
       const matchCat = (item.category_name || '').toLowerCase() === selectedCategoryPill.toLowerCase();
@@ -587,7 +570,6 @@ export default function SurplusPage() {
             {filteredListings.map(item => {
               const hasPhoto = item.photos && item.photos.length > 0;
               const photoUrl = hasPhoto ? item.photos[0].url : null;
-              const isMock = String(item.id).startsWith('mock-');
               const isClaimed = item.status === 'claimed';
 
               const emoji = CATEGORY_EMOJI[item.category_name] || CATEGORY_EMOJI[item.category_id] || "📦";

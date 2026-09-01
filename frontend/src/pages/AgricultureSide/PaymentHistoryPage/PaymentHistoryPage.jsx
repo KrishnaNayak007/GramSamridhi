@@ -19,21 +19,11 @@ export default function PaymentHistoryPage() {
     loadData();
   }, []);
 
-  // Static fallback data if database is empty
-  const mockPayments = [
-    { id: 'TXN-88213', title: 'Paddy Straw', desc: '350 kg · SWC Kanas', date: 'Today · 11:20 AM', mode: 'UPI', amount: 525, status: 'Pending', type: 'leaf' },
-    { id: 'TXN-88109', title: 'Wheat Residue', desc: '280 kg · SWC Kanas', date: '18 Aug · 09:05 AM', mode: 'UPI', amount: 420, status: 'Paid', type: 'leaf' },
-    { id: 'TXN-87960', title: 'Recyclables (Plastic + Metal)', desc: '42 kg · SWC Kanas', date: '11 Aug · 04:40 PM', mode: 'Bank Transfer', amount: 189, status: 'Paid', type: 'clay' },
-    { id: 'TXN-87710', title: 'Organic Waste', desc: '200 kg · SWC Kanas', date: '04 Aug · 10:12 AM', mode: 'UPI', amount: 310, status: 'Paid', type: 'leaf' },
-    { id: 'TXN-87502', title: 'Glass & Paper', desc: '30 kg · SWC Kanas', date: '27 Jul · 02:15 PM', mode: 'Bank Transfer', amount: 96, status: 'Paid', type: 'clay' },
-    { id: 'TXN-87284', title: 'Paddy Straw', desc: '310 kg · SWC Kanas', date: '15 Jul · 08:50 AM', mode: 'UPI', amount: 465, status: 'Paid', type: 'leaf' }
-  ];
-
   // Map dynamic pickups to payment history structures
   const dynamicPayments = pickups.map((p, idx) => ({
     id: 'TXN-' + (10000 + idx),
     title: p.residue_type || 'Crop Residue',
-    desc: parseFloat(p.weight_kg) + ' kg · ' + p.location_address.split(',')[0],
+    desc: parseFloat(p.weight_kg) + ' kg · ' + (p.location_address ? p.location_address.split(',')[0] : 'Farm Pickup'),
     date: p.scheduled_slot || 'Recently',
     mode: 'UPI',
     amount: parseFloat(p.payment_amount || 0),
@@ -41,7 +31,7 @@ export default function PaymentHistoryPage() {
     type: 'leaf'
   }));
 
-  const paymentList = dynamicPayments.length > 0 ? dynamicPayments : mockPayments;
+  const paymentList = dynamicPayments;
 
   // Compute stat metrics
   const totalEarned = paymentList.filter(p => p.status === 'Paid').reduce((sum, p) => sum + p.amount, 0);

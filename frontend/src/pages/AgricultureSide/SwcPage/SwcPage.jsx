@@ -188,11 +188,15 @@ export default function SwcPage({ onNavigate }) {
 
   const confirmSubmit = async () => {
     setShowConfirmModal(false);
+    if (!evidenceId) {
+      showToast("Please upload or capture a photo first.");
+      return;
+    }
     const coords = { latitude: 20.296, longitude: 85.824 };
 
     try {
       const submitData = {
-        evidence_id: evidenceId || "mock-evidence-uuid-12345",
+        evidence_id: evidenceId,
         latitude: coords.latitude,
         longitude: coords.longitude,
         description: description,
@@ -207,13 +211,14 @@ export default function SwcPage({ onNavigate }) {
       if (response.ok) {
         const data = await response.json();
         setTicketId(
-          data.id || "SWC-2026-" + Math.floor(10000 + Math.random() * 89999),
+          data.id ? `SWC-${String(data.id).slice(0, 8).toUpperCase()}` : "SWC-CONFIRMED",
         );
         setShowSuccessModal(true);
         setStep(4);
         showToast("Complaint submitted successfully");
       } else {
-        showToast("Failed to submit complaint to server");
+        const errData = await response.json().catch(() => ({}));
+        showToast(errData.detail || "Failed to submit complaint to server");
       }
     } catch (err) {
       console.error("Error submitting report:", err);

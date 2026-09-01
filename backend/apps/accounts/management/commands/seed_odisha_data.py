@@ -18,12 +18,12 @@ class Command(BaseCommand):
     help = "Seeds real administrative hierarchy for Bhubaneswar (Urban/Rural) and runs PostGIS resolution demo."
 
     def handle(self, *args, **options):
-        self.stdout.write("Loading Bhubaneswar administrative hierarchy JSON...")
-        json_path = os.path.join(settings.BASE_DIR, 'apps', 'geography', 'fixtures', 'Bhubaneswar_hierarchy.json')
+        self.stdout.write("Loading Odisha administrative hierarchy JSON...")
+        json_path = os.path.join(settings.BASE_DIR, 'apps', 'geography', 'fixtures', 'odisha_hierarchy.json')
         with open(json_path, 'r', encoding='utf-8') as f:
             hierarchy_data = json.load(f)
 
-        self.stdout.write("Configuring Bhubaneswar dataset (State -> District -> Subdistricts -> ULBs/Wards/Blocks/GPs/Villages)...")
+        self.stdout.write("Configuring Odisha dataset (State -> District -> Subdistricts -> ULBs/Wards/Blocks/GPs/Villages)...")
 
         try:
             with transaction.atomic():
@@ -33,14 +33,14 @@ class Command(BaseCommand):
                 AdministrativeArea.objects.all_with_deleted().hard_delete()
                 Category.objects.all_with_deleted().hard_delete()
 
-                # 1. State: Bhubaneswar (Code: 21)
-                # Broad bounding box polygon containing Bhubaneswar coordinates
-                Bhubaneswar_poly = Polygon(((81.0, 17.0), (81.0, 23.5), (87.5, 23.5), (87.5, 17.0), (81.0, 17.0)))
-                Bhubaneswar_mpoly = MultiPolygon(Bhubaneswar_poly)
+                # 1. State: Odisha (Code: 21)
+                # Broad bounding box polygon containing Odisha coordinates
+                odisha_poly = Polygon(((81.0, 17.0), (81.0, 23.5), (87.5, 23.5), (87.5, 17.0), (81.0, 17.0)))
+                odisha_mpoly = MultiPolygon(odisha_poly)
                 state, _ = AdministrativeArea.objects.get_or_create(
                     name="Odisha",
                     area_type="STATE",
-                    defaults={"boundary": Odisha_mpoly}
+                    defaults={"boundary": odisha_mpoly}
                 )
 
                 # 2. Seed all 30 Districts and 317 Subdistricts from JSON
@@ -209,6 +209,19 @@ class Command(BaseCommand):
                 citizen.set_password("citizen123")
                 citizen.save()
                 UserPreferences.objects.get_or_create(user=citizen)
+
+                # 7b. Seed Farmer User (Devinder Sahu)
+                farmer, _ = User.objects.get_or_create(
+                    username="devinder_Sahu",
+                    defaults={
+                        "email": "devinder.sahu@gramsamridhi.in",
+                        "phone": "+919876543210",
+                        "role": "farmer"
+                    }
+                )
+                farmer.set_password("citizen123")
+                farmer.save()
+                UserPreferences.objects.get_or_create(user=farmer)
 
                 # 8. Create mock evidence
                 evidence, _ = Evidence.objects.get_or_create(

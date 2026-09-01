@@ -1,90 +1,69 @@
 /**
- * Authentication API services with fallback offline/dummy mode.
+ * Authentication API services connecting to backend JWT auth endpoints.
  */
 export const authApi = {
   async login(username, password) {
+    const res = await fetch("/api/v1/auth/token/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+    let data;
     try {
-      const res = await fetch("/api/v1/auth/token/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Login failed");
-      return data;
-    } catch (err) {
-      console.warn(
-        "Backend server down, falling back to dummy sign-in user:",
-        err,
-      );
-      // Dummy user success payload
-      const isFarmer =
-        username?.toLowerCase() === "devinder_Sahu" ||
-        username?.toLowerCase().includes("farmer");
-      return {
-        access: "dummy_access_token",
-        refresh: "dummy_refresh_token",
-        user: {
-          username: username || "Bhubaneswar_citizen",
-          email: `${username || "citizen"}@GramSamridhi.in`,
-          phone: "+919999900024",
-          role: isFarmer ? "farmer" : "citizen",
-        },
-      };
+      data = await res.json();
+    } catch (e) {
+      data = { detail: "Server error occurred. Please try again." };
     }
+    if (!res.ok) {
+      const errorMsg = data.detail || data.non_field_errors?.[0] || (typeof data === 'object' ? Object.values(data)[0] : null) || "Invalid credentials or login failed.";
+      throw new Error(typeof errorMsg === 'string' ? errorMsg : JSON.stringify(errorMsg));
+    }
+    return data;
   },
 
   async register(userData) {
+    const res = await fetch("/api/v1/auth/register/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+    let data;
     try {
-      const res = await fetch("/api/v1/auth/register/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Registration failed");
-      return data;
-    } catch (err) {
-      console.warn(
-        "Backend server down, creating dummy user in client state:",
-        err,
-      );
-      return {
-        username: userData.username,
-        email: userData.email,
-        phone: userData.phone,
-        role: userData.role,
-      };
+      data = await res.json();
+    } catch (e) {
+      data = { detail: "Server error occurred during registration." };
     }
+    if (!res.ok) {
+      const errorMsg = data.detail || (typeof data === 'object' ? Object.entries(data).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join(' | ') : null) || "Registration failed.";
+      throw new Error(errorMsg);
+    }
+    return data;
   },
 
   async logout(refreshToken) {
     try {
-      const res = await fetch("/api/v1/auth/logout/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh: refreshToken }),
-      });
-      if (!res.ok) throw new Error("Logout failed");
+      if (refreshToken) {
+        await fetch("/api/v1/auth/logout/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh: refreshToken }),
+        });
+      }
       return true;
     } catch (err) {
-      console.warn("Logging out dummy user locally.");
+      console.warn("Logout request failed on server:", err);
       return true;
     }
   },
 
   async refreshToken(refresh) {
-    try {
-      const res = await fetch("/api/v1/auth/token/refresh/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error("Token refresh failed");
-      return data;
-    } catch (err) {
-      return { access: "dummy_access_token" };
-    }
+    const res = await fetch("/api/v1/auth/token/refresh/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refresh }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Token refresh failed");
+    return data;
   },
 };

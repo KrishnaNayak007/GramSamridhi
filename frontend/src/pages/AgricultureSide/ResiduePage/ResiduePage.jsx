@@ -105,14 +105,12 @@ export default function ResiduePage() {
 
     try {
       const data = await agricultureApi.createPickup(payload);
-      const generatedId = data.id ? 'RB-' + data.id.replace('mock-pickup-', '') : 'RB-' + (1040 + Math.floor(Math.random() * 900));
+      const generatedId = data.id ? `RB-${String(data.id).slice(0, 8)}` : 'RB-CONFIRMED';
       setReqId(generatedId);
       setIsSubmitted(true);
     } catch (err) {
       console.error("Error creating pickup request:", err);
-      // Fallback local submission
-      setReqId('RB-' + (1040 + Math.floor(Math.random() * 900)));
-      setIsSubmitted(true);
+      alert(err.message || 'Failed to submit pickup request. Please check connection and try again.');
     } finally {
       setLoading(false);
     }

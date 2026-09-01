@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import './GovTeamsPage.css';
 
 const INITIAL_TEAMS = [
-  { id:'T-01', name:'Team Alpha', zone:'Sector 4 · Ward 14', status:'on', supervisor:'K. Sharma', supInit:'KS', members:['A','R','P','M'], load:6, capacity:8, vehicle:'WB-06-AZ 2291', avgFarmScore:68, residueCertified:true },
-  { id:'T-02', name:'Team Bravo', zone:'Sector 7 · Ward 14', status:'on', supervisor:'N. Roy', supInit:'NR', members:['S','D','T'], load:8, capacity:8, vehicle:'WB-06-AZ 4410', avgFarmScore:41, residueCertified:false },
-  { id:'T-03', name:'Team Charlie', zone:'Sector 2 · Ward 14', status:'off', supervisor:'A. Ghosh', supInit:'AG', members:['V','L'], load:0, capacity:6, vehicle:'WB-06-AZ 1187', avgFarmScore:22, residueCertified:false },
-  { id:'T-04', name:'Team Delta', zone:'Riverside Colony', status:'overloaded', supervisor:'P. Iyer', supInit:'PI', members:['K','J','B','H','C'], load:11, capacity:8, vehicle:'WB-06-AZ 7765', avgFarmScore:74, residueCertified:true },
-  { id:'T-05', name:'Team Echo', zone:'Market Road Belt', status:'on', supervisor:'S. Verma', supInit:'SV', members:['O','Q'], load:3, capacity:8, vehicle:'WB-06-AZ 3302', avgFarmScore:15, residueCertified:false },
-  { id:'T-06', name:'Team Foxtrot', zone:'Sector 9 · Ward 14', status:'off', supervisor:'M. Das', supInit:'MD', members:['E','F','G'], load:0, capacity:6, vehicle:'WB-06-AZ 9034', avgFarmScore:57, residueCertified:true },
+  { id:'T-01', name:'Team Alpha', zone:'Sector 4 · Ward 14', status:'on', supervisor:'K. Sharma', supInit:'KS', members:['A','R','P','M'], load:6, capacity:8, vehicle:'OD-02-AZ 2291', avgFarmScore:68, residueCertified:true },
+  { id:'T-02', name:'Team Bravo', zone:'Sector 7 · Ward 14', status:'on', supervisor:'N. Roy', supInit:'NR', members:['S','D','T'], load:8, capacity:8, vehicle:'OD-02-AZ 4410', avgFarmScore:41, residueCertified:false },
+  { id:'T-03', name:'Team Charlie', zone:'Sector 2 · Ward 14', status:'off', supervisor:'A. Ghosh', supInit:'AG', members:['V','L'], load:0, capacity:6, vehicle:'OD-02-AZ 1187', avgFarmScore:22, residueCertified:false },
+  { id:'T-04', name:'Team Delta', zone:'Riverside Colony', status:'overloaded', supervisor:'P. Iyer', supInit:'PI', members:['K','J','B','H','C'], load:11, capacity:8, vehicle:'OD-02-AZ 7765', avgFarmScore:74, residueCertified:true },
+  { id:'T-05', name:'Team Echo', zone:'Market Road Belt', status:'on', supervisor:'S. Verma', supInit:'SV', members:['O','Q'], load:3, capacity:8, vehicle:'OD-02-AZ 3302', avgFarmScore:15, residueCertified:false },
+  { id:'T-06', name:'Team Foxtrot', zone:'Sector 9 · Ward 14', status:'off', supervisor:'M. Das', supInit:'MD', members:['E','F','G'], load:0, capacity:6, vehicle:'OD-02-AZ 9034', avgFarmScore:57, residueCertified:true },
 ];
 
 const DUTY_LABELS = { on: 'On Duty', off: 'Off Duty', overloaded: 'Overloaded' };

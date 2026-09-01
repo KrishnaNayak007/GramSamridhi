@@ -56,4 +56,7 @@ class TokenObtainPairWithSessionSerializer(TokenObtainPairSerializer):
             user_agent=user_agent
         )
 
+        # Include user profile in token response
+        data['user'] = UserSerializer(self.user).data
+
         return data
