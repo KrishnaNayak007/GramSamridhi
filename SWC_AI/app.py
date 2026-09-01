@@ -116,7 +116,7 @@ async def predict(file: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(status_code=400, content={"error": f"Could not read upload: {e}"})
 
-    response = {}
+    response = {"success": True}
 
     if severity_model is not None:
         try:

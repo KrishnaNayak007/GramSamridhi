@@ -136,7 +136,7 @@ export default function SwcPage({ onNavigate }) {
     setScanStepIndex(0);
 
     // Sequence through scanning animation steps
-    const stepTimes = [450, 950, 1450, 1950];
+    const stepTimes = [300, 700, 1100, 1500];
     stepTimes.forEach((time, index) => {
       setTimeout(() => {
         setScanStepIndex(index);
@@ -170,78 +170,79 @@ export default function SwcPage({ onNavigate }) {
 
         if (response && response.ok) {
           aiResult = await response.json();
+          console.log("[SWC_AI Live Prediction Result]:", aiResult);
         }
       } catch (err) {
         console.error("AI service inference call error:", err);
       }
     }
 
-    // Complete analysis smoothly
-    setTimeout(() => {
-      setIsAnalyzing(false);
-      setAnalyzed(true);
-      setStep(3);
+    // Ensure visual scan transition completes
+    await new Promise((resolve) => setTimeout(resolve, 1600));
 
-      let targetSevLabel = "Medium";
-      let targetSevConf = 85;
-      let targetSevMsg = "Noticeable accumulation - schedule pickup soon.";
+    setIsAnalyzing(false);
+    setAnalyzed(true);
+    setStep(3);
 
-      let targetTypeLabel = "Mixed Waste";
-      let targetTypeConf = 94;
-      let targetTypeMsg = "Mixed organic and inorganic waste detected — recommend municipal sorting.";
+    let targetSevLabel = "Medium";
+    let targetSevConf = 85;
+    let targetSevMsg = "Noticeable accumulation - schedule pickup soon.";
 
-      if (aiResult && aiResult.success) {
-        // Extract real YOLOv8 Severity
-        if (aiResult.severity) {
-          const rawSev = (aiResult.severity.label || "medium").toLowerCase();
-          targetSevLabel = rawSev.charAt(0).toUpperCase() + rawSev.slice(1);
-          targetSevConf = Math.round((aiResult.severity.confidence || 0.85) * 100);
-          targetSevMsg = aiResult.severity.message || targetSevMsg;
-        }
+    let targetTypeLabel = "Mixed Waste";
+    let targetTypeConf = 94;
+    let targetTypeMsg = "Mixed organic and inorganic waste detected — recommend municipal sorting.";
 
-        // Extract real YOLOv8 Waste Type
-        if (aiResult.waste_type) {
-          const rawType = (aiResult.waste_type.label || "mixed").toLowerCase();
-          if (rawType === "organic") {
-            targetTypeLabel = "Organic Waste";
-          } else if (rawType === "inorganic") {
-            targetTypeLabel = "Inorganic Waste (Plastic / Metal / Dry)";
-          } else {
-            targetTypeLabel = "Mixed Waste";
-          }
-          targetTypeConf = Math.round((aiResult.waste_type.confidence || 0.94) * 100);
-          targetTypeMsg = aiResult.waste_type.message || targetTypeMsg;
-        }
-
-        showToast(`AI Detection: ${targetTypeLabel} (${targetSevLabel} Severity)`);
-      } else {
-        showToast("AI detection complete — routing unlocked");
+    if (aiResult && (aiResult.waste_type || aiResult.severity || aiResult.success)) {
+      // Extract real YOLOv8 Severity
+      if (aiResult.severity && !aiResult.severity.error) {
+        const rawSev = (aiResult.severity.label || "medium").toLowerCase();
+        targetSevLabel = rawSev.charAt(0).toUpperCase() + rawSev.slice(1);
+        targetSevConf = Math.round((aiResult.severity.confidence || 0.85) * 100);
+        targetSevMsg = aiResult.severity.message || targetSevMsg;
       }
 
-      setSeverityLabel(targetSevLabel);
-      setSeverityConfidence(targetSevConf);
-      setSeverityMessage(targetSevMsg);
-
-      setTypeMessage(targetTypeMsg);
-      setTypeConfidence(targetTypeConf);
-      setWasteType(targetTypeLabel);
-
-      const maxConf = Math.max(targetSevConf, targetTypeConf);
-      let count = 0;
-      const interval = setInterval(() => {
-        count += 2;
-        if (count >= maxConf) {
-          count = maxConf;
-          clearInterval(interval);
+      // Extract real YOLOv8 Waste Type
+      if (aiResult.waste_type && !aiResult.waste_type.error) {
+        const rawType = (aiResult.waste_type.label || "mixed").toLowerCase();
+        if (rawType.includes("organic") || rawType.includes("food") || rawType.includes("vegetation")) {
+          targetTypeLabel = "Organic Waste";
+        } else if (rawType.includes("inorganic") || rawType.includes("plastic") || rawType.includes("metal")) {
+          targetTypeLabel = "Inorganic Waste (Plastic / Metal / Dry)";
+        } else {
+          targetTypeLabel = "Mixed Waste";
         }
-        setConfidence(count);
-      }, 15);
-
-      if (!locationStr) setLocationStr("Village Road, Ward 24");
-      if (!description) {
-        setDescription(`AI detected ${targetTypeLabel.toLowerCase()} with ${targetSevLabel.toLowerCase()} accumulation severity. Clearance and sanitation routing recommended.`);
+        targetTypeConf = Math.round((aiResult.waste_type.confidence || 0.94) * 100);
+        targetTypeMsg = aiResult.waste_type.message || targetTypeMsg;
       }
-    }, 2200);
+
+      showToast(`AI Detection: ${targetTypeLabel} (${targetSevLabel} Severity)`);
+    } else {
+      showToast("⚠️ Start SWC_AI (port 8001) for live AI predictions");
+    }
+
+    setSeverityLabel(targetSevLabel);
+    setSeverityConfidence(targetSevConf);
+    setSeverityMessage(targetSevMsg);
+
+    setTypeMessage(targetTypeMsg);
+    setTypeConfidence(targetTypeConf);
+    setWasteType(targetTypeLabel);
+
+    const maxConf = Math.max(targetSevConf, targetTypeConf);
+    let count = 0;
+    const interval = setInterval(() => {
+      count += 2;
+      if (count >= maxConf) {
+        count = maxConf;
+        clearInterval(interval);
+      }
+      setConfidence(count);
+    }, 15);
+
+    if (!locationStr) setLocationStr("Village Road, Ward 24");
+    if (!description) {
+      setDescription(`AI detected ${targetTypeLabel.toLowerCase()} with ${targetSevLabel.toLowerCase()} accumulation severity. Clearance and sanitation routing recommended.`);
+    }
   };
 
   // Geolocation trigger
