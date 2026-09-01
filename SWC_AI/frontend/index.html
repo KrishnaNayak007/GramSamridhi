@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SWC AI — Garbage Severity &amp; Type Classifier</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌱 SWC AI — Waste Classification &amp; Severity</h1>
+      <p class="subtitle">Upload a garbage or waste photo for local deep learning evaluation</p>
+    </header>
+
+    <main class="card">
+      <div class="upload-section">
+        <label for="file-input" class="upload-label">
+          <span class="upload-icon">📷</span>
+          <span>Choose an Image</span>
+          <input type="file" id="file-input" accept="image/*" />
+        </label>
+        <span id="file-name" class="file-name">No file chosen</span>
+        <button id="analyze-btn" class="btn primary-btn" disabled>Analyze Image</button>
+      </div>
+
+      <div class="preview-section" id="preview-section" style="display: none;">
+        <img id="image-preview" src="#" alt="Uploaded Waste Preview" />
+        <div class="banners-container">
+          <div id="severity-banner" class="banner"></div>
+          <div id="type-banner" class="banner"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>Powered by fine-tuned Ultralytics YOLOv8 Classification • Local PyTorch Inference</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
