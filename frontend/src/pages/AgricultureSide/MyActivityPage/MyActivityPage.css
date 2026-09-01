@@ -820,3 +820,221 @@
     justify-content: center;
   }
 }
+
+/* ===================== ACTIVITY DETAIL MODAL ===================== */
+.activity-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 24, 20, 0.65);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: modalFadeIn 0.25s ease;
+}
+
+.activity-modal-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(10, 30, 24, 0.35);
+  border: 1px solid rgba(24, 54, 48, 0.12);
+  display: flex;
+  flex-direction: column;
+  animation: modalPopIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalPopIn {
+  from { opacity: 0; transform: scale(0.94) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.activity-modal-header {
+  padding: 24px 28px 18px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.activity-modal-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.activity-modal-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--green-900);
+  font-weight: 700;
+}
+
+.activity-modal-close {
+  background: #f0f4f1;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activity-modal-close:hover {
+  background: #e2ede6;
+  color: var(--green-900);
+  transform: scale(1.05);
+}
+
+.activity-modal-close svg {
+  width: 18px;
+  height: 18px;
+}
+
+.activity-modal-body {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.activity-detail-section h4 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-faint);
+  margin-bottom: 6px;
+}
+
+.activity-detail-desc {
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--canvas);
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+}
+
+.activity-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.activity-detail-cell {
+  background: #FDFCF9;
+  border: 1px solid var(--line);
+  padding: 12px 14px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.activity-detail-cell .cell-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+
+.activity-detail-cell .cell-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--green-900);
+}
+
+.activity-timeline-box {
+  background: var(--pastel-green);
+  border: 1px solid rgba(43, 90, 76, 0.15);
+  border-radius: 16px;
+  padding: 18px 20px;
+}
+
+.activity-timeline-box h4 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--green-800);
+  margin-bottom: 14px;
+}
+
+.timeline-step {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  padding-bottom: 14px;
+}
+
+.timeline-step:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 16px;
+  bottom: 0;
+  width: 2px;
+  background: rgba(43, 90, 76, 0.25);
+}
+
+.timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #cbd9ce;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 1px rgba(43, 90, 76, 0.2);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.timeline-dot.active {
+  background: var(--green-700);
+  box-shadow: 0 0 0 3px rgba(43, 90, 76, 0.2);
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.timeline-content strong {
+  font-size: 13.5px;
+  color: var(--green-900);
+}
+
+.timeline-content span {
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.activity-modal-footer {
+  padding: 16px 28px 24px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: flex-end;
+}

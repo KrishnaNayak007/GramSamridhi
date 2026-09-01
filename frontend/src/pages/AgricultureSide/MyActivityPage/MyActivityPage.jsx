@@ -11,6 +11,7 @@ export default function MyActivityPage() {
   const [reports, setReports] = useState([]);
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
   
   // UI Display Toggles / Toast
   const [toastMessage, setToastMessage] = useState('');
@@ -135,25 +136,36 @@ export default function MyActivityPage() {
         type: 'swc',
         typeLabel: 'SWC Complaint',
         title: report.description || 'Garbage accumulation near village chowk',
-        location: report.location?.name || 'Local Area',
+        location: report.location?.name || report.incident?.representative_location?.name || report.incident?.administrative_area?.name || 'Local Area, Ward 24',
         status: report.incident?.status || 'pending',
         date: report.submitted_at || report.created_at,
+        category: report.incident?.category ? report.incident.category.replace(/_/g, ' ') : 'Civic Waste / Sanitation',
+        priorityScore: report.incident?.priority_score || 30.0,
+        evidence: report.evidence,
+        rawObj: report
       });
     });
   }
 
   if (Array.isArray(listings)) {
     listings.forEach(item => {
-      const isDonation = item.listing_type === 'donation';
+      const isDonation = item.listing_type === 'donation' || item.listing_type === 'give_away';
       combinedActivities.push({
         id: item.id ? `#SUR-${item.id.slice(0, 4).toUpperCase()}` : '#SUR-DUMM',
         rawId: item.id,
         type: isDonation ? 'donation' : 'surplus',
         typeLabel: isDonation ? 'Item Donated' : 'Surplus Listing',
         title: item.title,
-        location: item.owner?.username ? `${item.owner.username}` : 'You (Local)',
+        description: item.description,
+        location: item.location?.name || (item.owner?.username ? `${item.owner.username}` : 'Local Area'),
         status: item.status || 'active',
         date: item.created_at,
+        category: item.category?.name || 'Surplus Goods',
+        price: item.price,
+        condition: item.condition,
+        owner: item.owner?.username || 'You',
+        photos: item.photos,
+        rawObj: item
       });
     });
   }
@@ -409,7 +421,7 @@ export default function MyActivityPage() {
                     <td data-label="Date">{formatDate(act.date)}</td>
                     <td data-label="Action" className="col-action">
                       <button 
-                        onClick={() => triggerToast(`Viewing details for ${act.id}`)}
+                        onClick={() => setSelectedActivity(act)}
                         className="row-action"
                       >
                         View Details 
@@ -532,6 +544,102 @@ export default function MyActivityPage() {
           </div>
         </div>
       </section>
+
+      {/* ACTIVITY DETAIL MODAL */}
+      {selectedActivity && (
+        <div className="activity-modal-overlay" onClick={() => setSelectedActivity(null)}>
+          <div className="activity-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="activity-modal-header">
+              <div>
+                <div className="activity-modal-tag">
+                  <span className={`type-pill type-pill--${selectedActivity.type === 'swc' ? 'swc' : selectedActivity.type === 'donation' ? 'donation' : 'surplus'}`}>
+                    <i></i>{selectedActivity.typeLabel}
+                  </span>
+                  {getStatusPill(selectedActivity.status, selectedActivity.type)}
+                </div>
+                <h3 className="activity-modal-title">{selectedActivity.id}</h3>
+              </div>
+              <button 
+                className="activity-modal-close" 
+                onClick={() => setSelectedActivity(null)}
+                aria-label="Close modal"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 6L6 18M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="activity-modal-body">
+              <div className="activity-detail-section">
+                <h4>Title &amp; Description</h4>
+                <p className="activity-detail-desc">{selectedActivity.title || selectedActivity.description || "No description provided."}</p>
+              </div>
+
+              <div className="activity-detail-grid">
+                <div className="activity-detail-cell">
+                  <span className="cell-label">Category</span>
+                  <span className="cell-value">{selectedActivity.category}</span>
+                </div>
+                <div className="activity-detail-cell">
+                  <span className="cell-label">Location / Area</span>
+                  <span className="cell-value">{selectedActivity.location}</span>
+                </div>
+                <div className="activity-detail-cell">
+                  <span className="cell-label">Submitted On</span>
+                  <span className="cell-value">{formatDate(selectedActivity.date)}</span>
+                </div>
+                {selectedActivity.type === 'swc' ? (
+                  <div className="activity-detail-cell">
+                    <span className="cell-label">AI Priority Score</span>
+                    <span className="cell-value">{selectedActivity.priorityScore} / 100</span>
+                  </div>
+                ) : (
+                  <div className="activity-detail-cell">
+                    <span className="cell-label">Price / Listing Type</span>
+                    <span className="cell-value">
+                      {selectedActivity.price ? `₹${selectedActivity.price}` : 'Free Giveaway'}
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {selectedActivity.type === 'swc' && (
+                <div className="activity-timeline-box">
+                  <h4>Complaint Routing &amp; Status</h4>
+                  <div className="timeline-step">
+                    <div className="timeline-dot active"></div>
+                    <div className="timeline-content">
+                      <strong>Report Registered</strong>
+                      <span>Validated and assigned to local municipal ward authority.</span>
+                    </div>
+                  </div>
+                  <div className="timeline-step">
+                    <div className={`timeline-dot ${selectedActivity.status !== 'pending' ? 'active' : ''}`}></div>
+                    <div className="timeline-content">
+                      <strong>Field Verification &amp; Clearance</strong>
+                      <span>
+                        {selectedActivity.status === 'resolved' || selectedActivity.status === 'closed'
+                          ? 'Action completed and verified by sanitation team.'
+                          : 'Sanitation team inspection in progress.'}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="activity-modal-footer">
+              <button 
+                className="ss-btn ss-btn--primary" 
+                onClick={() => setSelectedActivity(null)}
+              >
+                Close Details
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* TOAST POPUP */}
       {toastVisible && (
