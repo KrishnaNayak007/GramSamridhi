@@ -28,32 +28,31 @@ export default function GovAnalyticsPage() {
     async function loadData() {
       try {
         const compData = await incidentsApi.getAll();
-        if (compData) {
-          const mapped = compData.map(inc => {
-            const severity = inc.priority_score > 7.0 ? 'high' : inc.priority_score > 4.0 ? 'medium' : 'low';
-            const status = inc.status === 'open' ? 'submitted' : inc.status === 'assigned' ? 'assigned' : inc.status === 'in_progress' ? 'progress' : 'resolved';
-            const created = new Date(inc.created_at || Date.now());
-            const elapsed = Math.max(0.1, ((Date.now() - created.getTime()) / 3600000));
-            return {
-              id: inc.id,
-              status: status,
-              severity: severity,
-              created_at: inc.created_at,
-              resolutionHours: 12.5,
-              locality: inc.representative_location?.name || 'BMC Ward 24',
-              assignedTeam: inc.assigned_officer?.name || null,
-              rating: inc.rating || 5,
-              reopened: false,
-              escalated: elapsed > (severity === 'high' ? 8 : severity === 'medium' ? 24 : 72)
-            };
-          });
-          setComplaints(mapped);
-        }
+        const compList = Array.isArray(compData) ? compData : (compData?.results || []);
+        const mapped = compList.map(inc => {
+          const priority = parseFloat(inc.priority_score) || 0;
+          const severity = priority > 7.0 ? 'high' : priority > 4.0 ? 'medium' : 'low';
+          const status = inc.status === 'open' ? 'submitted' : inc.status === 'assigned' ? 'assigned' : inc.status === 'in_progress' ? 'progress' : 'resolved';
+          const created = new Date(inc.created_at || Date.now());
+          const elapsed = Math.max(0.1, ((Date.now() - created.getTime()) / 3600000));
+          return {
+            id: inc.id,
+            status: status,
+            severity: severity,
+            created_at: inc.created_at,
+            resolutionHours: 12.5,
+            locality: inc.representative_location?.name || 'BMC Ward 24',
+            assignedTeam: inc.assigned_officer?.name || null,
+            rating: inc.rating || 5,
+            reopened: false,
+            escalated: elapsed > (severity === 'high' ? 8 : severity === 'medium' ? 24 : 72)
+          };
+        });
+        setComplaints(mapped);
 
         const pickData = await agricultureApi.getPickups();
-        if (pickData) {
-          setPickups(pickData);
-        }
+        const pickList = Array.isArray(pickData) ? pickData : (pickData?.results || []);
+        setPickups(pickList);
       } catch (err) {
         console.error("Error loading analytics data:", err);
       }
@@ -298,13 +297,14 @@ export default function GovAnalyticsPage() {
     const inorganic = [0, 0, 0, 0, 0, 0];
     const avoided = [0, 0, 0, 0, 0, 0];
 
-    pickups.forEach(p => {
+    (Array.isArray(pickups) ? pickups : []).forEach(p => {
       const d = new Date(p.created_at || Date.now());
       const m = d.toLocaleString('en-US', { month: 'short' });
       const idx = labels.indexOf(m);
       if (idx !== -1) {
-        const isOrganic = p.residue_type?.toLowerCase().includes('straw') || p.residue_type?.toLowerCase().includes('trash');
-        const qtyT = (p.weight_kg || 0) / 1000;
+        const rType = typeof p.residue_type === 'string' ? p.residue_type.toLowerCase() : '';
+        const isOrganic = rType.includes('straw') || rType.includes('trash') || !rType;
+        const qtyT = (parseFloat(p.weight_kg) || 0) / 1000;
         if (isOrganic) {
           organic[idx] += qtyT;
         } else {
@@ -324,14 +324,14 @@ export default function GovAnalyticsPage() {
     const chartW = width - paddingLeft - paddingRight;
     const chartH = height - paddingTop - paddingBottom;
 
-    const getX = (index) => paddingLeft + index * (chartW / (labels.length - 1));
+    const getX = (index) => paddingLeft + index * (chartW / Math.max(1, labels.length - 1));
     
     const maxVal = Math.max(...organic, ...inorganic, 10);
-    const scaleMax = Math.ceil(maxVal * 1.15);
+    const scaleMax = Math.ceil(maxVal * 1.15) || 10;
     const getLeftY = (val) => paddingTop + chartH - (val / scaleMax) * chartH;
 
     const maxAvoided = Math.max(...avoided, 1);
-    const scaleAvoidedMax = Math.ceil(maxAvoided * 1.15);
+    const scaleAvoidedMax = Math.ceil(maxAvoided * 1.15) || 1;
     const getRightY = (val) => paddingTop + chartH - (val / scaleAvoidedMax) * chartH;
 
     const linePoints = avoided.map((val, i) => `${getX(i)},${getRightY(val)}`);

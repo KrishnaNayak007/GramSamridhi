@@ -41,7 +41,7 @@ export default function GovOverviewPage({ onNavigate }) {
               desc: inc.description || 'No description provided.',
               aiNote: `AI priority score: ${inc.priority_score}. Category: ${inc.category || 'garbage_accumulation'}.`,
               confidence: 90,
-              farmScore: inc.category?.toLowerCase().includes('agri') || inc.category?.toLowerCase().includes('organic')
+              farmScore: (typeof inc.category === 'string' && (inc.category.toLowerCase().includes('agri') || inc.category.toLowerCase().includes('organic')))
                 ? Math.floor(75 + Math.random() * 20)
                 : Math.floor(10 + Math.random() * 60),
               mapTop: `${Math.floor(20 + Math.random() * 60)}%`,
