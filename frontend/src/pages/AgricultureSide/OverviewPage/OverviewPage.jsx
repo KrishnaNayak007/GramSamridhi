@@ -60,12 +60,12 @@ export default function OverviewPage({ onNavigate }) {
     .filter(p => p.payment_status !== 'paid' && p.status !== 'paid')
     .reduce((sum, p) => sum + parseFloat(p.payment_amount || 0), 0);
 
-  const reusedCount = surplusItems.filter(l => l.status === 'claimed' || l.status === 'completed').length;
+  const reusedCount = surplusItems.filter(l => l.status === 'sold_transferred' || l.status === 'completed_donated' || l.status === 'claimed' || l.status === 'completed').length;
 
   const activeContributors = new Set([
-    ...pickups.map(p => p.agriculture_name),
-    ...complaints.map(c => c.citizen_name)
-  ].filter(Boolean)).size;
+    ...pickups.map(p => p.farmer_username),
+    ...surplusItems.map(s => s.owner?.username)
+  ].filter(Boolean)).size || (pickups.length > 0 ? 1 : 0);
 
   const displayEarnings = farmerEarnings;
   const contributionScore = Math.min(100, Math.round((resolvedCount * 15) + (pickups.length * 10) + (reusedCount * 10)));

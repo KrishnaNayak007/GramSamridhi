@@ -60,28 +60,12 @@ export default function GovAnalyticsPage() {
     loadData();
   }, []);
 
-  // Compute dynamic stats strip metrics
-  const resolvedThisMonth = complaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
-  
-  const resolvedComplaints = complaints.filter(c => c.status === 'resolved' || c.status === 'closed');
-  const avgResolutionTime = resolvedComplaints.length > 0
-    ? (resolvedComplaints.reduce((sum, c) => sum + (c.resolutionHours || 12.5), 0) / resolvedComplaints.length).toFixed(1) + 'h'
-    : '0.0h';
-
-  const slaCompliantCount = complaints.filter(c => !c.escalated).length;
-  const slaCompliance = complaints.length > 0
-    ? Math.round((slaCompliantCount / complaints.length) * 100) + '%'
-    : '100%';
-
-  const ratedComplaints = complaints.filter(c => c.rating > 0);
-  const citizenSatisfaction = ratedComplaints.length > 0
-    ? (ratedComplaints.reduce((sum, c) => sum + c.rating, 0) / ratedComplaints.length).toFixed(1) + '/5'
-    : '5.0/5';
-
-  const repeatCount = complaints.filter(c => c.reopened).length;
-  const repeatComplaints = complaints.length > 0
-    ? Math.round((repeatCount / complaints.length) * 100) + '%'
-    : '0%';
+  // Compute dynamic stats strip metrics from real datasets
+  const totalIncidents = complaints.length;
+  const resolvedIncidents = complaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
+  const activeIncidents = complaints.filter(c => c.status === 'submitted' || c.status === 'reported' || c.status === 'open' || c.status === 'assigned' || c.status === 'progress' || c.status === 'in_progress').length;
+  const highPriorityIncidents = complaints.filter(c => c.severity === 'high').length;
+  const organicBiomassT = (pickups.filter(p => p.status === 'collected' || p.status === 'paid').reduce((sum, p) => sum + (parseFloat(p.weight_kg) || 0), 0) / 1000).toFixed(1);
 
   // Dynamic Leaderboard
   const teamResolutions = {};
@@ -470,13 +454,13 @@ export default function GovAnalyticsPage() {
           <div className="top-row">
             <div className="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                <rect x="3" y="3" width="18" height="18" rx="2" />
+                <path d="M3 9h18M9 21V9" />
               </svg>
             </div>
-            <span className="trend up">+12%</span>
           </div>
-          <div className="value">{resolvedThisMonth}</div>
-          <div className="label">Resolved This Month</div>
+          <div className="value">{totalIncidents}</div>
+          <div className="label">Total Incidents</div>
         </div>
         <div className="stat-card in-progress">
           <div className="top-row">
@@ -485,10 +469,9 @@ export default function GovAnalyticsPage() {
                 <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
               </svg>
             </div>
-            <span className="trend up">-8%</span>
           </div>
-          <div className="value">{avgResolutionTime}</div>
-          <div className="label">Avg. Resolution Time</div>
+          <div className="value">{activeIncidents}</div>
+          <div className="label">Active / In Progress</div>
         </div>
         <div className="stat-card resolved">
           <div className="top-row">
@@ -497,34 +480,32 @@ export default function GovAnalyticsPage() {
                 <path d="M20 6 9 17l-5-5"/>
               </svg>
             </div>
-            <span className="trend up">+3%</span>
           </div>
-          <div className="value">{slaCompliance}</div>
-          <div className="label">SLA Compliance</div>
-        </div>
-        <div className="stat-card pending">
-          <div className="top-row">
-            <div className="icon">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
-              </svg>
-            </div>
-            <span className="trend up">+0.2</span>
-          </div>
-          <div className="value">{citizenSatisfaction}</div>
-          <div className="label">Citizen Satisfaction</div>
+          <div className="value">{resolvedIncidents}</div>
+          <div className="label">Resolved &amp; Closed</div>
         </div>
         <div className="stat-card urgent">
           <div className="top-row">
             <div className="icon">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><path d="M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/>
+                <path d="M12 2 2 21h20L12 2z" />
+                <path d="M12 9v5M12 17h.01" />
               </svg>
             </div>
-            <span className="trend down">-2%</span>
           </div>
-          <div className="value">{repeatComplaints}</div>
-          <div className="label">Repeat Complaints</div>
+          <div className="value">{highPriorityIncidents}</div>
+          <div className="label">High Priority Cases</div>
+        </div>
+        <div className="stat-card pending">
+          <div className="top-row">
+            <div className="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2C7 6 6 10 6 13a6 6 0 0 0 12 0c0-3-1-7-6-11z"/>
+              </svg>
+            </div>
+          </div>
+          <div className="value">{organicBiomassT} T</div>
+          <div className="label">Biomass Diverted</div>
         </div>
       </section>
 

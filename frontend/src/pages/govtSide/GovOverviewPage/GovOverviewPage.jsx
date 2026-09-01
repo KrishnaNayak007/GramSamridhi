@@ -197,10 +197,10 @@ export default function GovOverviewPage({ onNavigate }) {
 
   // Calculate dynamic stats
   const totalCount = complaints.length;
-  const awaitingCount = complaints.filter(c => c.status === 'submitted' || c.status === 'reported').length;
+  const awaitingCount = complaints.filter(c => c.status === 'submitted' || c.status === 'reported' || c.status === 'open').length;
   const progressCount = complaints.filter(c => c.status === 'progress' || c.status === 'in_progress' || c.status === 'assigned').length;
   const resolvedCount = complaints.filter(c => c.status === 'resolved' || c.status === 'closed').length;
-  const urgentCount = complaints.filter(c => c.severity === 'high' && (c.status === 'submitted' || c.status === 'reported')).length;
+  const urgentCount = complaints.filter(c => c.severity === 'high' && (c.status === 'submitted' || c.status === 'reported' || c.status === 'open')).length;
 
   const selectedComplaint = complaints.find(c => c.id === selectedId) || complaints[0] || null;
 
@@ -210,8 +210,8 @@ export default function GovOverviewPage({ onNavigate }) {
     if (activeFilter === 'High') return c.severity === 'high';
     if (activeFilter === 'Medium') return c.severity === 'medium';
     if (activeFilter === 'Low') return c.severity === 'low';
-    if (activeFilter === 'Unassigned') return c.status === 'submitted';
-    if (activeFilter === 'My Team') return c.status === 'assigned' || c.status === 'progress';
+    if (activeFilter === 'Unassigned') return c.status === 'submitted' || c.status === 'reported' || c.status === 'open';
+    if (activeFilter === 'My Team') return c.status === 'assigned' || c.status === 'progress' || c.status === 'in_progress';
     return true;
   });
 
