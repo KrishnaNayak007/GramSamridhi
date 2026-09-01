@@ -3,7 +3,8 @@ import { apiFetch } from '../shared/lib/api';
 export const agricultureApi = {
   async getPickups() {
     const res = await apiFetch('/api/v1/agriculture/pickups/');
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data?.results || []);
   },
 
   async createPickup(payload) {
@@ -16,12 +17,14 @@ export const agricultureApi = {
 
   async getSchemes() {
     const res = await apiFetch('/api/v1/agriculture/schemes/');
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data?.results || []);
   },
 
   async getComplaints() {
     const res = await apiFetch('/api/v1/agriculture/complaints/');
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data?.results || []);
   },
 
   async createComplaint(payload) {

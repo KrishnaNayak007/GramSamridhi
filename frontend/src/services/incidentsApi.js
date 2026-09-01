@@ -3,7 +3,8 @@ import { apiFetch } from '../shared/lib/api';
 export const incidentsApi = {
   async getAll() {
     const res = await apiFetch('/api/v1/incidents/');
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data?.results || []);
   },
 
   async get(id) {

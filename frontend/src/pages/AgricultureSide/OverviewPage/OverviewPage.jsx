@@ -25,9 +25,9 @@ export default function OverviewPage({ onNavigate }) {
           agricultureApi.getPickups(),
           surplusApi.getAll()
         ]);
-        if (comps.status === 'fulfilled' && Array.isArray(comps.value)) setComplaints(comps.value);
-        if (picks.status === 'fulfilled' && Array.isArray(picks.value)) setPickups(picks.value);
-        if (surps.status === 'fulfilled' && Array.isArray(surps.value)) setSurplusItems(surps.value);
+        if (comps.status === 'fulfilled') setComplaints(Array.isArray(comps.value) ? comps.value : (comps.value?.results || []));
+        if (picks.status === 'fulfilled') setPickups(Array.isArray(picks.value) ? picks.value : (picks.value?.results || []));
+        if (surps.status === 'fulfilled') setSurplusItems(Array.isArray(surps.value) ? surps.value : (surps.value?.results || []));
       } catch (err) {
         console.error("Error loading Overview metrics:", err);
       }

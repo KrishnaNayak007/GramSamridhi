@@ -65,28 +65,30 @@ export default function ImpactPage() {
   useEffect(() => {
     async function loadData() {
       try {
-        const compData = await incidentsApi.getAll();
-        const pickData = await agricultureApi.getPickups();
+        const [compData, pickData] = await Promise.allSettled([
+          incidentsApi.getAll(),
+          agricultureApi.getPickups()
+        ]);
 
-        const comps = compData || [];
-        const picks = pickData || [];
+        const comps = compData.status === 'fulfilled' ? (Array.isArray(compData.value) ? compData.value : (compData.value?.results || [])) : [];
+        const picks = pickData.status === 'fulfilled' ? (Array.isArray(pickData.value) ? pickData.value : (pickData.value?.results || [])) : [];
 
         const resolvedCount = comps.filter(c => c.status === 'resolved' || c.status === 'closed').length;
-        const wasteCountVal = resolvedCount * 50; // 50kg per resolved complaint
-        
         const residueCountVal = picks
           .filter(p => p.status === 'collected' || p.status === 'paid')
           .reduce((sum, p) => sum + parseFloat(p.weight_kg || 0), 0);
 
+        const wasteCountVal = (resolvedCount * 50) + residueCountVal; // Combined waste & residue diverted (in kg)
+
         const paymentsCountVal = picks
-          .filter(p => p.status === 'paid')
+          .filter(p => p.payment_status === 'paid' || p.status === 'paid')
           .reduce((sum, p) => sum + parseFloat(p.payment_amount || 0), 0);
 
         const uniqueVillages = new Set([
-          ...picks.map(p => p.location_name || 'kanas'),
-          ...comps.map(c => c.representative_location?.name || 'BMC Ward 24')
+          ...picks.map(p => typeof p.location_address === 'string' ? p.location_address.split(',')[0].trim() : 'Kudiary Village'),
+          ...comps.map(c => c.representative_location?.name || c.administrative_area?.name || 'Kudiary GP')
         ].filter(Boolean));
-        const villagesCountVal = uniqueVillages.size || 1;
+        const villagesCountVal = uniqueVillages.size || 2;
 
         // Populate monthly trends
         const monthlyWaste = Array(12).fill(0);
@@ -95,7 +97,8 @@ export default function ImpactPage() {
         const monthlyFarmers = Array(12).fill(0);
 
         comps.forEach(c => {
-          const m = new Date(c.created_at || Date.now()).getMonth();
+          const d = new Date(c.first_reported_at || c.created_at || Date.now());
+          const m = isNaN(d.getMonth()) ? (new Date()).getMonth() : d.getMonth();
           monthlyComplaints[m]++;
           if (c.status === 'resolved' || c.status === 'closed') {
             monthlyWaste[m] += 50;
@@ -105,13 +108,14 @@ export default function ImpactPage() {
         const activeFarmersByMonth = Array(12).fill(null).map(() => new Set());
         picks.forEach(p => {
           const d = new Date(p.created_at || Date.now());
-          const m = d.getMonth();
+          const m = isNaN(d.getMonth()) ? (new Date()).getMonth() : d.getMonth();
           const isCollectedOrPaid = p.status === 'collected' || p.status === 'paid';
           if (isCollectedOrPaid) {
             monthlyResidue[m] += parseFloat(p.weight_kg || 0);
           }
-          if (p.farmer_name) {
-            activeFarmersByMonth[m].add(p.farmer_name);
+          const farmerId = p.farmer_username || p.farmer_name;
+          if (farmerId) {
+            activeFarmersByMonth[m].add(farmerId);
           }
         });
 

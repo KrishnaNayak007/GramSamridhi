@@ -3,7 +3,8 @@ import { apiFetch } from '../shared/lib/api';
 export const surplusApi = {
   async getAll() {
     const res = await apiFetch('/api/v1/surplus/listings/');
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data?.results || []);
   },
 
   async create(payload) {
@@ -16,7 +17,8 @@ export const surplusApi = {
 
   async getCategories() {
     const res = await apiFetch('/api/v1/surplus/categories/');
-    return res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data?.results || []);
   },
 
   async claim(id) {
