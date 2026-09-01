@@ -15,6 +15,9 @@ export default function SwcPage({ onNavigate }) {
   const [analyzed, setAnalyzed] = useState(false);
   const [scanStepIndex, setScanStepIndex] = useState(-1);
   const [confidence, setConfidence] = useState(0);
+  const [severityLabel, setSeverityLabel] = useState("Medium");
+  const [severityMessage, setSeverityMessage] = useState("Noticeable accumulation - schedule pickup soon.");
+  const [typeMessage, setTypeMessage] = useState("Mixed organic and inorganic waste detected — recommend municipal sorting.");
 
   // Form states
   const [wasteType, setWasteType] = useState("");
@@ -678,12 +681,54 @@ export default function SwcPage({ onNavigate }) {
                   <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
                   <span>AI suggestion — {wasteType || "Mixed Waste"}, {confidence || 94}% confidence. Review before submitting.</span>
                 </div>
+
+                {/* DUAL AI PREDICTION BANNERS */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "8px", margin: "12px 0" }}>
+                  <div
+                    id="severity-banner"
+                    style={{
+                      padding: "10px 14px",
+                      borderRadius: "8px",
+                      color: "#fff",
+                      fontSize: "12.5px",
+                      fontWeight: 600,
+                      backgroundColor: (severityLabel || "").toLowerCase() === "critical" ? "#F44336" : (severityLabel || "").toLowerCase() === "low" ? "#4CAF50" : "#FF9800",
+                      boxShadow: "0 2px 5px rgba(0,0,0,0.06)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px"
+                    }}
+                  >
+                    <div>{(severityLabel || "").toLowerCase() === "critical" ? "🔴" : (severityLabel || "").toLowerCase() === "low" ? "🟢" : "🟠"} <strong>{(severityLabel || "MEDIUM").toUpperCase()}</strong> — {(confidence || 94)}%</div>
+                    <small style={{ fontSize: "11px", fontWeight: 400, opacity: 0.95 }}>{severityMessage || "Noticeable accumulation - schedule pickup soon."}</small>
+                  </div>
+
+                  <div
+                    id="type-banner"
+                    style={{
+                      padding: "10px 14px",
+                      borderRadius: "8px",
+                      color: "#fff",
+                      fontSize: "12.5px",
+                      fontWeight: 600,
+                      backgroundColor: (wasteType || "").toLowerCase().includes("organic") ? "#4CAF50" : (wasteType || "").toLowerCase().includes("plastic") || (wasteType || "").toLowerCase().includes("inorganic") ? "#2196F3" : "#9C27B0",
+                      boxShadow: "0 2px 5px rgba(0,0,0,0.06)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "2px"
+                    }}
+                  >
+                    <div>{(wasteType || "").toLowerCase().includes("organic") ? "🍃" : (wasteType || "").toLowerCase().includes("plastic") || (wasteType || "").toLowerCase().includes("inorganic") ? "🧴" : "♻️"} <strong>{(wasteType || "MIXED WASTE").toUpperCase()}</strong> — {(confidence || 94)}%</div>
+                    <small style={{ fontSize: "11px", fontWeight: 400, opacity: 0.95 }}>{typeMessage || "Mixed organic and inorganic waste detected — recommend municipal sorting."}</small>
+                  </div>
+                </div>
+
                 <div className="result-top">
                   <img className="result-thumb" id="resultThumb" src={previewSrc} alt="Result thumbnail" />
                   <div className="result-meta">
                     <div className="meta-row"><span className="meta-label">Waste Type</span><span className="meta-val" id="metaWasteType">{wasteType || "Mixed Waste"}</span></div>
                     <div className="meta-row"><span className="meta-label">Category</span><span className="meta-val" id="metaCategory">{wasteType.includes("Residue") || wasteType.includes("Agricultural") ? "Agricultural Waste" : "Civic Waste / Sanitation"}</span></div>
-                    <div className="meta-row"><span className="meta-label">Severity</span><span className="pill pill-medium" id="metaSeverity">Medium</span></div>
+                    <div className="meta-row"><span className="meta-label">Severity</span><span className={`pill ${(severityLabel || "").toLowerCase() === 'critical' ? 'pill-high' : (severityLabel || "").toLowerCase() === 'low' ? 'pill-low' : 'pill-medium'}`} id="metaSeverity">{severityLabel || "Medium"}</span></div>
                   </div>
                 </div>
                 <div className="confidence-row">
