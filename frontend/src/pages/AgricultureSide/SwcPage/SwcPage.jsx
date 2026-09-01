@@ -46,28 +46,28 @@ export default function SwcPage({ onNavigate }) {
     if (c.includes("crop") || c.includes("residue")) {
       return {
         type: "Crop Residue Pickup",
-        desc: "Suitable for collection and an appropriate recovery or processing option."
+        desc: "Suitable for biomass collection and agricultural recovery or processing."
       };
     }
     if (c.includes("organic") || c.includes("food")) {
       return {
         type: "Organic Composting",
-        desc: "Can be sent for suitable composting or local processing."
+        desc: "Can be sent for suitable composting or local bio-waste processing."
       };
     }
     if (c.includes("plastic")) {
       return {
         type: "Plastic Recycling",
-        desc: "Separate and send to an appropriate recycling channel."
+        desc: "Separate and dispatch to registered plastic recycling facility."
       };
     }
     return {
-      type: "Civic Waste Route",
-      desc: "Route to the local sanitation team."
+      type: "Civic Sanitation Clearance",
+      desc: "Route to the local municipal sanitation team for clearance and disposal."
     };
   };
 
-  const nextStep = getNextStepInfo(wasteType || "Crop Residue");
+  const nextStep = getNextStepInfo(wasteType || "Mixed Waste");
 
   // Handle image upload selection
   const handleFileChange = (e) => {
@@ -157,8 +157,9 @@ export default function SwcPage({ onNavigate }) {
       }, 15);
 
       // Pre-fill form if empty
-      if (!wasteType) setWasteType("Crop Residue");
+      if (!wasteType) setWasteType("Mixed Waste");
       if (!locationStr) setLocationStr("Village Road, Ward 24");
+      if (!description) setDescription("Large garbage pile accumulated beside the roadside with mixed plastic and household waste.");
     }, 2700);
   };
 
@@ -243,7 +244,13 @@ export default function SwcPage({ onNavigate }) {
         latitude: coords.latitude,
         longitude: coords.longitude,
         description: description,
-        category: wasteType === "Crop Residue" ? "crop_residue" : "garbage_accumulation",
+        category: (wasteType.toLowerCase().includes("crop") || wasteType.toLowerCase().includes("residue"))
+          ? "crop_residue"
+          : wasteType.toLowerCase().includes("plastic")
+          ? "plastic_waste"
+          : wasteType.toLowerCase().includes("organic") || wasteType.toLowerCase().includes("food")
+          ? "organic_waste"
+          : "garbage_accumulation",
       };
 
       const response = await apiFetch("/api/v1/reports/", {
@@ -525,15 +532,15 @@ export default function SwcPage({ onNavigate }) {
                 </label>
                 <select id="wasteType" value={wasteType} onChange={(e) => setWasteType(e.target.value)}>
                   <option value="">Select type</option>
+                  <option>Mixed Waste</option>
+                  <option>Garbage Accumulation</option>
+                  <option>General Garbage</option>
+                  <option>Plastic</option>
+                  <option>Organic Waste</option>
+                  <option>Overflowing Bin</option>
                   <option>Crop Residue</option>
                   <option>Agricultural Waste</option>
-                  <option>Organic Waste</option>
                   <option>Agricultural Plastic</option>
-                  <option>Plastic</option>
-                  <option>Mixed Waste</option>
-                  <option>General Garbage</option>
-                  <option>Garbage Accumulation</option>
-                  <option>Overflowing Bin</option>
                   <option>Food Waste</option>
                   <option>E-Waste</option>
                   <option>Construction Waste</option>
@@ -669,13 +676,13 @@ export default function SwcPage({ onNavigate }) {
               <div className="ai-result fade-up" id="aiResult" style={{ display: "block" }}>
                 <div className="ai-suggest-note">
                   <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                  <span>AI suggestion — {wasteType}, 94% confidence. Review before submitting.</span>
+                  <span>AI suggestion — {wasteType || "Mixed Waste"}, {confidence || 94}% confidence. Review before submitting.</span>
                 </div>
                 <div className="result-top">
                   <img className="result-thumb" id="resultThumb" src={previewSrc} alt="Result thumbnail" />
                   <div className="result-meta">
-                    <div className="meta-row"><span className="meta-label">Waste Type</span><span className="meta-val" id="metaWasteType">{wasteType}</span></div>
-                    <div className="meta-row"><span className="meta-label">Category</span><span className="meta-val" id="metaCategory">{wasteType.includes("Residue") || wasteType.includes("Agricultural") ? "Agricultural Waste" : "Civic Waste"}</span></div>
+                    <div className="meta-row"><span className="meta-label">Waste Type</span><span className="meta-val" id="metaWasteType">{wasteType || "Mixed Waste"}</span></div>
+                    <div className="meta-row"><span className="meta-label">Category</span><span className="meta-val" id="metaCategory">{wasteType.includes("Residue") || wasteType.includes("Agricultural") ? "Agricultural Waste" : "Civic Waste / Sanitation"}</span></div>
                     <div className="meta-row"><span className="meta-label">Severity</span><span className="pill pill-medium" id="metaSeverity">Medium</span></div>
                   </div>
                 </div>
@@ -685,8 +692,8 @@ export default function SwcPage({ onNavigate }) {
                 </div>
                 <div className="chips">
                   <div className="chips-label">Detected Materials</div>
-                  <div className="chip"><svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v6M8 8h8l1 13H7L8 8Z"/></svg>{wasteType.includes("Residue") || wasteType.includes("Organic") ? "Organic" : "Inorganic"}</div>
-                  <div className="chip"><svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 5 20 3c0 4-2 5-3 10a7 7 0 0 1-6 7Z"/></svg>{wasteType}</div>
+                  <div className="chip"><svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v6M8 8h8l1 13H7L8 8Z"/></svg>{wasteType.includes("Residue") || wasteType.includes("Organic") || wasteType.includes("Food") ? "Organic" : "Inorganic / Plastic"}</div>
+                  <div className="chip"><svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 5 20 3c0 4-2 5-3 10a7 7 0 0 1-6 7Z"/></svg>{wasteType || "Mixed Waste"}</div>
                 </div>
 
                 <div className="next-step-block" id="nextStepBlock">
@@ -717,7 +724,7 @@ export default function SwcPage({ onNavigate }) {
 
               <div className="routing-preview-mini" id="routingPreviewMini">
                 <div className="rpm-row"><span>Location</span><span id="previewLocation">{locationStr || "Village Road, Ward 24"}</span></div>
-                <div className="rpm-row"><span>Waste Type</span><span id="previewWasteType">{wasteType || "Crop Residue"}</span></div>
+                <div className="rpm-row"><span>Waste Type</span><span id="previewWasteType">{wasteType || "Mixed Waste"}</span></div>
                 <div className="rpm-row"><span>Priority</span><span id="previewPriority">Medium</span></div>
                 <div className="rpm-row"><span>Suggested Route</span><span id="previewRoute">{nextStep.desc}</span></div>
                 <div className="rpm-row"><span>Status</span><span id="previewStatus">{analyzed ? "Ready to submit" : "Waiting for AI review"}</span></div>
