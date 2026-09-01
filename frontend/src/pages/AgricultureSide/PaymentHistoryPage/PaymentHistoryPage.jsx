@@ -11,7 +11,8 @@ export default function PaymentHistoryPage() {
     async function loadData() {
       try {
         const data = await agricultureApi.getPickups();
-        if (data) setPickups(data);
+        const list = Array.isArray(data) ? data : (data?.results || []);
+        setPickups(list);
       } catch (err) {
         console.error("Error loading pickups for payment history:", err);
       }
@@ -19,19 +20,26 @@ export default function PaymentHistoryPage() {
     loadData();
   }, []);
 
-  // Map dynamic pickups to payment history structures
-  const dynamicPayments = pickups.map((p, idx) => ({
-    id: 'TXN-' + (10000 + idx),
-    title: p.residue_type || 'Crop Residue',
-    desc: parseFloat(p.weight_kg) + ' kg · ' + (p.location_address ? p.location_address.split(',')[0] : 'Farm Pickup'),
-    date: p.scheduled_slot || 'Recently',
-    mode: 'UPI',
-    amount: parseFloat(p.payment_amount || 0),
-    status: p.payment_status === 'paid' ? 'Paid' : (p.status === 'collected' ? 'Processing' : 'Pending'),
-    type: 'leaf'
-  }));
+  // Map dynamic pickups to payment history structures safely
+  const paymentList = (Array.isArray(pickups) ? pickups : []).map((p, idx) => {
+    const weight = parseFloat(p.weight_kg) || 0;
+    const addr = typeof p.location_address === 'string' && p.location_address ? p.location_address.split(',')[0] : 'Farm Pickup';
+    const rawDate = p.scheduled_slot || p.created_at || 'Recently';
+    const amount = parseFloat(p.payment_amount) || 0;
+    const isPaid = (p.payment_status || '').toLowerCase() === 'paid' || (p.status || '').toLowerCase() === 'paid';
+    const isProgress = (p.status || '').toLowerCase() === 'collected' || (p.status || '').toLowerCase() === 'in_progress';
 
-  const paymentList = dynamicPayments;
+    return {
+      id: `TXN-${10000 + (p.id ? (typeof p.id === 'number' ? p.id : idx + 1) : idx + 1)}`,
+      title: p.residue_type ? `${p.residue_type} Residue` : 'Crop Residue',
+      desc: `${weight} kg · ${addr}`,
+      date: String(rawDate),
+      mode: 'UPI',
+      amount: amount,
+      status: isPaid ? 'Paid' : (isProgress ? 'Processing' : 'Pending'),
+      type: 'leaf'
+    };
+  });
 
   // Compute stat metrics
   const totalEarned = paymentList.filter(p => p.status === 'Paid').reduce((sum, p) => sum + p.amount, 0);
@@ -51,6 +59,19 @@ export default function PaymentHistoryPage() {
     return true;
   });
 
+  const renderDate = (dateStr) => {
+    if (!dateStr) return 'Recently';
+    if (dateStr.includes(' · ')) {
+      const parts = dateStr.split(' · ');
+      return <><span className="day">{parts[0]}</span> · {parts[1]}</>;
+    }
+    if (dateStr.includes(' | ')) {
+      const parts = dateStr.split(' | ');
+      return <><span className="day">{parts[0]}</span> · {parts[1]}</>;
+    }
+    return <span className="day">{dateStr}</span>;
+  };
+
   return (
     <div className="agriculture-payment-history-page">
       <div className="wrap">
@@ -68,22 +89,22 @@ export default function PaymentHistoryPage() {
           <div className="stat-card hero">
             <div className="stat-label">Total Earned</div>
             <div className="stat-value">₹ {totalEarned.toLocaleString('en-IN')}</div>
-            <div className="stat-foot">Since you joined · Mar 2026</div>
+            <div className="stat-foot">Since you joined</div>
           </div>
           <div className="stat-card">
-            <div className="stat-label">This Month</div>
-            <div className="stat-value">₹ {filteredList.filter(p => p.date.includes('Aug') || p.date.includes('Today')).reduce((sum, p) => sum + p.amount, 0).toLocaleString('en-IN')}</div>
-            <div className="stat-foot">up <b>↑ 22%</b> from July</div>
+            <div className="stat-label">Completed Payouts</div>
+            <div className="stat-value">₹ {totalEarned.toLocaleString('en-IN')}</div>
+            <div className="stat-foot">{paidCount} transactions settled</div>
           </div>
           <div className="stat-card">
             <div className="stat-label">Pending Payout</div>
             <div className="stat-value">₹ {pendingEarned.toLocaleString('en-IN')}</div>
-            <div className="stat-foot">Expected in 2 days</div>
+            <div className="stat-foot">Processed after collection</div>
           </div>
           <div className="stat-card">
-            <div className="stat-label">Total Payouts</div>
-            <div className="stat-value">{paidCount}</div>
-            <div className="stat-foot">Avg <b>₹ {avgPayout}</b> per payout</div>
+            <div className="stat-label">Average Payout</div>
+            <div className="stat-value">₹ {avgPayout.toLocaleString('en-IN')}</div>
+            <div className="stat-foot">Per completed transaction</div>
           </div>
         </div>
 
@@ -93,7 +114,6 @@ export default function PaymentHistoryPage() {
             <button className={'tab ' + (activeTab === 'All' ? 'active' : '')} onClick={() => setActiveTab('All')}>All</button>
             <button className={'tab ' + (activeTab === 'Paid' ? 'active' : '')} onClick={() => setActiveTab('Paid')}>Paid</button>
             <button className={'tab ' + (activeTab === 'Pending' ? 'active' : '')} onClick={() => setActiveTab('Pending')}>Pending</button>
-            <button className={'tab ' + (activeTab === 'This Year' ? 'active' : '')} onClick={() => setActiveTab('This Year')}>This Year</button>
           </div>
           <div className="search-mini">
             <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" style={{ width: '14px', height: '14px', marginRight: '6px' }}>
@@ -149,7 +169,7 @@ export default function PaymentHistoryPage() {
                   <td><span className="txn-id">{item.id}</span></td>
                   <td>
                     <div className="pay-date">
-                      <span className="day">{item.date.split(' · ')[0]}</span> {item.date.includes(' · ') && (' · ' + item.date.split(' · ')[1])}
+                      {renderDate(item.date)}
                     </div>
                   </td>
                   <td>
@@ -161,7 +181,7 @@ export default function PaymentHistoryPage() {
                       {item.mode}
                     </div>
                   </td>
-                  <td className="amt">+ ₹ {item.amount}</td>
+                  <td className="amt">+ ₹ {item.amount.toLocaleString('en-IN')}</td>
                   <td style={{ textAlign: 'right' }}>
                     <span className={'badge ' + (item.status === 'Paid' ? 'b-leaf' : 'b-wheat')}>
                       {item.status}
@@ -172,7 +192,7 @@ export default function PaymentHistoryPage() {
               {filteredList.length === 0 && (
                 <tr>
                   <td colSpan="6" style={{ textAlign: 'center', padding: '30px', color: 'var(--ink-soft)' }}>
-                    No payment records match the current filters.
+                    No payment records found yet. Crop residue buy-back requests and payouts will appear here.
                   </td>
                 </tr>
               )}
@@ -181,12 +201,6 @@ export default function PaymentHistoryPage() {
 
           <div className="table-foot">
             <span>Showing {filteredList.length} of {paymentList.length} payments</span>
-            <div className="pg-btns">
-              <button className="pg-btn active">1</button>
-              <button className="pg-btn">2</button>
-              <button className="pg-btn">3</button>
-              <button className="pg-btn">→</button>
-            </div>
           </div>
         </div>
 
