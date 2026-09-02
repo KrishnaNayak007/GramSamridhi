@@ -11,6 +11,7 @@ Docs at:
     http://127.0.0.1:8000/docs
 """
 
+import math
 from pathlib import Path
 from io import BytesIO
 
@@ -83,40 +84,23 @@ def load_models():
         print(f"[WARNING] {type_load_error} - waste-type predictions disabled")
 
 
-def classify_waste_type(model, image_bytes: bytes):
-    from PIL import Image
-    img = Image.open(BytesIO(image_bytes)).convert("RGB")
-    
-    # Full image prediction
-    r_full = model.predict(source=img, verbose=False)[0]
-    p_full = {model.names[i]: float(r_full.probs.data[i]) for i in range(len(model.names))}
-    
-    # Center crop prediction (focus on central waste object)
-    w, h = img.size
-    crop = img.crop((int(w * 0.1), int(h * 0.15), int(w * 0.9), int(h * 0.9)))
-    r_crop = model.predict(source=crop, verbose=False)[0]
-    p_crop = {model.names[i]: float(r_crop.probs.data[i]) for i in range(len(model.names))}
-    
-    # Combined probabilities
-    p_inorg = p_full.get("inorganic", 0.0) * 0.4 + p_crop.get("inorganic", 0.0) * 0.6
-    p_org = p_full.get("organic", 0.0) * 0.4 + p_crop.get("organic", 0.0) * 0.6
-    p_mix = p_full.get("mixed", 0.0) * 0.4 + p_crop.get("mixed", 0.0) * 0.6
-    
-    if p_inorg >= 0.18 and p_inorg >= p_org:
-        label = "inorganic"
-        conf = max(p_inorg, 0.92)
-    elif p_org >= 0.60 and p_inorg < 0.15:
-        label = "organic"
-        conf = max(p_org, 0.95)
-    elif p_mix >= 0.35 or (p_org > 0.20 and p_inorg > 0.10):
-        label = "mixed"
-        conf = max(p_mix, 0.88)
-    else:
-        top1_idx = int(r_full.probs.top1)
-        label = model.names[top1_idx]
-        conf = float(r_full.probs.top1conf)
-        
-    return label, conf
+def is_low_confidence(probs: dict, min_top_prob: float = 0.40, max_entropy_ratio: float = 0.85) -> bool:
+    """
+    Flags predictions where the model isn't meaningfully distinguishing
+    between classes — a strong signal the image doesn't resemble anything
+    it was trained on (e.g. a logo, a selfie, a document).
+    """
+    if not probs:
+        return True
+    top_prob = max(probs.values())
+    if top_prob < min_top_prob:
+        return True
+    n = len(probs)
+    if n <= 1:
+        return False
+    entropy = -sum(p * math.log(p + 1e-9) for p in probs.values())
+    max_entropy = math.log(n)
+    return (entropy / max_entropy) > max_entropy_ratio
 
 
 def classify_severity(model, image_bytes: bytes):
@@ -124,26 +108,77 @@ def classify_severity(model, image_bytes: bytes):
     img = Image.open(BytesIO(image_bytes)).convert("RGB")
     r = model.predict(source=img, verbose=False)[0]
     probs = {model.names[i]: float(r.probs.data[i]) for i in range(len(model.names))}
-    
-    p_crit = probs.get("critical", 0.0)
-    p_med = probs.get("medium", 0.0)
+
     p_low = probs.get("low", 0.0)
-    
-    if p_crit >= 0.65:
-        label = "critical"
-        conf = p_crit
-    elif p_low >= 0.35 and p_low >= p_med:
+    p_med = probs.get("medium", 0.0)
+    p_crit = probs.get("critical", 0.0)
+
+    # Continuous severity score (0-100) as the probability-weighted
+    # average of each class's representative severity value. This is the
+    # model's real output, not a picked label with an inflated confidence.
+    BAND_VALUE = {"low": 17.5, "medium": 53.0, "critical": 95.0}
+    score = (p_low * BAND_VALUE["low"]) + (p_med * BAND_VALUE["medium"]) + (p_crit * BAND_VALUE["critical"])
+    score = round(score, 1)
+
+    # Bucket by fixed thresholds: 0-35 Low, 36-70 Medium, 71-100 Critical
+    if score <= 35:
         label = "low"
-        conf = max(p_low, 0.88)
-    elif p_med >= 0.30:
+    elif score <= 70:
         label = "medium"
-        conf = max(p_med, 0.85)
     else:
-        top1_idx = int(r.probs.top1)
-        label = model.names[top1_idx]
-        conf = float(r.probs.top1conf)
-        
-    return label, conf
+        label = "critical"
+
+    return {
+        "label": label,
+        "score": score,               # 0-100, the real number to display
+        "confidence": round(max(p_low, p_med, p_crit), 4),  # real top-class prob, unfloored
+        "breakdown": {"low": round(p_low, 4), "medium": round(p_med, 4), "critical": round(p_crit, 4)},
+        "raw_probs": probs,
+    }
+
+
+def classify_waste_type(model, image_bytes: bytes):
+    from PIL import Image
+    img = Image.open(BytesIO(image_bytes)).convert("RGB")
+
+    r_full = model.predict(source=img, verbose=False)[0]
+    p_full = {model.names[i]: float(r_full.probs.data[i]) for i in range(len(model.names))}
+
+    w, h = img.size
+    crop = img.crop((int(w * 0.1), int(h * 0.15), int(w * 0.9), int(h * 0.9)))
+    r_crop = model.predict(source=crop, verbose=False)[0]
+    p_crop = {model.names[i]: float(r_crop.probs.data[i]) for i in range(len(model.names))}
+
+    p_inorg = p_full.get("inorganic", 0.0) * 0.4 + p_crop.get("inorganic", 0.0) * 0.6
+    p_org = p_full.get("organic", 0.0) * 0.4 + p_crop.get("organic", 0.0) * 0.6
+    p_mix = p_full.get("mixed", 0.0) * 0.4 + p_crop.get("mixed", 0.0) * 0.6
+
+    # Real top-1 label from the actual combined probabilities — no floor.
+    scores = {"inorganic": p_inorg, "organic": p_org, "mixed": p_mix}
+    label = max(scores, key=scores.get)
+    confidence = round(scores[label], 4)
+
+    result = {
+        "label": label,
+        "confidence": confidence,
+        "raw_probs": p_full,
+        "combined_scores": {k: round(v, 4) for k, v in scores.items()},
+    }
+
+    if label == "mixed":
+        # Normalize organic vs inorganic shares so they read as a clean
+        # breakdown (the two real component signals inside "mixed"),
+        # rather than showing p_mix itself, which doesn't decompose.
+        total = p_org + p_inorg
+        if total > 0:
+            result["breakdown"] = {
+                "organic_pct": round((p_org / total) * 100, 1),
+                "inorganic_pct": round((p_inorg / total) * 100, 1),
+            }
+        else:
+            result["breakdown"] = {"organic_pct": 50.0, "inorganic_pct": 50.0}
+
+    return result
 
 
 @app.get("/")
@@ -160,47 +195,79 @@ async def predict(file: UploadFile = File(...)):
     if not file.content_type or not file.content_type.startswith("image/"):
         return JSONResponse(
             status_code=400,
-            content={"error": f"Unsupported file type: {file.content_type}. Please upload an image."},
+            content={"success": False, "error": f"Unsupported file type: {file.content_type}. Please upload an image."},
         )
 
     try:
         image_bytes = await file.read()
     except Exception as e:
-        return JSONResponse(status_code=400, content={"error": f"Could not read upload: {e}"})
+        return JSONResponse(status_code=400, content={"success": False, "error": f"Could not read upload: {e}"})
+
+    severity_res = None
+    if severity_model is not None:
+        try:
+            severity_res = classify_severity(severity_model, image_bytes)
+        except Exception as e:
+            severity_res = {"error": f"Severity prediction failed: {e}"}
+
+    type_res = None
+    if type_model is not None:
+        try:
+            type_res = classify_waste_type(type_model, image_bytes)
+        except Exception as e:
+            type_res = {"error": f"Waste-type prediction failed: {e}"}
+
+    # Out-of-distribution / invalid non-waste image guard
+    is_invalid = False
+    if (
+        severity_res
+        and "raw_probs" in severity_res
+        and type_res
+        and "raw_probs" in type_res
+    ):
+        if is_low_confidence(type_res["raw_probs"]) and is_low_confidence(severity_res["raw_probs"]):
+            is_invalid = True
+
+    if type_res and type_res.get("label") == "not_waste":
+        is_invalid = True
+
+    if is_invalid:
+        return {
+            "success": False,
+            "error": "unrecognized_image",
+            "message": "This doesn't look like a waste photo we can confidently classify. Please upload a clear photo of the waste/garbage.",
+        }
 
     response = {"success": True}
 
-    if severity_model is not None:
-        try:
-            label, conf = classify_severity(severity_model, image_bytes)
-            response["severity"] = {
-                "label": label,
-                "confidence": round(conf, 4),
-                "message": SEVERITY_MESSAGES.get(label, ""),
-            }
-        except Exception as e:
-            response["severity"] = {"error": f"Severity prediction failed: {e}"}
+    if severity_res and "error" not in severity_res:
+        response["severity"] = {
+            "label": severity_res["label"],
+            "score": severity_res["score"],
+            "confidence": severity_res["confidence"],
+            "breakdown": severity_res.get("breakdown", {}),
+            "message": SEVERITY_MESSAGES.get(severity_res["label"], ""),
+        }
     else:
         response["severity"] = {
             "label": "medium",
-            "confidence": 0.94,
+            "score": 53.0,
+            "confidence": 0.53,
             "message": SEVERITY_MESSAGES.get("medium"),
         }
 
-    if type_model is not None:
-        try:
-            label, conf = classify_waste_type(type_model, image_bytes)
-            response["waste_type"] = {
-                "label": label,
-                "confidence": round(conf, 4),
-                "message": TYPE_MESSAGES.get(label, ""),
-            }
-        except Exception as e:
-            response["waste_type"] = {"error": f"Waste-type prediction failed: {e}"}
+    if type_res and "error" not in type_res:
+        response["waste_type"] = {
+            "label": type_res["label"],
+            "confidence": type_res["confidence"],
+            "breakdown": type_res.get("breakdown", {}),
+            "message": TYPE_MESSAGES.get(type_res["label"], ""),
+        }
     else:
         response["waste_type"] = {
             "label": "mixed",
-            "confidence": 0.94,
+            "confidence": 0.50,
+            "breakdown": {"organic_pct": 50.0, "inorganic_pct": 50.0},
             "message": TYPE_MESSAGES.get("mixed"),
         }
 

@@ -21,7 +21,7 @@ from pathlib import Path
 
 RAW_DIR = Path("dataset_type_raw")
 OUT_DIR = Path("dataset_type")
-CLASSES = ["organic", "inorganic", "mixed"]
+CLASSES = ["organic", "inorganic", "mixed", "not_waste"]
 VALID_EXT = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
 VAL_SPLIT = 0.2
 SEED = 42

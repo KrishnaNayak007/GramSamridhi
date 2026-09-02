@@ -20,6 +20,8 @@ export default function SwcPage({ onNavigate }) {
   const [severityMessage, setSeverityMessage] = useState("Noticeable accumulation - schedule pickup soon.");
   const [typeConfidence, setTypeConfidence] = useState(0);
   const [typeMessage, setTypeMessage] = useState("Mixed organic and inorganic waste detected — recommend municipal sorting.");
+  const [typeBreakdown, setTypeBreakdown] = useState(null);
+  const [invalidImageError, setInvalidImageError] = useState(null);
 
   // Form states
   const [wasteType, setWasteType] = useState("");
@@ -122,6 +124,8 @@ export default function SwcPage({ onNavigate }) {
     setStep(1);
     setAnalyzed(false);
     setIsAnalyzing(false);
+    setInvalidImageError(null);
+    setTypeBreakdown(null);
     setScanStepIndex(-1);
     setConfidence(0);
     setWasteType("");
@@ -180,28 +184,41 @@ export default function SwcPage({ onNavigate }) {
     // Ensure visual scan transition completes
     await new Promise((resolve) => setTimeout(resolve, 1600));
 
+    // Handle out-of-distribution / unrecognized image rejection from AI
+    if (aiResult && aiResult.success === false) {
+      setIsAnalyzing(false);
+      setAnalyzed(false);
+      setStep(1);
+      const msg = aiResult.message || "This doesn't look like a waste photo we can confidently classify. Please upload a clear photo of the waste/garbage.";
+      setInvalidImageError(msg);
+      showToast("⚠️ " + msg);
+      return;
+    }
+
+    setInvalidImageError(null);
     setIsAnalyzing(false);
     setAnalyzed(true);
     setStep(3);
 
     let targetSevLabel = "Medium";
-    let targetSevConf = 85;
+    let targetSevScore = 53;
     let targetSevMsg = "Noticeable accumulation - schedule pickup soon.";
 
     let targetTypeLabel = "Mixed Waste";
-    let targetTypeConf = 94;
+    let targetTypeConf = 85;
+    let targetTypeBreakdown = null;
     let targetTypeMsg = "Mixed organic and inorganic waste detected — recommend municipal sorting.";
 
     if (aiResult && (aiResult.waste_type || aiResult.severity || aiResult.success)) {
-      // Extract real YOLOv8 Severity
+      // Extract real continuous YOLOv8 Severity Score (0-35 Low, 36-70 Medium, 71-100 Critical)
       if (aiResult.severity && !aiResult.severity.error) {
         const rawSev = (aiResult.severity.label || "medium").toLowerCase();
         targetSevLabel = rawSev.charAt(0).toUpperCase() + rawSev.slice(1);
-        targetSevConf = Math.round((aiResult.severity.confidence || 0.85) * 100);
+        targetSevScore = aiResult.severity.score !== undefined ? Math.round(aiResult.severity.score) : Math.round((aiResult.severity.confidence || 0.85) * 100);
         targetSevMsg = aiResult.severity.message || targetSevMsg;
       }
 
-      // Extract real YOLOv8 Waste Type
+      // Extract real YOLOv8 Waste Type + Mixed breakdown
       if (aiResult.waste_type && !aiResult.waste_type.error) {
         const rawType = (aiResult.waste_type.label || "mixed").toLowerCase().trim();
         if (rawType === "inorganic" || rawType.includes("inorganic") || rawType.includes("plastic") || rawType.includes("metal")) {
@@ -211,7 +228,8 @@ export default function SwcPage({ onNavigate }) {
         } else {
           targetTypeLabel = "Mixed Waste";
         }
-        targetTypeConf = Math.round((aiResult.waste_type.confidence || 0.94) * 100);
+        targetTypeConf = Math.round((aiResult.waste_type.confidence || 0.85) * 100);
+        targetTypeBreakdown = aiResult.waste_type.breakdown || null;
         targetTypeMsg = aiResult.waste_type.message || targetTypeMsg;
       }
 
@@ -221,14 +239,15 @@ export default function SwcPage({ onNavigate }) {
     }
 
     setSeverityLabel(targetSevLabel);
-    setSeverityConfidence(targetSevConf);
+    setSeverityConfidence(targetSevScore);
     setSeverityMessage(targetSevMsg);
 
     setTypeMessage(targetTypeMsg);
     setTypeConfidence(targetTypeConf);
+    setTypeBreakdown(targetTypeBreakdown);
     setWasteType(targetTypeLabel);
 
-    const maxConf = Math.max(targetSevConf, targetTypeConf);
+    const maxConf = Math.max(targetSevScore, targetTypeConf);
     let count = 0;
     const interval = setInterval(() => {
       count += 2;
@@ -588,6 +607,42 @@ export default function SwcPage({ onNavigate }) {
               </div>
             </div>
 
+            {invalidImageError && (
+              <div style={{
+                margin: "14px 0 6px",
+                padding: "12px 14px",
+                borderRadius: "8px",
+                background: "#FEF2F2",
+                border: "1px solid #FCA5A5",
+                color: "#991B1B",
+                fontSize: "13px",
+                display: "flex",
+                alignItems: "center",
+                gap: "10px"
+              }}>
+                <span style={{ fontSize: "18px" }}>⚠️</span>
+                <div style={{ flex: 1 }}>
+                  <strong>Unrecognized Image:</strong> {invalidImageError}
+                </div>
+                <button 
+                  type="button" 
+                  onClick={removePhoto} 
+                  style={{
+                    padding: "6px 10px",
+                    background: "#DC2626",
+                    color: "#fff",
+                    border: "none",
+                    borderRadius: "6px",
+                    fontSize: "11.5px",
+                    fontWeight: 600,
+                    cursor: "pointer"
+                  }}
+                >
+                  Upload New Photo
+                </button>
+              </div>
+            )}
+
             <div className="analyze-bar">
               <button 
                 className="btn-solid analyze-btn" 
@@ -800,6 +855,18 @@ export default function SwcPage({ onNavigate }) {
                         : "♻️"}{" "}
                       <strong>{(wasteType || "MIXED WASTE").toUpperCase()}</strong> — {(typeConfidence || confidence || 96)}%
                     </div>
+                    {wasteType === "Mixed Waste" && typeBreakdown && (
+                      <div style={{ margin: "6px 0 4px", padding: "6px 10px", background: "rgba(255,255,255,0.18)", borderRadius: "6px", fontSize: "11.5px" }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px", fontWeight: 600 }}>
+                          <span>🍃 Organic: {typeBreakdown.organic_pct}%</span>
+                          <span>🧴 Inorganic: {typeBreakdown.inorganic_pct}%</span>
+                        </div>
+                        <div style={{ width: "100%", height: "6px", background: "rgba(255,255,255,0.35)", borderRadius: "3px", overflow: "hidden", display: "flex" }}>
+                          <div style={{ width: `${typeBreakdown.organic_pct}%`, background: "#4CAF50" }} />
+                          <div style={{ width: `${typeBreakdown.inorganic_pct}%`, background: "#2196F3" }} />
+                        </div>
+                      </div>
+                    )}
                     <small style={{ fontSize: "11px", fontWeight: 400, opacity: 0.95 }}>{typeMessage || "Mixed organic and inorganic waste detected — recommend municipal sorting."}</small>
                   </div>
                 </div>
