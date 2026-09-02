@@ -31,6 +31,7 @@ import ContractsPage from "../pages/AgricultureSide/ContractsPage/ContractsPage"
 import PaymentHistoryPage from "../pages/AgricultureSide/PaymentHistoryPage/PaymentHistoryPage";
 import LeaderboardPage from "../pages/AgricultureSide/LeaderboardPage/LeaderboardPage";
 import ResiduePage from "../pages/AgricultureSide/ResiduePage/ResiduePage";
+import HelpPage from "../pages/AgricultureSide/HelpPage/HelpPage";
 import Navbar from "../pages/AgricultureSide/Navbar/Navbar";
 import AskGramSamridhiModal from "../components/AskGramSamridhi/AskGramSamridhiModal";
 import "../pages/AgricultureSide/AgriculturePortal.css";
@@ -163,40 +164,7 @@ export default function App() {
       case "settings":
         return <SettingsPage />;
       case "help":
-        return (
-          <div
-            style={{
-              background: "var(--card)",
-              border: "1px solid var(--border-soft)",
-              borderRadius: "var(--radius-lg)",
-              padding: "24px",
-              fontFamily: "var(--font-body)",
-              minHeight: "60vh",
-            }}
-          >
-            <h2
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: "20px",
-                color: "var(--ink-950)",
-                marginBottom: "10px",
-              }}
-            >
-              Help & Support
-            </h2>
-            <p
-              style={{
-                fontSize: "14px",
-                color: "var(--ink-500)",
-                lineHeight: "1.6",
-              }}
-            >
-              If you have any issues with complaint registration, municipal
-              coordination, or surplus claiming, please reach out to your local
-              Ward Officer or submit a ticket here.
-            </p>
-          </div>
-        );
+        return <HelpPage />;
       default:
         return <DashboardPage onNavigate={setCurrentTab} user={user} />;
     }
