@@ -48,22 +48,22 @@ export default function SwcPage({ onNavigate }) {
   // Helper logic for recommended next step
   const getNextStepInfo = (category) => {
     const c = (category || "").toLowerCase();
+    if (c.includes("inorganic") || c.includes("plastic") || c.includes("metal") || c.includes("dry")) {
+      return {
+        type: "Plastic / Dry Waste Clearance",
+        desc: "Separate and route non-biodegradable materials for municipal sorting and recycling."
+      };
+    }
     if (c.includes("crop") || c.includes("residue")) {
       return {
         type: "Crop Residue Pickup",
         desc: "Suitable for biomass collection and agricultural recovery or processing."
       };
     }
-    if (c.includes("organic") || c.includes("food")) {
+    if (c.includes("organic") || c.includes("food") || c.includes("vegetation")) {
       return {
         type: "Organic Composting",
         desc: "Can be sent for suitable composting or local bio-waste processing."
-      };
-    }
-    if (c.includes("plastic")) {
-      return {
-        type: "Plastic Recycling",
-        desc: "Separate and dispatch to registered plastic recycling facility."
       };
     }
     return {
@@ -203,11 +203,11 @@ export default function SwcPage({ onNavigate }) {
 
       // Extract real YOLOv8 Waste Type
       if (aiResult.waste_type && !aiResult.waste_type.error) {
-        const rawType = (aiResult.waste_type.label || "mixed").toLowerCase();
-        if (rawType.includes("organic") || rawType.includes("food") || rawType.includes("vegetation")) {
-          targetTypeLabel = "Organic Waste";
-        } else if (rawType.includes("inorganic") || rawType.includes("plastic") || rawType.includes("metal")) {
+        const rawType = (aiResult.waste_type.label || "mixed").toLowerCase().trim();
+        if (rawType === "inorganic" || rawType.includes("inorganic") || rawType.includes("plastic") || rawType.includes("metal")) {
           targetTypeLabel = "Inorganic Waste (Plastic / Metal / Dry)";
+        } else if (rawType === "organic" || rawType.includes("food") || rawType.includes("vegetation")) {
+          targetTypeLabel = "Organic Waste";
         } else {
           targetTypeLabel = "Mixed Waste";
         }
@@ -328,7 +328,7 @@ export default function SwcPage({ onNavigate }) {
         description: description,
         category: (wasteType.toLowerCase().includes("crop") || wasteType.toLowerCase().includes("residue"))
           ? "crop_residue"
-          : wasteType.toLowerCase().includes("plastic")
+          : wasteType.toLowerCase().includes("inorganic") || wasteType.toLowerCase().includes("plastic") || wasteType.toLowerCase().includes("metal")
           ? "plastic_waste"
           : wasteType.toLowerCase().includes("organic") || wasteType.toLowerCase().includes("food")
           ? "organic_waste"
@@ -790,14 +790,26 @@ export default function SwcPage({ onNavigate }) {
                       color: "#fff",
                       fontSize: "12.5px",
                       fontWeight: 600,
-                      backgroundColor: (wasteType || "").toLowerCase().includes("organic") ? "#4CAF50" : (wasteType || "").toLowerCase().includes("plastic") || (wasteType || "").toLowerCase().includes("inorganic") ? "#2196F3" : "#9C27B0",
+                      backgroundColor:
+                        (wasteType || "").toLowerCase().includes("inorganic") || (wasteType || "").toLowerCase().includes("plastic")
+                          ? "#2196F3"
+                          : (wasteType || "").toLowerCase().includes("organic")
+                          ? "#4CAF50"
+                          : "#9C27B0",
                       boxShadow: "0 2px 5px rgba(0,0,0,0.06)",
                       display: "flex",
                       flexDirection: "column",
                       gap: "2px"
                     }}
                   >
-                    <div>{(wasteType || "").toLowerCase().includes("organic") ? "🍃" : (wasteType || "").toLowerCase().includes("plastic") || (wasteType || "").toLowerCase().includes("inorganic") ? "🧴" : "♻️"} <strong>{(wasteType || "MIXED WASTE").toUpperCase()}</strong> — {(typeConfidence || confidence || 96)}%</div>
+                    <div>
+                      {(wasteType || "").toLowerCase().includes("inorganic") || (wasteType || "").toLowerCase().includes("plastic")
+                        ? "🧴"
+                        : (wasteType || "").toLowerCase().includes("organic")
+                        ? "🍃"
+                        : "♻️"}{" "}
+                      <strong>{(wasteType || "MIXED WASTE").toUpperCase()}</strong> — {(typeConfidence || confidence || 96)}%
+                    </div>
                     <small style={{ fontSize: "11px", fontWeight: 400, opacity: 0.95 }}>{typeMessage || "Mixed organic and inorganic waste detected — recommend municipal sorting."}</small>
                   </div>
                 </div>
@@ -816,7 +828,14 @@ export default function SwcPage({ onNavigate }) {
                 </div>
                 <div className="chips">
                   <div className="chips-label">Detected Materials</div>
-                  <div className="chip"><svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v6M8 8h8l1 13H7L8 8Z"/></svg>{wasteType.includes("Residue") || wasteType.includes("Organic") || wasteType.includes("Food") ? "Organic" : "Inorganic / Plastic"}</div>
+                  <div className="chip">
+                    <svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v6M8 8h8l1 13H7L8 8Z"/></svg>
+                    {(wasteType || "").toLowerCase().includes("inorganic") || (wasteType || "").toLowerCase().includes("plastic")
+                      ? "Inorganic / Plastic"
+                      : (wasteType || "").toLowerCase().includes("organic") || (wasteType || "").toLowerCase().includes("residue")
+                      ? "Organic / Biodegradable"
+                      : "Mixed Materials"}
+                  </div>
                   <div className="chip"><svg viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 5 20 3c0 4-2 5-3 10a7 7 0 0 1-6 7Z"/></svg>{wasteType || "Mixed Waste"}</div>
                 </div>
 
