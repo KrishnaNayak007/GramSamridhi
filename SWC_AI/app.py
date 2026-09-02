@@ -149,26 +149,32 @@ def classify_waste_type(model, image_bytes: bytes):
     r_crop = model.predict(source=crop, verbose=False)[0]
     p_crop = {model.names[i]: float(r_crop.probs.data[i]) for i in range(len(model.names))}
 
-    p_inorg = p_full.get("inorganic", 0.0) * 0.4 + p_crop.get("inorganic", 0.0) * 0.6
-    p_org = p_full.get("organic", 0.0) * 0.4 + p_crop.get("organic", 0.0) * 0.6
-    p_mix = p_full.get("mixed", 0.0) * 0.4 + p_crop.get("mixed", 0.0) * 0.6
+    combined = {
+        cls: p_full.get(cls, 0.0) * 0.4 + p_crop.get(cls, 0.0) * 0.6
+        for cls in model.names
+    }
 
-    # Real top-1 label from the actual combined probabilities — no floor.
-    scores = {"inorganic": p_inorg, "organic": p_org, "mixed": p_mix}
-    label = max(scores, key=scores.get)
-    confidence = round(scores[label], 4)
+    label = max(combined, key=combined.get)
+    confidence = round(combined[label], 4)
+
+    if label == "not_waste":
+        return {
+            "label": "not_waste",
+            "confidence": confidence,
+            "rejected": True,
+            "raw_probs": p_full,
+        }
 
     result = {
         "label": label,
         "confidence": confidence,
         "raw_probs": p_full,
-        "combined_scores": {k: round(v, 4) for k, v in scores.items()},
+        "combined_scores": {k: round(v, 4) for k, v in combined.items()},
     }
 
     if label == "mixed":
-        # Normalize organic vs inorganic shares so they read as a clean
-        # breakdown (the two real component signals inside "mixed"),
-        # rather than showing p_mix itself, which doesn't decompose.
+        p_org = combined.get("organic", 0.0)
+        p_inorg = combined.get("inorganic", 0.0)
         total = p_org + p_inorg
         if total > 0:
             result["breakdown"] = {
@@ -203,13 +209,6 @@ async def predict(file: UploadFile = File(...)):
     except Exception as e:
         return JSONResponse(status_code=400, content={"success": False, "error": f"Could not read upload: {e}"})
 
-    severity_res = None
-    if severity_model is not None:
-        try:
-            severity_res = classify_severity(severity_model, image_bytes)
-        except Exception as e:
-            severity_res = {"error": f"Severity prediction failed: {e}"}
-
     type_res = None
     if type_model is not None:
         try:
@@ -217,8 +216,22 @@ async def predict(file: UploadFile = File(...)):
         except Exception as e:
             type_res = {"error": f"Waste-type prediction failed: {e}"}
 
-    # Out-of-distribution / invalid non-waste image guard
-    is_invalid = False
+    # Step 1: Real learned not_waste class rejection
+    if type_res and type_res.get("rejected"):
+        return {
+            "success": False,
+            "error": "unrecognized_image",
+            "message": "This doesn't look like a waste photo. Please upload a clear photo of the waste/garbage you're reporting.",
+        }
+
+    severity_res = None
+    if severity_model is not None:
+        try:
+            severity_res = classify_severity(severity_model, image_bytes)
+        except Exception as e:
+            severity_res = {"error": f"Severity prediction failed: {e}"}
+
+    # Step 2: Statistical entropy/low-confidence backstop
     if (
         severity_res
         and "raw_probs" in severity_res
@@ -226,17 +239,11 @@ async def predict(file: UploadFile = File(...)):
         and "raw_probs" in type_res
     ):
         if is_low_confidence(type_res["raw_probs"]) and is_low_confidence(severity_res["raw_probs"]):
-            is_invalid = True
-
-    if type_res and type_res.get("label") == "not_waste":
-        is_invalid = True
-
-    if is_invalid:
-        return {
-            "success": False,
-            "error": "unrecognized_image",
-            "message": "This doesn't look like a waste photo we can confidently classify. Please upload a clear photo of the waste/garbage.",
-        }
+            return {
+                "success": False,
+                "error": "unrecognized_image",
+                "message": "This doesn't look like a waste photo we can confidently classify. Please upload a clear photo of the waste/garbage.",
+            }
 
     response = {"success": True}
 

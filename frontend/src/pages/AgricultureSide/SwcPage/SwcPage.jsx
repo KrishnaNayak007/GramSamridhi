@@ -247,7 +247,7 @@ export default function SwcPage({ onNavigate }) {
     setTypeBreakdown(targetTypeBreakdown);
     setWasteType(targetTypeLabel);
 
-    const maxConf = Math.max(targetSevScore, targetTypeConf);
+    const maxConf = targetTypeConf;
     let count = 0;
     const interval = setInterval(() => {
       count += 2;
@@ -823,7 +823,7 @@ export default function SwcPage({ onNavigate }) {
                       gap: "2px"
                     }}
                   >
-                    <div>{(severityLabel || "").toLowerCase() === "critical" ? "🔴" : (severityLabel || "").toLowerCase() === "low" ? "🟢" : "🟠"} <strong>{(severityLabel || "MEDIUM").toUpperCase()}</strong> — {(severityConfidence || confidence || 85)}%</div>
+                    <div>{(severityLabel || "").toLowerCase() === "critical" ? "🔴" : (severityLabel || "").toLowerCase() === "low" ? "🟢" : "🟠"} <strong>{(severityLabel || "MEDIUM").toUpperCase()} SEVERITY</strong></div>
                     <small style={{ fontSize: "11px", fontWeight: 400, opacity: 0.95 }}>{severityMessage || "Noticeable accumulation - schedule pickup soon."}</small>
                   </div>
 
