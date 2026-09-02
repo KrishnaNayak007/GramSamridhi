@@ -22,17 +22,20 @@
 
   --deep:#183630;
   --cream:#E3DAC9;
-  --gold:#C9A45E;
-  --gold-bg:#F5EEDD;
-
-  --danger:#C1503F;
-  --danger-bg:#FBEAE6;
-  --orange:#B9791C;
-  --orange-bg:#FCEFD8;
-  --success:#1E8449;
-  --success-bg:#E4F5E9;
-  --info:#3D6FD1;
-  --info-bg:#E8EFFC;
+  --danger:#C94A45;
+  --danger-bg:rgba(201, 74, 69, 0.12);
+  --orange:#C58A32;
+  --orange-bg:rgba(197, 138, 50, 0.12);
+  --gold:#C58A32;
+  --gold-bg:rgba(197, 138, 50, 0.12);
+  --success:#25855A;
+  --success-bg:rgba(37, 133, 90, 0.12);
+  --info:#4D86A8;
+  --info-bg:rgba(77, 134, 168, 0.12);
+  --organic:#3E8B62;
+  --organic-bg:rgba(62, 139, 98, 0.12);
+  --mixed:#8A7A3B;
+  --mixed-bg:rgba(138, 122, 59, 0.12);
 
   --r-xl:26px;
   --r-lg:20px;

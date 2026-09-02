@@ -816,7 +816,12 @@ export default function SwcPage({ onNavigate }) {
                       color: "#fff",
                       fontSize: "12.5px",
                       fontWeight: 600,
-                      backgroundColor: (severityLabel || "").toLowerCase() === "critical" ? "#F44336" : (severityLabel || "").toLowerCase() === "low" ? "#4CAF50" : "#FF9800",
+                      backgroundColor:
+                        (severityLabel || "").toLowerCase() === "critical"
+                          ? "#C94A45"
+                          : (severityLabel || "").toLowerCase() === "low"
+                          ? "#25855A"
+                          : "#C58A32",
                       boxShadow: "0 2px 5px rgba(0,0,0,0.06)",
                       display: "flex",
                       flexDirection: "column",
@@ -837,10 +842,10 @@ export default function SwcPage({ onNavigate }) {
                       fontWeight: 600,
                       backgroundColor:
                         (wasteType || "").toLowerCase().includes("inorganic") || (wasteType || "").toLowerCase().includes("plastic")
-                          ? "#2196F3"
+                          ? "#4D86A8"
                           : (wasteType || "").toLowerCase().includes("organic")
-                          ? "#4CAF50"
-                          : "#9C27B0",
+                          ? "#3E8B62"
+                          : "#8A7A3B",
                       boxShadow: "0 2px 5px rgba(0,0,0,0.06)",
                       display: "flex",
                       flexDirection: "column",
@@ -849,21 +854,21 @@ export default function SwcPage({ onNavigate }) {
                   >
                     <div>
                       {(wasteType || "").toLowerCase().includes("inorganic") || (wasteType || "").toLowerCase().includes("plastic")
-                        ? "🧴"
+                        ? "🔵"
                         : (wasteType || "").toLowerCase().includes("organic")
-                        ? "🍃"
-                        : "♻️"}{" "}
+                        ? "🟢"
+                        : "🟤"}{" "}
                       <strong>{(wasteType || "MIXED WASTE").toUpperCase()}</strong> — {(typeConfidence || confidence || 96)}%
                     </div>
                     {wasteType === "Mixed Waste" && typeBreakdown && typeBreakdown.organic_pct !== undefined && typeBreakdown.inorganic_pct !== undefined && (
                       <div style={{ margin: "6px 0 4px", padding: "6px 10px", background: "rgba(255,255,255,0.18)", borderRadius: "6px", fontSize: "11.5px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px", fontWeight: 600 }}>
-                          <span>🍃 Organic: {typeBreakdown.organic_pct}%</span>
-                          <span>🧴 Inorganic: {typeBreakdown.inorganic_pct}%</span>
+                          <span>🟢 Organic: {typeBreakdown.organic_pct}%</span>
+                          <span>🔵 Inorganic: {typeBreakdown.inorganic_pct}%</span>
                         </div>
                         <div style={{ width: "100%", height: "6px", background: "rgba(255,255,255,0.35)", borderRadius: "3px", overflow: "hidden", display: "flex" }}>
-                          <div style={{ width: `${typeBreakdown.organic_pct}%`, background: "#4CAF50" }} />
-                          <div style={{ width: `${typeBreakdown.inorganic_pct}%`, background: "#2196F3" }} />
+                          <div style={{ width: `${typeBreakdown.organic_pct}%`, background: "#3E8B62" }} />
+                          <div style={{ width: `${typeBreakdown.inorganic_pct}%`, background: "#4D86A8" }} />
                         </div>
                       </div>
                     )}
