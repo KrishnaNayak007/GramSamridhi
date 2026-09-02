@@ -205,7 +205,7 @@ export default function SwcPage({ onNavigate }) {
       if (aiResult.waste_type && !aiResult.waste_type.error) {
         const rawType = (aiResult.waste_type.label || "mixed").toLowerCase().trim();
         if (rawType === "inorganic" || rawType.includes("inorganic") || rawType.includes("plastic") || rawType.includes("metal")) {
-          targetTypeLabel = "Inorganic Waste (Plastic / Metal / Dry)";
+          targetTypeLabel = "Inorganic Waste";
         } else if (rawType === "organic" || rawType.includes("food") || rawType.includes("vegetation")) {
           targetTypeLabel = "Organic Waste";
         } else {
@@ -614,19 +614,9 @@ export default function SwcPage({ onNavigate }) {
                 </label>
                 <select id="wasteType" value={wasteType} onChange={(e) => setWasteType(e.target.value)}>
                   <option value="">Select type</option>
-                  <option>Mixed Waste</option>
-                  <option>Garbage Accumulation</option>
-                  <option>General Garbage</option>
-                  <option>Plastic</option>
-                  <option>Organic Waste</option>
-                  <option>Overflowing Bin</option>
-                  <option>Crop Residue</option>
-                  <option>Agricultural Waste</option>
-                  <option>Agricultural Plastic</option>
-                  <option>Food Waste</option>
-                  <option>E-Waste</option>
-                  <option>Construction Waste</option>
-                  <option>Other</option>
+                  <option value="Organic Waste">Organic Waste</option>
+                  <option value="Inorganic Waste">Inorganic Waste</option>
+                  <option value="Mixed Waste">Mixed Waste</option>
                 </select>
               </div>
               <div className="field">
