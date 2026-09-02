@@ -855,7 +855,7 @@ export default function SwcPage({ onNavigate }) {
                         : "♻️"}{" "}
                       <strong>{(wasteType || "MIXED WASTE").toUpperCase()}</strong> — {(typeConfidence || confidence || 96)}%
                     </div>
-                    {wasteType === "Mixed Waste" && typeBreakdown && (
+                    {wasteType === "Mixed Waste" && typeBreakdown && typeBreakdown.organic_pct !== undefined && typeBreakdown.inorganic_pct !== undefined && (
                       <div style={{ margin: "6px 0 4px", padding: "6px 10px", background: "rgba(255,255,255,0.18)", borderRadius: "6px", fontSize: "11.5px" }}>
                         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px", fontWeight: 600 }}>
                           <span>🍃 Organic: {typeBreakdown.organic_pct}%</span>

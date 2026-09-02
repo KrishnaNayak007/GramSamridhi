@@ -151,7 +151,7 @@ def classify_waste_type(model, image_bytes: bytes):
 
     combined = {
         cls: p_full.get(cls, 0.0) * 0.4 + p_crop.get(cls, 0.0) * 0.6
-        for cls in model.names
+        for cls in model.names.values()
     }
 
     label = max(combined, key=combined.get)
