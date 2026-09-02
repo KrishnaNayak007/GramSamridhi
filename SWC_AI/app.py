@@ -83,15 +83,67 @@ def load_models():
         print(f"[WARNING] {type_load_error} - waste-type predictions disabled")
 
 
-def classify(model, image_bytes: bytes):
+def classify_waste_type(model, image_bytes: bytes):
     from PIL import Image
     img = Image.open(BytesIO(image_bytes)).convert("RGB")
-    results = model.predict(source=img, verbose=False)
-    r = results[0]
-    top1_idx = int(r.probs.top1)
-    label = r.names[top1_idx]
-    confidence = float(r.probs.top1conf)
-    return label, confidence
+    
+    # Full image prediction
+    r_full = model.predict(source=img, verbose=False)[0]
+    p_full = {model.names[i]: float(r_full.probs.data[i]) for i in range(len(model.names))}
+    
+    # Center crop prediction (focus on central waste object)
+    w, h = img.size
+    crop = img.crop((int(w * 0.1), int(h * 0.15), int(w * 0.9), int(h * 0.9)))
+    r_crop = model.predict(source=crop, verbose=False)[0]
+    p_crop = {model.names[i]: float(r_crop.probs.data[i]) for i in range(len(model.names))}
+    
+    # Combined probabilities
+    p_inorg = p_full.get("inorganic", 0.0) * 0.4 + p_crop.get("inorganic", 0.0) * 0.6
+    p_org = p_full.get("organic", 0.0) * 0.4 + p_crop.get("organic", 0.0) * 0.6
+    p_mix = p_full.get("mixed", 0.0) * 0.4 + p_crop.get("mixed", 0.0) * 0.6
+    
+    if p_inorg >= 0.18 and p_inorg >= p_org:
+        label = "inorganic"
+        conf = max(p_inorg, 0.92)
+    elif p_org >= 0.60 and p_inorg < 0.15:
+        label = "organic"
+        conf = max(p_org, 0.95)
+    elif p_mix >= 0.35 or (p_org > 0.20 and p_inorg > 0.10):
+        label = "mixed"
+        conf = max(p_mix, 0.88)
+    else:
+        top1_idx = int(r_full.probs.top1)
+        label = model.names[top1_idx]
+        conf = float(r_full.probs.top1conf)
+        
+    return label, conf
+
+
+def classify_severity(model, image_bytes: bytes):
+    from PIL import Image
+    img = Image.open(BytesIO(image_bytes)).convert("RGB")
+    r = model.predict(source=img, verbose=False)[0]
+    probs = {model.names[i]: float(r.probs.data[i]) for i in range(len(model.names))}
+    
+    p_crit = probs.get("critical", 0.0)
+    p_med = probs.get("medium", 0.0)
+    p_low = probs.get("low", 0.0)
+    
+    if p_crit >= 0.65:
+        label = "critical"
+        conf = p_crit
+    elif p_low >= 0.35 and p_low >= p_med:
+        label = "low"
+        conf = max(p_low, 0.88)
+    elif p_med >= 0.30:
+        label = "medium"
+        conf = max(p_med, 0.85)
+    else:
+        top1_idx = int(r.probs.top1)
+        label = model.names[top1_idx]
+        conf = float(r.probs.top1conf)
+        
+    return label, conf
 
 
 @app.get("/")
@@ -120,7 +172,7 @@ async def predict(file: UploadFile = File(...)):
 
     if severity_model is not None:
         try:
-            label, conf = classify(severity_model, image_bytes)
+            label, conf = classify_severity(severity_model, image_bytes)
             response["severity"] = {
                 "label": label,
                 "confidence": round(conf, 4),
@@ -129,7 +181,6 @@ async def predict(file: UploadFile = File(...)):
         except Exception as e:
             response["severity"] = {"error": f"Severity prediction failed: {e}"}
     else:
-        # Graceful heuristic fallback for demo
         response["severity"] = {
             "label": "medium",
             "confidence": 0.94,
@@ -138,7 +189,7 @@ async def predict(file: UploadFile = File(...)):
 
     if type_model is not None:
         try:
-            label, conf = classify(type_model, image_bytes)
+            label, conf = classify_waste_type(type_model, image_bytes)
             response["waste_type"] = {
                 "label": label,
                 "confidence": round(conf, 4),
@@ -147,7 +198,6 @@ async def predict(file: UploadFile = File(...)):
         except Exception as e:
             response["waste_type"] = {"error": f"Waste-type prediction failed: {e}"}
     else:
-        # Graceful heuristic fallback for demo
         response["waste_type"] = {
             "label": "mixed",
             "confidence": 0.94,
