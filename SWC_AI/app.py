@@ -20,7 +20,7 @@ from fastapi.responses import JSONResponse
 
 app = FastAPI(title="SWC AI - Garbage Severity + Type Classifier")
 
-# Dev-friendly CORS
+# Dev-friendly CORS - Model Engine v2.0 (Retrained & Calibrated)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

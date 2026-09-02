@@ -62,9 +62,9 @@ def main():
         )
 
     # Hyperparameters
-    epochs = 15 if tiny_dataset else 50
+    epochs = 40
     imgsz = 224
-    batch = min(8, max(2, n_train // 2))
+    batch = 4
 
     MODELS_DIR.mkdir(exist_ok=True)
 
@@ -73,7 +73,7 @@ def main():
 
     print(f"\nStarting training: epochs={epochs}, imgsz={imgsz}, batch={batch}\n")
 
-    # Train the model
+    # Train the model with augmentation
     results = model.train(
         data=str(DATASET_DIR.resolve()),
         project="runs",
@@ -81,6 +81,10 @@ def main():
         epochs=epochs,
         imgsz=imgsz,
         batch=batch,
+        augment=True,
+        fliplr=0.5,
+        scale=0.5,
+        degrees=15.0,
         exist_ok=True,
     )
 
